@@ -21,6 +21,9 @@
   --radius-lg: 12px;
   --shadow: 0 1px 3px rgb(15 23 42 / 0.08), 0 1px 2px rgb(15 23 42 / 0.06);
   --shadow-lg: 0 4px 6px rgb(15 23 42 / 0.07), 0 2px 4px rgb(15 23 42 / 0.06);
+  /* Motion: strong custom curves, never plain ease-in for UI */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   color-scheme: light;
 }
 
@@ -77,7 +80,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
 }
 
 .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px }
@@ -90,8 +93,14 @@ header.site {
 }
 header.site nav { display: flex; gap: 12px; align-items: center; flex-wrap: wrap }
 header.site nav b { font-weight: 600; color: var(--fg); text-decoration: none }
-header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 4px 8px; border-radius: 6px }
-header.site nav a:hover { color: var(--fg); background: var(--card) }
+header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 4px 8px; border-radius: 6px; transition: color 150ms var(--ease-out), background-color 150ms var(--ease-out) }
+@media (hover: hover) and (pointer: fine) {
+  header.site nav a:hover { color: var(--fg); background: var(--card) }
+  .tbtn:hover { color: var(--fg); border-color: var(--muted); background: var(--card) }
+  .btn:hover { background: var(--brand-hover) }
+  .btn.ghost:hover { background: var(--brand-light); color: var(--brand-hover) }
+  .faq summary:hover { color: var(--fg) }
+}
 
 .tbtn {
   margin-left: auto;
@@ -102,9 +111,9 @@ header.site nav a:hover { color: var(--fg); background: var(--card) }
   padding: 6px 16px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: color 150ms var(--ease-out), border-color 150ms var(--ease-out), background-color 150ms var(--ease-out), transform 160ms var(--ease-out);
 }
-.tbtn:hover { color: var(--fg); border-color: var(--muted); background: var(--card) }
+.tbtn:active { transform: scale(0.97) }
 
 .hero { padding: 48px 0 16px }
 .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: .2em 0; font-weight: 700; letter-spacing: -0.02em }
@@ -192,7 +201,7 @@ table.data td:first-child { font-family: var(--mono); font-weight: 500 }
 }
 .faq summary::-webkit-details-marker { display: none }
 .faq summary::after {
-  content: "+"; font-size: 18px; color: var(--muted); transition: transform 0.2s;
+  content: "+"; font-size: 18px; color: var(--muted); transition: transform 200ms var(--ease-out), color 200ms var(--ease-out);
 }
 .faq details[open] summary::after { transform: rotate(45deg); color: var(--brand) }
 .faq details[open] summary { border-bottom: 1px solid var(--line) }
@@ -207,10 +216,9 @@ table.data td:first-child { font-family: var(--mono); font-weight: 500 }
   padding: 12px 22px;
   font-size: 15px; font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, transform 0.05s;
+  transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
-.btn:hover { background: var(--brand-hover) }
-.btn:active { transform: scale(0.98) }
+.btn:active { transform: scale(0.97) }
 .btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px }
 
 .btn.ghost {
@@ -218,8 +226,6 @@ table.data td:first-child { font-family: var(--mono); font-weight: 500 }
   color: var(--brand);
   border: 1px solid var(--brand);
 }
-.btn.ghost:hover { background: var(--brand-light); color: var(--brand-hover) }
-
 footer.site {
   border-top: 1px solid var(--line);
   margin-top: 56px;
@@ -234,3 +240,45 @@ footer.site {
 /* SVG diagrams: readable in both themes, no overflow */
 svg { max-width: 100%; height: auto }
 svg text:not([fill]) { fill: var(--fg) }
+
+/* Animated ambient background: GPU-only (transform/opacity), slow drift */
+.bg-field { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none }
+header.site, main.wrap, footer.site { position: relative; z-index: 1 }
+.blob { position: absolute; border-radius: 9999px; filter: blur(90px); opacity: 0.5; will-change: transform }
+.blob.b1 { width: 44vmax; height: 44vmax; top: -14vmax; right: -10vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 26%, transparent), transparent 70%);
+  animation: drift1 28s var(--ease-in-out) infinite alternate }
+.blob.b2 { width: 36vmax; height: 36vmax; bottom: -12vmax; left: -10vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 24%, transparent), transparent 70%);
+  animation: drift2 34s var(--ease-in-out) infinite alternate }
+.blob.b3 { width: 26vmax; height: 26vmax; top: 38%; left: 52%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%);
+  animation: drift3 40s var(--ease-in-out) infinite alternate }
+html[data-theme="dark"] .blob { opacity: 0.32 }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .blob { opacity: 0.32 }
+}
+@keyframes drift1 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-6vmax, 5vmax) scale(1.12) } }
+@keyframes drift2 { from { transform: translate(0, 0) scale(1.08) } to { transform: translate(5vmax, -4vmax) scale(0.95) } }
+@keyframes drift3 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-4vmax, -5vmax) scale(1.15) } }
+
+/* One-time entrance: opacity + small rise, staggered, never from scale(0) */
+.hero h1, .hero p, main.wrap > h1 {
+  opacity: 0;
+  animation: rise 550ms var(--ease-out) forwards;
+}
+.hero p, main.wrap > h1 { animation-delay: 90ms }
+@keyframes rise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: translateY(0) } }
+
+/* Reduced motion: no movement, keep comprehension-aiding fades */
+@media (prefers-reduced-motion: reduce) {
+  .bg-field { display: none }
+  .hero h1, .hero p, main.wrap > h1 { animation: fade 200ms ease-out forwards }
+  @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+}
+
+/* Print: clean page, no ambient layer */
+@media print {
+  .bg-field, .tbtn { display: none }
+  header.site { position: static }
+}
