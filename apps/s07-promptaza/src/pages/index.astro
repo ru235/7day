@@ -1,0 +1,74 @@
+---
+const SITE = 'https://promptaza.ru';
+const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | promptaza.ru';
+const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const faqs = [
+  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
+  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
+  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={SITE + '/'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:type" content="website" />
+<link rel="stylesheet" href="/_s555.css" />
+<script type="application/ld+json" set:html={faqJson}></script>
+</head>
+<body>
+<header class="site"><div class="wrap"><nav><b>promptaza.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<main class="wrap">
+<section class="hero">
+<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
+<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+</section>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
+<section class="calc" id="calc">
+<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
+<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
+<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
+<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
+<button class="btn" id="go">Рассчитать</button>
+<button class="btn ghost" id="print">Печать</button>
+<div class="result" id="out">—</div>
+<p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+</section>
+<h2>Таблица: медь скрытая (ПУЭ)</h2>
+<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
+<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
+<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
+<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
+<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
+<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
+<h2>Как пользоваться</h2>
+<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Частые вопросы</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+</main>
+<footer class="site"><div class="wrap">promptaza.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
+<style>@import url('/_s555.css');</style>
+<script>
+const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
+function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
+const I=U===380?P/(1.732*380*0.95):P/U;
+const row=TAB[M].find(r=>r[1]>=I)||[16,I];
+const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
+const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
+out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
+try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
+try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
+go.onclick=calc;print.onclick=()=>window.print();
+share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
+(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+</script>
+</body>
+</html>
