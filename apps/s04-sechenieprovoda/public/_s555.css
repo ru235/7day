@@ -100,7 +100,34 @@ header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px;
   .btn:hover { background: var(--brand-hover) }
   .btn.ghost:hover { background: var(--brand-light); color: var(--brand-hover) }
   .faq summary:hover { color: var(--fg) }
+  .fgrid a:hover { color: var(--fg); text-decoration: underline }
 }
+header.site nav a[aria-current="page"] { color: var(--fg); background: var(--card) }
+
+/* Eyebrow: plain micro-label, no chip */
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px }
+
+/* Operate layout: fields + sticky result on desktop */
+.calc-layout { display: grid; gap: 14px }
+.calc-fields { display: grid; gap: 12px; align-content: start }
+.calc-side { display: grid; gap: 10px; align-content: start }
+@media (min-width: 760px) {
+  .calc-layout { grid-template-columns: 1fr 1fr; align-items: start }
+  .calc-side { position: sticky; top: 76px }
+}
+
+/* Breadcrumbs */
+.crumbs { font-size: 13px; color: var(--muted); margin: 18px 0 0 }
+.crumbs a { color: var(--muted); text-decoration: none }
+.crumbs [aria-current="page"] { color: var(--fg) }
+
+/* Footer columns */
+.fgrid { display: grid; gap: 24px; padding: 8px 0 4px }
+.fgrid h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 10px }
+.fgrid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px }
+.fgrid a { color: var(--muted); text-decoration: none; font-size: 14px }
+.fgrid p { font-size: 13px; color: var(--muted); margin: 0; max-width: 32ch }
+@media (min-width: 760px) { .fgrid { grid-template-columns: 1.2fr 1fr 1fr } }
 
 .tbtn {
   margin-left: auto;
@@ -163,14 +190,18 @@ html[data-theme="dark"] .answer { background: var(--accent-light) }
   border-radius: var(--radius);
   padding: 16px;
   white-space: pre-wrap;
+  font-variant-numeric: tabular-nums;
 }
+.result-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted) }
 
 table.data {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
+table.data caption { text-align: left; font-weight: 600; padding: 0 0 8px; color: var(--fg) }
 table.data th, table.data td {
   border: 1px solid var(--line);
   padding: 10px 12px;

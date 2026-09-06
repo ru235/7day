@@ -1,3 +1,15 @@
+# Машиночитаемые данные: /llms.txt (кратко), /llms-full.txt (полностью), /api/data.json
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: YandexAdditional
+Allow: /
 User-agent: *
 Allow: /
+Disallow: /print/
 Sitemap: https://sechenieprovoda.ru/sitemap.xml
