@@ -5,7 +5,7 @@
 | S01 | formatjson.ru | Dev-конвертеры JSON/YAML/Base64 |
 | S02 | shinapodbor.ru | Шины/диски топ100+20 китайских |
 | S03 | prokatves.ru | Металл вес |
-| S04 | avtomatpodbor.ru | Проводка/автоматы (эталон) |
+| S04 | sechenieprovoda.ru | Проводка/автоматы (эталон) |
 | S05 | fanerabox.ru | Фанера/лазер SVG |
 | S06 | kartonkorob.ru | Коробка FEFCO |
 | S07 | promptaza.ru | Промпты+ИИ |

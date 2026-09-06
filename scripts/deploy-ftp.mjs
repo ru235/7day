@@ -5,10 +5,10 @@ import path from 'node:path';
 
 const MAP = [
   ['s01-formatjson', 'S01'], ['s02-shinapodbor', 'S02'], ['s03-prokatves', 'S03'],
-  ['s04-avtomatpodbor', 'S04'], ['s05-fanerabox', 'S05'], ['s06-kartonkorob', 'S06'],
+  ['s04-sechenieprovoda', 'S04'], ['s05-fanerabox', 'S05'], ['s06-kartonkorob', 'S06'],
   ['s07-promptaza', 'S07'], ['s08-domenpodbor', 'S08'],
 ];
-const only = process.argv[2]; // напр. node scripts/deploy-ftp.mjs s04-avtomatpodbor
+const only = process.argv[2]; // напр. node scripts/deploy-ftp.mjs s04-sechenieprovoda
 for (const [app, key] of MAP) {
   if (only && only !== app) continue;
   const client = new Client();

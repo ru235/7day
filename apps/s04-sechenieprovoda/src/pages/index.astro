@@ -1,6 +1,6 @@
 ---
-const SITE = 'https://avtomatpodbor.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | avtomatpodbor.ru';
+const SITE = 'https://sechenieprovoda.ru';
+const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | sechenieprovoda.ru';
 const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
 const faqs = [
   { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
@@ -15,7 +15,7 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 ---
 <!doctype html>
 <html lang="ru">
-<head>
+<head><script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -26,9 +26,9 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:type" content="website" />
 <link rel="stylesheet" href="/_s555.css" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
+<script is:inline src="/theme.js" defer></script></head>
 <body>
-<header class="site"><div class="wrap"><nav><b>avtomatpodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a></nav></div></header>
+<header class="site"><div class="wrap"><nav><b>sechenieprovoda.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a><button id="ttheme" class="tbtn" type="button">◐ тёмная</button></nav></div></header>
 <main class="wrap">
 <section class="hero">
 <h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
@@ -70,7 +70,7 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
 <p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a> · <a href="/kabel-markirovka/">Маркировка кабелей →</a> · <a href="/zazemlenie/">Заземление →</a> · <a href="/teoriya-formuly/">Теория →</a> · <a href="/primery-raschetov/">Примеры →</a></p>
 </main>
-<footer class="site"><div class="wrap">avtomatpodbor.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
+<footer class="site"><div class="wrap">sechenieprovoda.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
 <style>@import url('/_s555.css');</style>
 <script>
 const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];

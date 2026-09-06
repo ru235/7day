@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sechenieprovoda.ru/sitemap.xml

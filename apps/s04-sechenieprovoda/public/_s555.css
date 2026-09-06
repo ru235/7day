@@ -1,10 +1,13 @@
-:root{--bg:#fff;--fg:#17202b;--muted:#5b6b7c;--line:#e3e9f0;--brand:#2f56c4;--accent:#0e9f6e;--card:#f6f8fb;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-@media(prefers-color-scheme:dark){:root{--bg:#10151c;--fg:#e8edf3;--muted:#9aa8b8;--line:#233041;--brand:#7aa2ff;--card:#161e29}}
+:root{--bg:#fff;--fg:#17202b;--muted:#5b6b7c;--line:#e3e9f0;--brand:#2f56c4;--accent:#0e9f6e;--card:#f6f8fb;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;color-scheme:light}
+html[data-theme="dark"]{--bg:#10151c;--fg:#e8edf3;--muted:#9aa8b8;--line:#233041;--brand:#7aa2ff;--accent:#34c98e;--card:#161e29;color-scheme:dark}
+@media(prefers-color-scheme:dark){html:not([data-theme]){--bg:#10151c;--fg:#e8edf3;--muted:#9aa8b8;--line:#233041;--brand:#7aa2ff;--accent:#34c98e;--card:#161e29;color-scheme:dark}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,Inter,sans-serif}
 .wrap{max-width:960px;margin:0 auto;padding:24px 16px}
-header.site{border-bottom:1px solid var(--line)}header.site nav{display:flex;gap:16px;align-items:center}
+header.site{border-bottom:1px solid var(--line)}header.site nav{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.tbtn{margin-left:auto;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:4px 14px;font-size:13px;cursor:pointer}
+.tbtn:hover{color:var(--fg);border-color:var(--muted)}
 .hero{padding:40px 0 8px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.1;margin:.2em 0}
-.answer{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:16px;margin:20px 0}
+.answer{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--accent);border-radius:10px;padding:16px;margin:20px 0}
 .calc{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
 .calc label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
 .calc input,.calc select{padding:10px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:var(--bg);color:var(--fg)}
