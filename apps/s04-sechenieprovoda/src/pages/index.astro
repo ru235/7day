@@ -28,7 +28,7 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <script type="application/ld+json" set:html={faqJson}></script>
 <script is:inline src="/theme.js" defer></script></head>
 <body>
-<header class="site"><div class="wrap"><nav><b>sechenieprovoda.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a><button id="ttheme" class="tbtn" type="button">◐ тёмная</button></nav></div></header>
+<header class="site"><div class="wrap"><nav><b>sechenieprovoda.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica">Таблица</a><a href="/avtomat-vybor">Автомат</a><a href="/kabel-markirovka">Маркировка</a><a href="/zazemlenie">Заземление</a><a href="/teoriya-formuly">Теория</a><a href="/primery-raschetov">Примеры</a><button id="ttheme" class="tbtn" type="button">◐ тёмная</button></nav></div></header>
 <main class="wrap">
 <section class="hero">
 <h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
@@ -65,21 +65,28 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <text x="380" y="60" font-size="13">каждая мощная линия —</text><text x="380" y="80" font-size="13">свой автомат и кабель</text><text x="380" y="110" font-size="13" fill="var(--muted)">УЗО 30 мА — на розетки</text><text x="380" y="130" font-size="13" fill="var(--muted)">и влажные зоны</text>
 </svg>
 <h2>Разделы</h2>
-<ul><li><a href="/kabel-markirovka/">Маркировка кабелей: ВВГ, NYM, ПВС, СИП</a></li><li><a href="/zazemlenie/">Расчёт заземления + калькулятор контура</a></li><li><a href="/teoriya-formuly/">Теория просто: 3 формулы</a></li><li><a href="/primery-raschetov/">4 живых примера</a></li></ul>
+<ul><li><a href="/kabel-markirovka">Маркировка кабелей: ВВГ, NYM, ПВС, СИП</a></li><li><a href="/zazemlenie">Расчёт заземления + калькулятор контура</a></li><li><a href="/teoriya-formuly">Теория просто: 3 формулы</a></li><li><a href="/primery-raschetov">4 живых примера</a></li></ul>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a> · <a href="/kabel-markirovka/">Маркировка кабелей →</a> · <a href="/zazemlenie/">Заземление →</a> · <a href="/teoriya-formuly/">Теория →</a> · <a href="/primery-raschetov/">Примеры →</a></p>
+<p><a href="/sechenie-tok-tablica">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor">Как выбрать автомат →</a> · <a href="/kabel-markirovka">Маркировка кабелей →</a> · <a href="/zazemlenie">Заземление →</a> · <a href="/teoriya-formuly">Теория →</a> · <a href="/primery-raschetov">Примеры →</a></p>
 </main>
 <footer class="site"><div class="wrap">sechenieprovoda.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
 <style>@import url('/_s555.css');</style>
 <script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
+const RHO={cu:0.0175,al:0.028};
+const TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70],[16,80],[25,105],[35,130],[50,160],[70,200],[95,250]],al:[[2.5,20],[4,28],[6,36],[10,50],[16,60],[25,80],[35,95],[50,120],[70,150],[95,190]]};
+const BR=[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250];
+const MAXI={cu:250,al:190};
 function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
 const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
+if(!(I>0)){out.textContent='Введите мощность больше нуля.';return}
+const row=TAB[M].find(r=>r[1]>=I*1.25);
+if(!row){out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> — вне бытового диапазона (таблица до ${MAXI[M]} А).<br>Такая нагрузка требует проекта: параллельные линии, шины, согласование с сетями. Обратитесь к электрику.`;return}
+const S=row[0],Imax=row[1];
+let br=BR.find(b=>b>=I);if(br>Imax)br=BR.filter(b=>b<=Imax).pop();
 const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
+const big=S>=25?' · <b>нужен проект</b> (сечения от 25 мм² — не бытовой монтаж)':'';
+out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b>${big}<br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
 try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
 try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
 go.onclick=calc;print.onclick=()=>window.print();
