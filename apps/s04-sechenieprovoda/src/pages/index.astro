@@ -50,9 +50,10 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
 <label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
 <label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
+<label>Прокладка <select id="lay"><option value="in">В помещении</option><option value="out">На улице</option></select></label>
 <label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
 <div><button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button></div>
+<button class="btn ghost" id="printBtn">Печать</button></div>
 </div>
 <aside class="calc-side" aria-live="polite">
 <span class="result-label">Результат</span>
@@ -93,30 +94,61 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 </div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
 <footer class="site"><div class="wrap"><div class="fgrid"><div><h3>sechenieprovoda.ru</h3><p>Калькуляторы и справочник электрика. Расчёт ориентировочный, сверяйтесь с ПУЭ и электриком. Обновлено 2026-09-06.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор сечения</a></li><li><a href="/sechenie-tok-tablica">Таблица сечение–ток</a></li><li><a href="/zazemlenie">Заземление</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/avtomat-vybor">Выбор автомата</a></li><li><a href="/kabel-markirovka">Маркировка кабелей</a></li><li><a href="/teoriya-formuly">Теория и формулы</a></li><li><a href="/primery-raschetov">Примеры расчётов</a></li></ul></div></div></div></footer>
 
 <style>@import url('/_s555.css');</style>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики посещаемости планируем подключить Яндекс.Метрику и Google Analytics — они могут использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script>
+const $=id=>document.getElementById(id);
 const RHO={cu:0.0175,al:0.028};
 const TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70],[16,80],[25,105],[35,130],[50,160],[70,200],[95,250]],al:[[2.5,20],[4,28],[6,36],[10,50],[16,60],[25,80],[35,95],[50,120],[70,150],[95,190]]};
 const BR=[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250];
 const MAXI={cu:250,al:190};
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-if(!(I>0)){out.textContent='Введите мощность больше нуля.';return}
-const row=TAB[M].find(r=>r[1]>=I*1.25);
-if(!row){out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> — вне бытового диапазона (таблица до ${MAXI[M]} А).<br>Такая нагрузка требует проекта: параллельные линии, шины, согласование с сетями. Обратитесь к электрику.`;return}
-const S=row[0],Imax=row[1];
-let br=BR.find(b=>b>=I);if(br>Imax)br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-const big=S>=25?' · <b>нужен проект</b> (сечения от 25 мм² — не бытовой монтаж)':'';
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b>${big}<br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+function cableAdvice(M,S,lay,U){
+  if(lay==='out')return 'Улица: по воздуху — СИП-4 (УФ-стойкий); в земле — ВБШв в трубе. Обычный ВВГ на солнце и в грунте без защиты — нельзя.';
+  if(M==='al')return S>=16?'Алюминий от 16 мм² допустим, но в жилых зданиях предпочтительна медь (ПУЭ 7.1.34).':'Алюминий до 16 мм² в жилых зданиях запрещён (ПУЭ 7.1.34) — возьмите медь.';
+  const cores=U===380?5:3;
+  return S<=10?`В помещении: ВВГнг-LS ${cores}×${S} (по ГОСТ 31996-2012, пожаробезопасный по ГОСТ 31565-2012).`:`Сечение ${S} мм² — уже уровень проекта, кабель и защиту считает проектировщик.`;
+}
+function lastCalc(){const P=+$('p').value,U=+$('u').value,M=$('m').value,L=+$('l').value,lay=$('lay').value;
+  const I=U===380?P/(1.732*380*0.95):P/U;
+  if(!(I>0))return null;
+  const row=TAB[M].find(r=>r[1]>=I*1.25);
+  if(!row)return {P,U,M,L,lay,I,over:true};
+  const S=row[0],Imax=row[1];
+  let br=BR.find(b=>b>=I);if(br>Imax)br=BR.filter(b=>b<=Imax).pop();
+  const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
+  return {P,U,M,L,lay,I,S,br,dU,pct};
+}
+function calc(){const out=$('out'),r=lastCalc();
+  if(!r){out.textContent='Введите мощность больше нуля.';return}
+  if(r.over){out.innerHTML=`Ток: <b>${r.I.toFixed(1)} А</b> — вне бытового диапазона (таблица до ${MAXI[r.M]} А).<br>Такая нагрузка требует проекта: параллельные линии, шины, согласование с сетями. Обратитесь к электрику.`;return}
+  const big=r.S>=25?' · <b>нужен проект</b> (сечения от 25 мм² — не бытовой монтаж)':'';
+  out.innerHTML=`Ток: <b>${r.I.toFixed(1)} А</b> · Сечение: <b>${r.S} мм² (${r.M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${r.br}А</b>${big}<br>Падение: ${r.dU.toFixed(1)} В (${r.pct.toFixed(1)}%)${r.pct>5?' — увеличьте сечение':''}<br><span style="font-size:14px">${cableAdvice(r.M,r.S,r.lay,r.U)}</span>`;
+  try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P:r.P,U:r.U,M:r.M,L:r.L,lay:r.lay,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
+  try{window.s555ev&&s555ev('calc_run',{P:r.P,U:r.U,lay:r.lay})}catch(e){}
+  return r;
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');const d=new Date().toLocaleDateString('ru-RU');
+  const layName={in:'в помещении',out:'на улице'}[r.lay]||'—';
+  const matName=r.M==='cu'?'медь':'алюминий';
+  const body=r.over?`<p><b>Ток ${r.I.toFixed(1)} А — вне бытового диапазона.</b> Требуется проект электроснабжения.</p>`
+    :`<table><tr><th>Параметр</th><th>Значение</th></tr><tr><td>Ток нагрузки</td><td>${r.I.toFixed(1)} А</td></tr><tr><td>Сечение жилы</td><td>${r.S} мм², ${matName}</td></tr><tr><td>Автоматический выключатель</td><td>${r.br}А, характеристика C (свет и длинные линии — B)</td></tr><tr><td>Падение напряжения</td><td>${r.dU.toFixed(1)} В (${r.pct.toFixed(1)}%)</td></tr><tr><td>Рекомендуемый кабель</td><td>${cableAdvice(r.M,r.S,r.lay,r.U)}</td></tr></table>
+    <h2>Рекомендации</h2><ul><li>Мощные приборы от 2 кВт — отдельные линии со своим автоматом.</li><li>УЗО 30 мА — на розетки и влажные зоны; во влажных помещениях — обязательно.</li><li>Автомат защищает кабель: номинал не выше длит. тока кабеля.</li><li>Длина свыше 30 м — проверьте падение, при >5% увеличьте сечение.</li></ul>`;
+  sh.innerHTML=`<h1>Расчёт сечения кабеля — sechenieprovoda.ru</h1><p>Дата: ${d}</p>
+  <h2>Вводные данные</h2><table><tr><th>Параметр</th><th>Значение</th></tr><tr><td>Мощность</td><td>${r.P} Вт</td></tr><tr><td>Напряжение</td><td>${r.U} В</td></tr><tr><td>Материал жилы</td><td>${matName}</td></tr><tr><td>Прокладка</td><td>${layName}</td></tr><tr><td>Длина линии</td><td>${r.L} м</td></tr></table>
+  <h2>Результат</h2>${body}
+  <h2>Нормативные ссылки</h2><ul><li>ПУЭ 7-е изд., гл. 1.3: выбор сечений по нагреву — табл. 1.3.4 (медь), 1.3.5 (алюминий).</li><li>ПУЭ 7.1.34: в жилых зданиях — кабели и провода с медными жилами.</li><li>ГОСТ 31996-2012: кабели силовые с пластмассовой изоляцией.</li><li>ГОСТ 31565-2012: пожарная безопасность кабельных изделий (нг-LS).</li><li>ГОСТ Р 50345 (МЭК 60898): автоматические выключатели.</li></ul>
+  <p><b>Важно:</b> расчёт ориентировочный и не заменяет проект. Монтаж — квалифицированным персоналом, с проверкой затяжки контактов, селективности защит и срабатывания УЗО.</p>`;
+}
+$('go').onclick=calc;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+(function(){const q=new URLSearchParams(location.search);if(q.get('p'))$('p').value=q.get('p');calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+  const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>

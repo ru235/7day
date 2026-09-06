@@ -50,28 +50,7 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme]) {
-    --bg: #0b1020;
-    --fg: #f1f5f9;
-    --muted: #94a3b8;
-    --muted-light: #64748b;
-    --line: #1e293b;
-    --card: #111827;
-    --brand: #60a5fa;
-    --brand-hover: #93c5fd;
-    --brand-light: #1e3a5f;
-    --accent: #34d399;
-    --accent-light: #064e3b;
-    --danger: #f87171;
-    --danger-light: #7f1d1d;
-    --warning: #fbbf24;
-    --warning-light: #78350f;
-    --shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 1px 2px rgb(0 0 0 / 0.2);
-    --shadow-lg: 0 4px 6px rgb(0 0 0 / 0.3), 0 2px 4px rgb(0 0 0 / 0.2);
-    color-scheme: dark;
-  }
-}
+/* NOTE: light theme is the default. Dark applies only via explicit [data-theme="dark"] toggle. */
 
 * { box-sizing: border-box }
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
@@ -322,9 +301,6 @@ header.site, main.wrap, footer.site { position: relative; z-index: 1 }
   background: radial-gradient(circle, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%);
   animation: drift3 40s var(--ease-in-out) infinite alternate }
 html[data-theme="dark"] .blob { opacity: 0.32 }
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme]) .blob { opacity: 0.32 }
-}
 @keyframes drift1 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-6vmax, 5vmax) scale(1.12) } }
 @keyframes drift2 { from { transform: translate(0, 0) scale(1.08) } to { transform: translate(5vmax, -4vmax) scale(0.95) } }
 @keyframes drift3 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-4vmax, -5vmax) scale(1.15) } }
@@ -354,8 +330,27 @@ html[data-theme="dark"] .blob { opacity: 0.32 }
 .card h3::after { content: " →"; color: var(--brand); font-weight: 400 }
 .card p { margin: 0; font-size: 14px; color: var(--muted) }
 
-/* Print: clean page, no ambient layer */
+/* Cookies: fixed notice, no tracking of its own */
+.cookies { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--card); border-top: 1px solid var(--line); box-shadow: var(--shadow-lg) }
+.cookies[hidden] { display: none }
+.cookies p { display: flex; gap: 12px; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); margin: 0; padding: 12px 0 }
+.cookies .btn { flex-shrink: 0; padding: 8px 18px; font-size: 14px }
+
+/* Print sheet: screen-hidden A4 report */
+.print-sheet { display: none }
+
+/* Print: only the report fits on A4 */
 @media print {
-  .bg-field, .tbtn { display: none }
-  header.site { position: static }
+  .bg-field, .tbtn, .burger, .cookies { display: none !important }
+  header.site, footer.site { display: none !important }
+  main.wrap > * { display: none !important }
+  main.wrap > .print-sheet { display: block !important }
+  .print-sheet { font-size: 11.5px; color: #000 }
+  .print-sheet h1 { font-size: 18px; margin: 0 0 4px }
+  .print-sheet h2 { font-size: 13px; margin: 10px 0 4px }
+  .print-sheet p, .print-sheet li { font-size: 11.5px; margin: 2px 0 }
+  .print-sheet ul { padding-left: 18px; margin: 2px 0 }
+  .print-sheet table { width: 100%; border-collapse: collapse; margin: 4px 0 }
+  .print-sheet th, .print-sheet td { border: 1px solid #999; padding: 3px 6px; text-align: left; font-size: 11.5px }
+  @page { margin: 12mm }
 }
