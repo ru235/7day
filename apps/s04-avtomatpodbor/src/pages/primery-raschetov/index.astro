@@ -1,0 +1,32 @@
+---
+---
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Примеры расчётов: квартира, дом 15 кВт, гараж, длинная линия | avtomatpodbor.ru</title>
+<meta name="description" content="4 готовых примера: студия, дом 15 кВт на 3 фазах, гараж 12В, линия 60 метров. Сечение, автомат, ошибки.">
+<link rel="stylesheet" href="/_s555.css"></head>
+<body><header class="site"><div class="wrap"><nav><b>avtomatpodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a></nav></div></header>
+<main class="wrap">
+<h1>4 живых примера — найди свой</h1>
+
+<h2>Пример 1. Студия: духовка 3.5 кВт</h2>
+<svg viewBox="0 0 560 120" width="100%" role="img" aria-label="Схема линии духовки" style="background:var(--card);border:1px solid var(--line);border-radius:10px">
+<rect x="20" y="35" width="100" height="50" rx="8" fill="none" stroke="var(--brand)" stroke-width="2"/><text x="70" y="64" text-anchor="middle" font-size="13">Щит</text>
+<line x1="120" y1="60" x2="380" y2="60" stroke="var(--muted)" stroke-width="3"/><text x="250" y="48" text-anchor="middle" font-size="12" fill="var(--muted)">ВВГ 3×2.5, 12 м, автомат 16А</text>
+<rect x="380" y="35" width="150" height="50" rx="8" fill="none" stroke="var(--accent)" stroke-width="2"/><text x="455" y="64" text-anchor="middle" font-size="13">Духовка 3.5 кВт</text>
+</svg>
+<p>Ток 3500/220 ≈ <b>15.9 А</b> → кабель ВВГнг-LS 3×2.5 (27 А) + автомат <b>16А, C</b> + отдельная розетка. Ошибка: вешать на общую линию с чайником — вместе 30 А, автомат 16А будет выбивать.</p>
+
+<h2>Пример 2. Дом 15 кВт, 3 фазы</h2>
+<p>Ток на фазу ≈ <b>24 А</b> → ввод СИП-4 4×16 (по воздуху) → щит: вводной 32А → разводка: плита 5×4 (25А), розетки 3×2.5 (16–20А), свет 3×1.5 (10А). Заземление — треугольник (см. <a href="/zazemlenie/">расчёт</a>).</p>
+
+<h2>Пример 3. Гараж 12 В: фара 100 Вт, 8 метров</h2>
+<p>Ток 100/12 ≈ <b>8.3 А</b> — как чайник в 220! Нужно 2×4 мм² меди, иначе падение 12% и тусклый свет. Правило 12 В: сечения всегда толще, чем кажется.</p>
+
+<h2>Пример 4. Баня 60 м от дома, 6 кВт</h2>
+<p>Ток 27 А → по току хватило бы 4 мм², но падение на 60 м ≈ 14 В. Берём <b>6 мм²</b> (падение 9 В) + автомат 32А в доме и 25А в бане (селективность). Кабель — ВБШв в земле в трубе.</p>
+
+<table class="data"><tr><th>Случай</th><th>Кабель</th><th>Автомат</th></tr>
+<tr><td>Свет</td><td>3×1.5</td><td>10А B</td></tr><tr><td>Розетки</td><td>3×2.5</td><td>16А C</td></tr>
+<tr><td>Духовка/стиралка</td><td>3×2.5 отд.</td><td>16А C</td></tr><tr><td>Плита/проточник</td><td>3×4…3×6</td><td>25–32А C</td></tr></table>
+<p><a href="/">← посчитать свой случай</a></p>
+</main></body></html>

@@ -1,0 +1,44 @@
+---
+---
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Расчёт заземления: контур, сопротивление, схема | avtomatpodbor.ru</title>
+<meta name="description" content="Как рассчитать заземление дома: сопротивление грунта, один электрод и контур, норма 4/8/30 Ом. Онлайн-расчёт + схема треугольником.">
+<link rel="stylesheet" href="/_s555.css"></head>
+<body><header class="site"><div class="wrap"><nav><b>avtomatpodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a></nav></div></header>
+<main class="wrap">
+<h1>Заземление дома: расчёт за 2 минуты</h1>
+<div class="answer"><b>Суть:</b> вбиваем в землю 3 стальных уголка треугольником, соединяем полосой, ведём в щит. Норма для дома с газом — ≤10 Ом, для ТТ с УЗО — ≤30 Ом на практике хватает. Грунт мокрый — сопротивление ниже.</div>
+
+<h2>Схема контура «треугольник»</h2>
+<svg viewBox="0 0 560 240" width="100%" role="img" aria-label="Схема контура заземления" style="background:var(--card);border:1px solid var(--line);border-radius:10px">
+<polygon points="280,40 140,190 420,190" fill="none" stroke="var(--brand)" stroke-width="3"/>
+<circle cx="280" cy="40" r="10" fill="var(--brand)"/><circle cx="140" cy="190" r="10" fill="var(--brand)"/><circle cx="420" cy="190" r="10" fill="var(--brand)"/>
+<text x="280" y="28" text-anchor="middle" font-size="13">электрод 1 (уголок 50×50, L=3 м)</text>
+<text x="110" y="210" font-size="13">электрод 2</text><text x="400" y="210" font-size="13">электрод 3</text>
+<text x="280" y="150" text-anchor="middle" font-size="13" fill="var(--muted)">стальная полоса 40×4, глубина 0.5–0.7 м</text>
+<line x1="280" y1="190" x2="280" y2="228" stroke="var(--accent)" stroke-width="3"/><text x="290" y="226" font-size="13">в щит (PE)</text>
+<text x="280" y="120" text-anchor="middle" font-size="13" fill="var(--muted)">расстояние между электродами ≥ длины электрода</text>
+</svg>
+
+<h2>Калькулятор: сколько электродов нужно</h2>
+<section class="calc">
+<label>Сопротивление грунта ρ, Ом·м (чернозём ~50, суглинок ~100, песок ~500) <input id="rho" type="number" value="100" min="10" max="1000"></label>
+<label>Длина электрода, м <input id="len" type="number" value="3" min="1.5" max="6" step="0.5"></label>
+<label>Нужно получить, Ом <input id="need" type="number" value="10" min="4" max="30"></label>
+<button class="btn" id="gz">Рассчитать</button>
+<div class="result" id="gout">—</div>
+</section>
+
+<h2>Формула (для понимания)</h2>
+<p>Один вертикальный электрод: <b>R = ρ / (2πL) · ln(4L/d)</b>, где d ≈ 0.05 м для уголка 50×50. Три электрода треугольником дают примерно <b>R/3 · 1.4</b> (коэффициент использования ~0.7). Пример: суглинок 100 Ом·м, L=3 м → один ≈ 27 Ом → треугольник ≈ 12 Ом → добавьте 4-й электрод или удлините до 4.5 м.</p>
+<table class="data"><tr><th>Грунт</th><th>ρ, Ом·м</th></tr><tr><td>Чернозём, глина мокрая</td><td>20–60</td></tr><tr><td>Суглинок</td><td>80–150</td></tr><tr><td>Песок сухой</td><td>400–700</td></tr><tr><td>Скала</td><td>1000+</td></tr></table>
+<p><a href="/">← к калькулятору сечения</a></p>
+</main>
+<script>
+gz.onclick=()=>{const r=+rho.value,L=+len.value,N=+need.value;
+const R1=r/(2*Math.PI*L)*Math.log(4*L/0.05);
+let n=1;while((R1/n/0.7)>N&&n<12)n++;
+gout.innerHTML=`Один электрод: <b>${R1.toFixed(1)} Ом</b> · Контур: <b>${n} шт</b> → ≈ ${(R1/n/0.7).toFixed(1)} Ом (треугольник/ряд с к=0.7)`;
+try{window.s555ev&&s555ev('calc_run',{page:'zazemlenie'})}catch(e){}};
+</script>
+</body></html>

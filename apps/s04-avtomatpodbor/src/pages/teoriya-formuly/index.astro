@@ -1,0 +1,34 @@
+---
+---
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Теория электрики просто: закон Ома, мощность, падение напряжения | avtomatpodbor.ru</title>
+<meta name="description" content="Закон Ома, мощность P=U·I, падение напряжения, почему греется тонкий провод. Формулы с примерами обычным языком.">
+<link rel="stylesheet" href="/_s555.css"></head>
+<body><header class="site"><div class="wrap"><nav><b>avtomatpodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a><a href="/kabel-markirovka/">Маркировка</a><a href="/zazemlenie/">Заземление</a><a href="/teoriya-formuly/">Теория</a><a href="/primery-raschetov/">Примеры</a></nav></div></header>
+<main class="wrap">
+<h1>Теория за 10 минут — только нужное</h1>
+<div class="answer"><b>Вся бытовая электрика — 3 формулы:</b> ток I = P / U · мощность P = U · I · падение dU = 2·I·L·ρ / S. Остальное — таблицы по ним.</div>
+
+<h2>1. Закон Ома: ток = мощность / напряжение</h2>
+<p>Чайник 2000 Вт в розетке 220 В тянет I = 2000/220 ≈ <b>9 А</b>. Поэтому розетки делают на 16 А: чайник + ещё что-то влезет, а утюг 3000 Вт (13.6 А) + чайник одновременно — уже перегруз одной розетки.</p>
+<svg viewBox="0 0 560 150" width="100%" role="img" aria-label="Схема: источник, провод, нагрузка" style="background:var(--card);border:1px solid var(--line);border-radius:10px">
+<rect x="30" y="45" width="90" height="60" rx="8" fill="none" stroke="var(--brand)" stroke-width="2"/><text x="75" y="80" text-anchor="middle" font-size="14">220 В</text>
+<line x1="120" y1="60" x2="440" y2="60" stroke="var(--muted)" stroke-width="3"/><line x1="120" y1="90" x2="440" y2="90" stroke="var(--muted)" stroke-width="3"/>
+<rect x="440" y="45" width="90" height="60" rx="8" fill="none" stroke="var(--accent)" stroke-width="2"/><text x="485" y="80" text-anchor="middle" font-size="14">P, Вт</text>
+<text x="280" y="50" text-anchor="middle" font-size="13" fill="var(--muted)">провод: чем тоньше и длиннее — тем больше сопротивление</text>
+<text x="280" y="130" text-anchor="middle" font-size="14">I = P / U — ток считает вся квартира</text>
+</svg>
+
+<h2>2. Почему греется тонкий провод</h2>
+<p>У провода есть сопротивление R = ρ·L/S. Ток греет его мощностью P = I²·R. Удвоили ток — нагрев <b>в 4 раза</b>. Поэтому занижать сечение опасно: автомат может не успеть, а изоляция уже плавится. Автомат ставят <b>по кабелю</b>, а не по нагрузке.</p>
+
+<h2>3. Падение напряжения: длинный кабель «съедает» вольты</h2>
+<p>Формула для 220 В: <b>dU = 2·I·L·ρ / S</b> (ρ меди 0.0175). Пример: 5 кВт (22.7 А), 50 м, 4 мм² → dU ≈ 10 В (4.5%) — терпимо. Та же линия на 2.5 мм² → 16 В (7%) — лампочки тускнеют, насос гудит. Лечится +1 шагом сечения.</p>
+
+<h2>4. Три фазы 380 В: ток в ~3 раза меньше</h2>
+<p>Та же мощность делится на три фазы: I = P / (√3·380·0.95). Дом 15 кВт → ≈ 24 А на фазу → вводной 32А, кабель 5×6. Поэтому в частные дома тянут 3 фазы.</p>
+
+<h2>5. Автомат B или C?</h2>
+<p>Буква — чувствительность к пусковому току. <b>B</b> срабатывает раньше — свет и длинные линии. <b>C</b> — универсально: розетки, бытовуха. <b>D</b> — моторы с тяжёлым пуском (насос, компрессор).</p>
+<p><a href="/primery-raschetov/">Дальше: 4 живых примера →</a> · <a href="/">← к калькулятору</a></p>
+</main></body></html>
