@@ -93,6 +93,9 @@ header.site {
 }
 header.site nav { display: flex; gap: 12px; align-items: center; flex-wrap: wrap }
 header.site nav b { font-weight: 600; color: var(--fg); text-decoration: none }
+.brand { display: inline-flex; align-items: center; gap: 9px; color: var(--fg); text-decoration: none; font-weight: 700; font-size: 17px; letter-spacing: -0.01em }
+.brand svg { display: block; width: 26px; height: 26px }
+.brand small { font-weight: 500; color: var(--muted); font-size: 13px }
 header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 4px 8px; border-radius: 6px; transition: color 150ms var(--ease-out), background-color 150ms var(--ease-out) }
 @media (hover: hover) and (pointer: fine) {
   header.site nav a:hover { color: var(--fg); background: var(--card) }
@@ -101,6 +104,7 @@ header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px;
   .btn.ghost:hover { background: var(--brand-light); color: var(--brand-hover) }
   .faq summary:hover { color: var(--fg) }
   .fgrid a:hover { color: var(--fg); text-decoration: underline }
+  .card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-lg) }
 }
 header.site nav a[aria-current="page"] { color: var(--fg); background: var(--card) }
 
@@ -307,6 +311,14 @@ html[data-theme="dark"] .blob { opacity: 0.32 }
   .hero h1, .hero p, main.wrap > h1 { animation: fade 200ms ease-out forwards }
   @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
 }
+
+/* Guide cards: flat link-cards, top-level only */
+.cards { display: grid; gap: 12px; margin: 20px 0 }
+@media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr } }
+.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px 20px; text-decoration: none; color: var(--fg); transition: border-color 160ms var(--ease-out), transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out) }
+.card h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600 }
+.card h3::after { content: " →"; color: var(--brand); font-weight: 400 }
+.card p { margin: 0; font-size: 14px; color: var(--muted) }
 
 /* Print: clean page, no ambient layer */
 @media print {

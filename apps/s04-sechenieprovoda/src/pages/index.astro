@@ -28,6 +28,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
 <link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="stylesheet" href="/_s555.css" />
 <script type="application/ld+json" set:html={faqJson}></script>
 <script type="application/ld+json" set:html={siteJson}></script>
@@ -35,7 +36,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <script type="application/ld+json" set:html={howtoJson}></script>
 <script is:inline src="/theme.js" defer></script></head>
 <body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
-<header class="site"><div class="wrap"><nav><b>sechenieprovoda.ru</b><a href="/" aria-current="page">Калькулятор</a><a href="/sechenie-tok-tablica">Таблица</a><a href="/avtomat-vybor">Автомат</a><a href="/kabel-markirovka">Маркировка</a><a href="/zazemlenie">Заземление</a><a href="/teoriya-formuly">Теория</a><a href="/primery-raschetov">Примеры</a><button id="ttheme" class="tbtn" type="button">◐ тёмная</button></nav></div></header>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="сечениепровода — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13.5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="11.5" cy="13.5" r="3.4" fill="currentColor"/><circle cx="20.5" cy="13.5" r="3.4" fill="currentColor"/><circle cx="16" cy="20.5" r="3.4" fill="var(--accent)"/></svg><span>сечениепровода<small>.ru</small></span></a><a href="/" aria-current="page">Калькулятор</a><a href="/sechenie-tok-tablica">Таблица</a><a href="/avtomat-vybor">Автомат</a><a href="/kabel-markirovka">Маркировка</a><a href="/zazemlenie">Заземление</a><a href="/teoriya-formuly">Теория</a><a href="/primery-raschetov">Примеры</a><button id="ttheme" class="tbtn" type="button">◐ тёмная</button></nav></div></header>
 <main class="wrap">
 <section class="hero">
 <p class="eyebrow">Калькулятор электрика</p>
@@ -81,6 +82,15 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <line x1="110" y1="105" x2="130" y2="105" stroke="var(--muted)" stroke-width="2"/><line x1="220" y1="105" x2="250" y2="45" stroke="var(--muted)" stroke-width="2"/><line x1="220" y1="105" x2="250" y2="105" stroke="var(--muted)" stroke-width="2"/><line x1="220" y1="105" x2="250" y2="165" stroke="var(--muted)" stroke-width="2"/>
 <text x="380" y="60" font-size="13">каждая мощная линия —</text><text x="380" y="80" font-size="13">свой автомат и кабель</text><text x="380" y="110" font-size="13" fill="var(--muted)">УЗО 30 мА — на розетки</text><text x="380" y="130" font-size="13" fill="var(--muted)">и влажные зоны</text>
 </svg>
+<h2>Справочник</h2>
+<div class="cards">
+<a class="card" href="/sechenie-tok-tablica"><h3>Таблица сечение–ток</h3><p>Полные данные до 95 мм²: медь и алюминий, мощность, автоматы.</p></a>
+<a class="card" href="/avtomat-vybor"><h3>Выбор автомата</h3><p>Номинал по кабелю, характеристики B, C, D, селективность.</p></a>
+<a class="card" href="/kabel-markirovka"><h3>Маркировка кабелей</h3><p>ВВГ, NYM, ПВС, СИП: расшифровка и куда какой.</p></a>
+<a class="card" href="/zazemlenie"><h3>Заземление</h3><p>Контур треугольником, нормы и калькулятор электродов.</p></a>
+<a class="card" href="/teoriya-formuly"><h3>Теория и формулы</h3><p>Три формулы обычным языком: ток, нагрев, падение.</p></a>
+<a class="card" href="/primery-raschetov"><h3>Примеры расчётов</h3><p>Студия, дом 15 кВт, гараж 12 В, баня в 60 метрах.</p></a>
+</div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
 </main>
