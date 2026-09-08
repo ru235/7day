@@ -1,0 +1,57 @@
+---
+import db from '../../../packages/datasets/tires-db.json';
+const SITE = 'https://shinapodbor.ru';
+const title = 'Штатные размеры шин и дисков: 114 моделей | shinapodbor.ru';
+const desc = 'Заводские размеры шин и дисков: Lada, Kia, Hyundai, Toyota, Skoda, Haval, Chery, Geely и другие. PCD, вылет ET, диаметр ступицы.';
+const faqs = [
+  { q: 'Где смотреть штатный размер?', a: 'На табличке авто (проём двери, лючок бака) и в руководстве. Наша таблица — ходовые комплектации, сверяйтесь с табличкой.' },
+  { q: 'Что важнее: шина или диск?', a: 'Оба. Шина держит диаметр в ±3%, диск обязан совпасть по PCD, а вылет и ступица — в допуске.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const crumbs = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Главная', item: SITE + '/' }, { '@type': 'ListItem', position: 2, name: 'Таблица размеров', item: SITE + '/tablitsa-razmerov' }] });
+const groups = [...new Set(db.cars.map(c => c.make))].sort().map(mk => ({ mk, cars: db.cars.filter(c => c.make === mk) }));
+---
+<!doctype html><html lang="ru"><head><script is:inline src="/theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/tablitsa-razmerov'} />
+<meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_s555.css"><script type="application/ld+json" set:html={faqJson}></script><script type="application/ld+json" set:html={crumbs}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112400622', 'ym');
+    ym(112400622, 'init', {ssr:true, webvisor:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112400622" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="шиноподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="1.6" fill="var(--accent)"/></svg><span>шиноподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><span></span><span></span></button><div class="nav-links" id="navlinks"><a href="/">Калькулятор</a><a href="/tablitsa-razmerov" aria-current="page">Таблица</a><a href="/markirovka">Маркировка</a><a href="/davlenie">Давление</a><a href="/diski">Диски</a><a href="/sezon">Сезон</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="/">Главная</a> / <span aria-current="page">Таблица размеров</span></nav>
+<h1>Штатные размеры шин и дисков</h1>
+<div class="answer"><b>Как пользоваться:</b> найдите марку и модель — в таблице заводские типоразмеры ходовых комплектаций. PCD обязана совпасть, вылет ET — в пределах ±5–7 мм, DIA — точно или через центровочные кольца. Сверяйтесь с табличкой на авто.</div>
+<label style="display:grid;gap:6px;max-width:420px;margin:16px 0">Быстрый поиск по таблице <input id="q" type="search" placeholder="Например: Creta или 215/60" style="padding:10px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:var(--bg);color:var(--fg)" /></label>
+{groups.map(g => (
+<section data-mk={g.mk}>
+<h2>{g.mk}</h2>
+<table class="data"><caption>{g.mk}: штатные шины и диски</caption><tr><th>Модель</th><th>Годы</th><th>Шина</th><th>Диск</th><th>PCD / ET / DIA</th></tr>
+{g.cars.map(c => c.stock.map((s, i) => (
+<tr><td>{i === 0 ? c.model : ''}</td><td>{i === 0 ? (c.years || '—') : ''}</td><td>{s.tire}</td><td>{s.disk || '—'}</td><td>{s.pcd ? `${s.pcd} / ET${s.et} / ${s.dia}` : 'сверьтесь с руководством'}</td></tr>
+)))}
+</table>
+</section>
+))}
+<h2>Частые вопросы</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="/">← сравнить размеры в калькуляторе</a></p></main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>shinapodbor.ru</h3><p>Шинный калькулятор и справочник. Размеры ходовых комплектаций — сверяйтесь с руководством. Обновлено 2026-09-08.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор шин</a></li><li><a href="/tablitsa-razmerov">Таблица размеров</a></li><li><a href="/diski">Проверка дисков</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/markirovka">Маркировка</a></li><li><a href="/davlenie">Давление</a></li><li><a href="/sezon">Сезон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<script>
+$('q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();
+document.querySelectorAll('section[data-mk]').forEach(s=>{s.style.display=s.textContent.toLowerCase().includes(q)?'':'none'})});
+function $(id){return document.getElementById(id)}
+</script>
+</body></html>

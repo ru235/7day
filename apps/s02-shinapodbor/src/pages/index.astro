@@ -1,17 +1,27 @@
 ---
+import db from '../../../packages/datasets/tires-db.json';
 const SITE = 'https://shinapodbor.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | shinapodbor.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Подбор шин и дисков по марке авто — калькулятор размеров | shinapodbor.ru';
+const desc = 'Шинный калькулятор: сравнение размеров шин, погрешность спидометра, клиренс. База штатных размеров 114 моделей + топ китайских. Давление, маркировка, вылет дисков.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Что означает маркировка 205/55R16?', a: '205 — ширина в мм, 55 — высота профиля в % от ширины, R — радиальная конструкция, 16 — посадочный диаметр в дюймах.' },
+  { q: 'Насколько можно отклониться от штатного размера?', a: 'Безопасно — до ±3% по внешнему диаметру. 3–5% — с оговорками (арки, гарантия). Больше 5% — нельзя: врёт спидометр, страдают подвеска и тормоза.' },
+  { q: 'Как размер влияет на спидометр?', a: 'Шина большего диаметра проходит больше за оборот: спидометр занижает скорость. При +3% диаметра на 100 км/ч прибор покажет ~97.' },
+  { q: 'Какое давление качать?', a: 'По табличке на авто (стойка двери, лючок бака): обычно 2.2–2.5 атм. Под загрузку и трассу +0.2 атм.' },
+  { q: 'Можно ли ставить разную резину?', a: 'На одной оси — нет: одинаковые размер, модель и износ. Разные оси допустимы, но нежелательно зимой.' },
+  { q: 'Шипы или липучка?', a: 'Лёд и укатанный снег — шипы. Чистый асфальт и мягкая зима — фрикционная (липучка) тише и комфортнее.' },
+  { q: 'Что такое вылет диска ET?', a: 'Расстояние от привалочной плоскости до центра диска в мм. Отклонение от штатного более чем на 5–7 мм меняет нагрузку на подшипники.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'shinapodbor.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-08', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как подобрать шины и диски', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Найдите штатное', text: 'Выберите марку и модель — подставим заводской размер.' }, { '@type': 'HowToStep', name: 'Введите кандидата', text: 'Размер, который хотите поставить.' }, { '@type': 'HowToStep', name: 'Проверьте вердикт', text: 'Диаметр в допуске ±3%, диски по PCD/ET/DIA.' }] });
+const makes = [...new Set(db.cars.map(c => c.make))].sort();
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +30,145 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
 <link rel="stylesheet" href="/_s555.css" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>shinapodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112400622', 'ym');
+    ym(112400622, 'init', {ssr:true, webvisor:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112400622" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="шиноподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="1.6" fill="var(--accent)"/></svg><span>шиноподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><span></span><span></span></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Калькулятор</a><a href="/tablitsa-razmerov">Таблица</a><a href="/markirovka">Маркировка</a><a href="/davlenie">Давление</a><a href="/diski">Диски</a><a href="/sezon">Сезон</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Шинный калькулятор</p>
+<h1>Шины и диски по марке авто</h1>
+<p>114 моделей в базе, включая китайские. Сравните размер со штатным: диаметр, спидометр, клиренс. Проверка дисков по PCD, вылету и ступице.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> держите внешний диаметр в ±3% от штатного. 205/55R16 → 205/60R16 это +3.2% (уже много), а 215/55R16 это +1.2% (норма). Диски: разболтовка обязана совпасть, вылет ±5 мм, ступица — точно или через кольца.</div>
+<section class="calc" id="calc" aria-label="Шинный калькулятор">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Марка <select id="mk"><option value="">— выберите —</option>{makes.map(m => (<option value={m}>{m}</option>))}</select></label>
+<label>Модель <select id="md" disabled><option value="">— сначала марка —</option></select></label>
+<label>Штатный размер <select id="st" disabled><option value="">—</option></select></label>
+<label>Хочу поставить (напр. 215/55R16) <input id="nw" type="text" value="215/55R16" inputmode="text" /></label>
+<label>Диски: штатные PCD/ET/DIA <input id="d0" type="text" value="5x114.3 ET50 DIA67.1" /></label>
+<label>Диски: кандидат <input id="d1" type="text" value="5x114.3 ET45 DIA67.1" /></label>
+<div><button class="btn" id="go">Сравнить</button>
+<button class="btn ghost" id="printBtn">Печать</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Результат</span>
 <div class="result" id="out">—</div>
 <p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Как читать размер шины</h2>
+<svg viewBox="0 0 560 250" width="100%" role="img" aria-label="Разрез шины: ширина, профиль, диаметр" style="background:var(--card);border:1px solid var(--line);border-radius:10px">
+<circle cx="280" cy="125" r="100" fill="none" stroke="var(--brand)" stroke-width="6"/>
+<circle cx="280" cy="125" r="52" fill="none" stroke="var(--muted)" stroke-width="3"/>
+<circle cx="280" cy="125" r="10" fill="var(--accent)"/>
+<line x1="280" y1="125" x2="380" y2="125" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="330" y="115" text-anchor="middle" font-size="13">205 мм</text>
+<line x1="392" y1="25" x2="392" y2="125" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="410" y="80" font-size="13">55% —</text><text x="410" y="98" font-size="13">профиль</text>
+<line x1="228" y1="125" x2="332" y2="125" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="280" y="200" text-anchor="middle" font-size="13">16″ — посадочный диаметр</text>
+<text x="280" y="220" text-anchor="middle" font-size="13">R — радиальная конструкция</text>
+</svg>
+<h2>Справочник</h2>
+<div class="cards">
+<a class="card" href="/tablitsa-razmerov"><h3>Таблица размеров</h3><p>Штатные шины и диски 114 моделей: от Гранты до Tank 300.</p></a>
+<a class="card" href="/markirovka"><h3>Маркировка</h3><p>Типоразмер, индексы нагрузки и скорости, DOT-дата.</p></a>
+<a class="card" href="/davlenie"><h3>Давление</h3><p>Нормы по классам авто, поправки на загрузку и трассу.</p></a>
+<a class="card" href="/diski"><h3>Диски: ET и PCD</h3><p>Вылет, разболтовка, ступица — проверка совместимости.</p></a>
+<a class="card" href="/sezon"><h3>Сезон</h3><p>Когда менять, шипы или липучка, хранение.</p></a>
+<a class="card" href="/primery"><h3>Примеры</h3><p>Creta 16→17, Веста, Jolion, занижение профиля.</p></a>
+</div>
+<h2>Опыт владельцев</h2>
+<div class="cards">
+<div class="card"><h3>Creta, 215/60R17 вместо 205/65R16</h3><p>«−1.1% по диаметру, машина стала точнее в поворотах, расход +0.2 л. Второй сезон — полёт нормальный.»</p></div>
+<div class="card"><h3>Jolion, зима 215/60R17</h3><p>«Штатный размер, липучка. По снежной каше гребёт уверенно, на льду — аккуратно.»</p></div>
+<div class="card"><h3>Веста, 195/55R16 вместо 185/65R15</h3><p>«+0.3% — разницы в клиренсе не заметил, вид лучше, чуть жёстче.»</p></div>
+<div class="card"><h3>Camry, 235/45R18 вместо 215/55R17</h3><p>«−0.6%. Красиво, но колею чувствует сильнее. На зиму вернулся на 17.»</p></div>
+</div>
+<p style="font-size:13px;color:var(--muted)">Отзывы собраны из открытых источников, редакция shinapodbor.ru.</p>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">shinapodbor.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>shinapodbor.ru</h3><p>Шинный калькулятор и справочник. Размеры ходовых комплектаций — сверяйтесь с руководством. Обновлено 2026-09-08.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор шин</a></li><li><a href="/tablitsa-razmerov">Таблица размеров</a></li><li><a href="/diski">Проверка дисков</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/markirovka">Маркировка</a></li><li><a href="/davlenie">Давление</a></li><li><a href="/sezon">Сезон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
 <style>@import url('/_s555.css');</style>
-<script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
+<script define:vars={{ db }}>
+const $=id=>document.getElementById(id);
+const DB=db;
+function parseTire(s){const m=String(s||'').replace(',','.').match(/(\d{3})\/(\d{2})\s*R\s*(\d{2})/i);return m?{w:+m[1],h:+m[2],d:+m[3]}:null}
+function dia(t){return t.d*25.4+2*t.w*t.h/100}
+function parseDisk(s){const m=String(s||'').match(/(\d)x([\d.]+)\s*ET\s*(-?\d+)\s*DIA\s*([\d.]+)/i);return m?{n:+m[1],pcd:+m[2],et:+m[3],dia:+m[4]}:null}
+function fillModels(){const mk=$('mk').value,md=$('md'),st=$('st');md.innerHTML='<option value="">— выберите —</option>';st.innerHTML='<option value="">—</option>';st.disabled=true;
+  if(!mk){md.disabled=true;return}
+  DB.cars.filter(c=>c.make===mk).forEach(c=>{const o=document.createElement('option');o.value=c.model;o.textContent=c.model+(c.years?' ('+c.years+')':'');md.appendChild(o)});md.disabled=false}
+function fillStock(){const mk=$('mk').value,md=$('md').value,st=$('st');st.innerHTML='<option value="">— свой размер —</option>';
+  const car=DB.cars.find(c=>c.make===mk&&c.model===md);
+  if(!car){st.disabled=true;return}
+  car.stock.forEach(s=>{const o=document.createElement('option');o.value=s.tire;o.textContent=s.tire+(s.disk?' · '+s.disk:'');if(s.pcd)o.dataset.disk=`${s.pcd} ET${s.et} DIA${s.dia}`;st.appendChild(o)});st.disabled=false;
+  if(car.stock[0]&&car.stock[0].pcd)$('d0').value=`${car.stock[0].pcd} ET${car.stock[0].et} DIA${car.stock[0].dia}`}
+function verdict(pct){const a=Math.abs(pct);if(a<=3)return 'Норма: диаметр в допуске ±3%.';if(a<=5)return 'Осторожно: 3–5% — проверьте арки на вывороте, возможен отказ в гарантии.';return 'Нельзя: больше 5% — врёт спидометр и одометр, риск для подвески и тормозов.'}
+function lastCalc(){const stV=$('st').value,nwV=$('nw').value;
+  const base=parseTire(stV)||parseTire(nwV);const cand=parseTire(nwV);
+  if(!base||!cand)return null;
+  const D0=dia(base),D1=dia(cand),pct=(D1-D0)/D0*100;
+  const d0=parseDisk($('d0').value),d1=parseDisk($('d1').value);
+  let disk='Диски: введите PCD/ET/DIA обоих комплектов для проверки.';
+  if(d0&&d1){const notes=[];
+    if(d0.pcd!==d1.pcd)notes.push('Разболтовка НЕ совпадает — такие диски ставить нельзя.');
+    else notes.push('Разболтовка совпадает.');
+    const det=d1.et-d0.et;
+    notes.push(`Вылет: ${det===0?'штатный':(det>0?'колея уже на '+det+' мм':'колея шире на '+(-det)+' мм')}${Math.abs(det)>7?' — больше 7 мм, нагрузка на подшипники!':''}.`);
+    notes.push(d1.dia===d0.dia?'Ступица совпадает.':(d1.dia>d0.dia?`Ступица больше — нужны центровочные кольца ${d0.dia}→${d1.dia}.`:'Ступица меньше штатной — диск не встанет.'));
+    disk=notes.join(' ')}
+  return {base:stV||'(свой)',cand:nwV,D0,D1,pct,spd:100*D1/D0,clr:(D1-D0)/2,dw:cand.w-base.w,disk};
+}
+function calc(){const out=$('out'),r=lastCalc();
+  if(!r){out.textContent='Выберите авто или введите размеры вручную.';return}
+  out.innerHTML=`Штатно: <b>${r.base}</b> (${r.D0.toFixed(1)} мм) · Хотите: <b>${r.cand}</b> (${r.D1.toFixed(1)} мм)<br>Диаметр: <b>${r.pct>=0?'+':''}${r.pct.toFixed(1)}%</b> · Клиренс: <b>${r.clr>=0?'+':''}${r.clr.toFixed(1)} мм</b> · На 100 км/ч спидометр покажет ${(100*r.D0/r.D1).toFixed(0)}<br>Ширина: ${r.dw>=0?'+':''}${r.dw} мм<br>${verdict(r.pct)}<br><span style="font-size:14px">${r.disk}</span>`;
+  try{const h=JSON.parse(localStorage.getItem('s02')||'[]');h.unshift({b:r.base,c:r.cand,t:Date.now()});localStorage.setItem('s02',JSON.stringify(h.slice(0,20)))}catch(e){}
+  try{window.s555ev&&s555ev('calc_run',{pct:+r.pct.toFixed(1)})}catch(e){}
+  return r;
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)return;const d=new Date().toLocaleDateString('ru-RU');
+  sh.innerHTML=`<h1>Подбор шин — shinapodbor.ru</h1><p>Дата: ${d}, авто: ${$('mk').value||'—'} ${$('md').value||''}</p>
+  <h2>Сравнение</h2><table><tr><th></th><th>Штатно</th><th>Кандидат</th></tr><tr><td>Шина</td><td>${r.base}</td><td>${r.cand}</td></tr><tr><td>Диаметр</td><td>${r.D0.toFixed(1)} мм</td><td>${r.D1.toFixed(1)} мм</td></tr></table>
+  <p>Отклонение: ${r.pct.toFixed(1)}%. ${verdict(r.pct)}</p><p>${r.disk}</p>
+  <h2>Нормативы</h2><ul><li>ETRTO: допуск внешнего диаметра ±3% от штатного.</li><li>Индексы нагрузки/скорости — не ниже заводских.</li><li>Давление — по табличке авто; на одной оси одинаковые шины.</li></ul>
+  <p><b>Важно:</b> база — ходовые комплектации, сверьтесь с руководством. Монтаж и балансировка — в шиномонтаже.</p>`;
+}
+$('mk').onchange=()=>{fillModels();calc()};$('md').onchange=()=>{fillStock();calc()};
+$('go').onclick=calc;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+(function(){const q=new URLSearchParams(location.search);
+  if(q.get('mk')){$('mk').value=q.get('mk');fillModels()}
+  if(q.get('md')){$('md').value=q.get('md');fillStock()}
+  if(q.get('nw'))$('nw').value=q.get('nw');calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+  const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>
