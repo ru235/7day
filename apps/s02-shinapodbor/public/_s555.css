@@ -92,11 +92,12 @@ header.site nav a { color: var(--muted); text-decoration: none; font-size: 14px;
 header.site nav a[aria-current="page"] { color: var(--fg); background: var(--card) }
 
 /* Burger: hidden on desktop */
-.burger { display: none; margin-left: auto; width: 44px; height: 44px; flex: none; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; padding: 0; grid-template-rows: 1fr 1fr; align-content: center; justify-items: center; gap: 0 }
-.burger span { display: block; width: 18px; height: 2px; flex: none; background: var(--fg); border-radius: 2px; transition: transform 200ms var(--ease-out) }
-.burger span + span { margin-top: 5px }
-.burger.open span:first-child { transform: translateY(3.5px) rotate(45deg) }
-.burger.open span + span { transform: translateY(-3.5px) rotate(-45deg) }
+.burger { display: none; margin-left: auto; width: 44px; height: 44px; flex: none; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; padding: 0; place-items: center }
+.burger svg { display: block; width: 20px; height: 20px }
+.burger path { stroke: var(--fg); stroke-width: 2; stroke-linecap: round; fill: none; transform-box: fill-box; transform-origin: center; transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out) }
+.burger.open .l1 { transform: translateY(5px) rotate(45deg) }
+.burger.open .l2 { opacity: 0 }
+.burger.open .l3 { transform: translateY(-5px) rotate(-45deg) }
 
 @media (min-width: 760px) {
   .nav-links { display: contents }
@@ -106,7 +107,7 @@ header.site nav a[aria-current="page"] { color: var(--fg); background: var(--car
   .tbtn { margin: 6px 0 0; width: 100%; height: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px; border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: 15px }
   .tbtn::after { content: "Тема"; font-size: 15px }
   header.site nav { position: relative }
-  .nav-links { position: absolute; top: calc(100% + 1px); left: 0; right: 0; z-index: 9; display: grid; gap: 2px; background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid var(--line); box-shadow: var(--shadow-lg); padding: 8px 16px 14px; max-height: calc(100dvh - 70px); overflow-y: auto; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out) }
+  .nav-links { position: absolute; top: calc(100% + 1px); left: 0; right: 0; z-index: 9; isolation: isolate; display: grid; gap: 2px; background: var(--bg); background-color: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid var(--line); box-shadow: var(--shadow-lg); padding: 8px 16px 14px; max-height: calc(100dvh - 70px); overflow-y: auto; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out) }
   .nav-links.open { opacity: 1; transform: none; pointer-events: auto }
   .nav-links a { padding: 10px 8px; font-size: 15px; opacity: 0; transform: translateY(-4px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out) }
   .nav-links.open a { opacity: 1; transform: none }
