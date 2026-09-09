@@ -1,0 +1,66 @@
+---
+const SITE = 'https://shinapodbor.ru';
+const title = 'Диски: вылет ET, разболтовка PCD, ступица DIA | shinapodbor.ru';
+const desc = 'Проверка совместимости дисков: PCD обязана совпасть, вылет ET ±5–7 мм, DIA точно или кольца. Схема вылета, калькулятор.';
+const faqs = [
+  { q: 'Что будет при неправильном вылете?', a: 'Меньше ET — колея шире, нагрузка на подшипники и рулевое. Больше ET — диск трёт о суппорт и стойку. Допуск ±5–7 мм.' },
+  { q: 'DIA больше ступицы — можно?', a: 'Да, через центровочные кольца. Меньше — нельзя, диск не сядет.' },
+  { q: 'PCD 5x114.3 и 5x115 — взаимозаменяемы?', a: 'Нет. Даже 0.7 мм разницы — болты встанут криво, будет биение. Только точное совпадение.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const crumbs = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Главная', item: SITE + '/' }, { '@type': 'ListItem', position: 2, name: 'Диски', item: SITE + '/diski' }] });
+const article = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Article', headline: 'Диски: вылет, разболтовка, ступица', description: desc, inLanguage: 'ru', datePublished: '2026-09-08', dateModified: '2026-09-08', author: { '@type': 'Organization', name: 'shinapodbor.ru' } });
+---
+<!doctype html><html lang="ru"><head><script is:inline src="/theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/diski'} />
+<meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="article" /><meta property="article:section" content="Расчёты" /><meta property="article:published_time" content="2026-09-08" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_s555.css"><script type="application/ld+json" set:html={faqJson}></script><script type="application/ld+json" set:html={crumbs}></script><script type="application/ld+json" set:html={article}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112400622', 'ym');
+    ym(112400622, 'init', {ssr:true, webvisor:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112400622" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="шиноподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="1.6" fill="var(--accent)"/></svg><span>шиноподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><span></span><span></span></button><div class="nav-links" id="navlinks"><a href="/">Калькулятор</a><a href="/tablitsa-razmerov">Таблица</a><a href="/markirovka">Маркировка</a><a href="/davlenie">Давление</a><a href="/diski" aria-current="page">Диски</a><a href="/sezon">Сезон</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="/">Главная</a> / <span aria-current="page">Диски</span></nav>
+<h1>Диски: вылет, разболтовка, ступица</h1>
+<div class="answer"><b>Три правила:</b> PCD совпадает точь-в-точь · вылет ET в пределах ±5–7 мм от штатного · DIA равна ступице или больше через центровочные кольца.</div>
+<h2>Схема вылета ET</h2>
+<svg viewBox="0 0 560 200" width="100%" role="img" aria-label="Схема вылета диска" style="background:var(--card);border:1px solid var(--line);border-radius:10px">
+<rect x="230" y="40" width="24" height="120" rx="4" fill="none" stroke="var(--brand)" stroke-width="3"/>
+<rect x="254" y="60" width="90" height="80" rx="6" fill="none" stroke="var(--muted)" stroke-width="2"/>
+<line x1="242" y1="30" x2="242" y2="170" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="242" y="22" text-anchor="middle" font-size="13">привалочная плоскость</text>
+<line x1="299" y1="60" x2="299" y2="140" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="360" y="105" font-size="13">ET = расстояние</text><text x="360" y="123" font-size="13">от плоскости</text><text x="360" y="141" font-size="13">до центра диска</text>
+<text x="120" y="105" font-size="13">ступица</text><text x="120" y="123" font-size="13" fill="var(--muted)">← сюда</text>
+</svg>
+<h2>Проверка дисков</h2>
+<section class="calc"><label>Штатные (напр. 5x114.3 ET50 DIA67.1) <input id="w0" type="text" value="5x114.3 ET50 DIA67.1" /></label>
+<label>Кандидат <input id="w1" type="text" value="5x114.3 ET45 DIA73.1" /></label>
+<button class="btn" id="wGo">Проверить</button>
+<div class="result" id="wOut">—</div></section>
+<h2>Частые вопросы</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="/">← к калькулятору</a></p></main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>shinapodbor.ru</h3><p>Шинный калькулятор и справочник. Размеры ходовых комплектаций — сверяйтесь с руководством. Обновлено 2026-09-08.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор шин</a></li><li><a href="/tablitsa-razmerov">Таблица размеров</a></li><li><a href="/diski">Проверка дисков</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/markirovka">Маркировка</a></li><li><a href="/davlenie">Давление</a></li><li><a href="/sezon">Сезон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+function pd(s){const m=String(s||'').match(/(\d)x([\d.]+)\s*ET\s*(-?\d+)\s*DIA\s*([\d.]+)/i);return m?{pcd:+m[2],et:+m[3],dia:+m[4]}:null}
+$('wGo').onclick=()=>{const a=pd($('w0').value),b=pd($('w1').value);
+if(!a||!b){$('wOut').textContent='Формат: 5x114.3 ET50 DIA67.1';return}
+const n=[];n.push(a.pcd!==b.pcd?'PCD НЕ совпадает — нельзя.':'PCD совпадает.');
+const det=b.et-a.et;n.push(`Вылет: ${det===0?'штатный':(det>0?'колея уже на '+det+' мм':'колея шире на '+(-det)+' мм')}${Math.abs(det)>7?' — вне допуска!':''}.`);
+n.push(b.dia===a.dia?'Ступица совпадает.':(b.dia>a.dia?`Нужны кольца ${a.dia}→${b.dia}.`:'Ступица меньше — не встанет.'));
+$('wOut').innerHTML=n.join('<br>');};
+</script>
+</body></html>

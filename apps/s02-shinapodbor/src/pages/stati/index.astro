@@ -1,0 +1,43 @@
+---
+const SITE = 'https://shinapodbor.ru';
+const title = 'Статьи о шинах и дисках | shinapodbor.ru';
+const desc = 'Практические статьи: шипы и липучка, хранение, б/у шины, аквапланирование, ошибки диаметра, обкатка.';
+const crumbs = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Главная', item: SITE + '/' }, { '@type': 'ListItem', position: 2, name: 'Статьи', item: SITE + '/stati' }] });
+const arts = [
+  { s: 'shipy-lipuchka', h: 'Шипы или липучка', p: 'Лёд и трасса — шипы, город и мягкая зима — липучка.' },
+  { s: 'hranenie', h: 'Хранение шин', p: 'На дисках — стопкой, без дисков — стоя. Прохлада и темнота.' },
+  { s: 'oshibki-diametra', h: '5 ошибок диаметра', p: 'Диаметр, ширина, вылет, нагрузка, давление.' },
+  { s: 'bu-shiny', h: 'Б/у шины', p: 'Возраст, остаток, грыжи, комплектность.' },
+  { s: 'akvaplanirovanie', h: 'Аквапланирование', p: 'Ширина, протектор и скорость всплытия.' },
+  { s: 'obkatka', h: 'Обкатка новых шин', p: '500 спокойных км, затем протяжка.' },
+];
+---
+<!doctype html><html lang="ru"><head><script is:inline src="/theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/stati'} />
+<meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_s555.css"><script type="application/ld+json" set:html={crumbs}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112400622', 'ym');
+    ym(112400622, 'init', {ssr:true, webvisor:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112400622" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="шиноподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="1.6" fill="var(--accent)"/></svg><span>шиноподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><span></span><span></span></button><div class="nav-links" id="navlinks"><a href="/">Калькулятор</a><a href="/tablitsa-razmerov">Таблица</a><a href="/markirovka">Маркировка</a><a href="/davlenie">Давление</a><a href="/diski">Диски</a><a href="/sezon">Сезон</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="/">Главная</a> / <span aria-current="page">Статьи</span></nav>
+<h1>Статьи о шинах и дисках</h1>
+<div class="answer"><b>Практика без воды:</b> выбор, проверка, давление, сезон — каждая статья заканчивается конкретным действием.</div>
+<div class="cards">
+{arts.map(a => (<a class="card" href={'/stati/' + a.s}><h3>{a.h}</h3><p>{a.p}</p></a>))}
+</div>
+<p><a href="/">← к калькулятору</a></p></main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>shinapodbor.ru</h3><p>Шинный калькулятор и справочник. Размеры ходовых комплектаций — сверяйтесь с руководством. Обновлено 2026-09-08.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор шин</a></li><li><a href="/tablitsa-razmerov">Таблица размеров</a></li><li><a href="/diski">Проверка дисков</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/markirovka">Маркировка</a></li><li><a href="/davlenie">Давление</a></li><li><a href="/sezon">Сезон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+</body></html>

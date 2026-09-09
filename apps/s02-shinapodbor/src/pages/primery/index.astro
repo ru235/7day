@@ -1,0 +1,53 @@
+---
+const SITE = 'https://shinapodbor.ru';
+const title = 'Примеры замены шин: Creta, Веста, Jolion | shinapodbor.ru';
+const desc = 'Живые примеры: Creta 16→17, Веста 15→16, Haval Jolion, занижение профиля. Диаметр, клиренс, спидометр до и после.';
+const faqs = [
+  { q: 'Стоит ли переходить с 16 на 17?', a: 'Вид и управляемость лучше, комфорт и цена шин — хуже. Держите диаметр в ±3% и готовьтесь к более жёсткой езде.' },
+  { q: 'Что даёт более широкая шина?', a: 'Пятно контакта и стабильность, но +расход, +колея, +аквапланирование. Шире 20 мм от штатной — проверять арки.' },
+  { q: 'Занижение профиля — это опасно?', a: 'Само по себе нет, если диаметр в допуске. Но низкий профиль легче пробить до диска на яме.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const crumbs = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Главная', item: SITE + '/' }, { '@type': 'ListItem', position: 2, name: 'Примеры', item: SITE + '/primery' }] });
+const article = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Article', headline: 'Примеры замены шин', description: desc, inLanguage: 'ru', datePublished: '2026-09-08', dateModified: '2026-09-08', author: { '@type': 'Organization', name: 'shinapodbor.ru' } });
+---
+<!doctype html><html lang="ru"><head><script is:inline src="/theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/primery'} />
+<meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="article" /><meta property="article:section" content="Справочник" /><meta property="article:published_time" content="2026-09-08" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_s555.css"><script type="application/ld+json" set:html={faqJson}></script><script type="application/ld+json" set:html={crumbs}></script><script type="application/ld+json" set:html={article}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112400622', 'ym');
+    ym(112400622, 'init', {ssr:true, webvisor:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112400622" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="шиноподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="1.6" fill="var(--accent)"/></svg><span>шиноподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><span></span><span></span></button><div class="nav-links" id="navlinks"><a href="/">Калькулятор</a><a href="/tablitsa-razmerov">Таблица</a><a href="/markirovka">Маркировка</a><a href="/davlenie">Давление</a><a href="/diski">Диски</a><a href="/sezon">Сезон</a><a href="/primery" aria-current="page">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="/">Главная</a> / <span aria-current="page">Примеры</span></nav>
+<h1>Примеры замены шин — с цифрами</h1>
+<h2>Creta: 205/65R16 → 215/60R17</h2>
+<p>672.9 → 689.8 мм: <b>+2.5%</b>, клиренс +8.4 мм, на 100 км/ч спидометр покажет 98. Вердикт: норма. Диски 6.5Jx17, PCD та же.</p>
+<h2>Веста: 185/65R15 → 195/55R16</h2>
+<p>621.5 → 620.9 мм: <b>−0.1%</b> — почти идеальная замена. Вид лучше, жёсткость чуть выше.</p>
+<h2>Jolion: остаёмся на 215/60R17 зимой</h2>
+<p>Штатный размер, липучка. Узкая (относительно) шина лучше режет кашу. Давление 2.3, под загрузку 2.5.</p>
+<h2>Занижение профиля: 205/55R16 → 215/45R17</h2>
+<p>631.9 → 625.3 мм: <b>−1.0%</b>, клиренс −3.3 мм. Красиво и остро, но ямы теперь бьют в диск — для хороших дорог.</p>
+<table class="data"><caption>Сводка примеров</caption><tr><th>Переход</th><th>Диаметр</th><th>Вердикт</th></tr>
+<tr><td>205/65R16 → 215/60R17</td><td>+2.5%</td><td>норма</td></tr>
+<tr><td>185/65R15 → 195/55R16</td><td>−0.1%</td><td>идеально</td></tr>
+<tr><td>205/55R16 → 215/45R17</td><td>−1.0%</td><td>норма, жёстче</td></tr>
+<tr><td>205/55R16 → 205/60R16</td><td>+3.2%</td><td>уже много</td></tr></table>
+<h2>Частые вопросы</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="/">← посчитать свой случай</a></p></main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>shinapodbor.ru</h3><p>Шинный калькулятор и справочник. Размеры ходовых комплектаций — сверяйтесь с руководством. Обновлено 2026-09-08.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор шин</a></li><li><a href="/tablitsa-razmerov">Таблица размеров</a></li><li><a href="/diski">Проверка дисков</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/markirovka">Маркировка</a></li><li><a href="/davlenie">Давление</a></li><li><a href="/sezon">Сезон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+</body></html>
