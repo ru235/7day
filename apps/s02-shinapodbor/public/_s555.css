@@ -104,8 +104,8 @@ header.site nav a[aria-current="page"] { color: var(--fg); background: var(--car
 }
 @media (max-width: 759px) {
   .burger { display: grid }
-  .tbtn { margin: 6px 0 0; width: 100%; height: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px; border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: 15px }
-  .tbtn::after { content: "Тема"; font-size: 15px }
+  .nav-links .tbtn { margin: 6px 0 0; width: 100%; height: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px; border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: 15px }
+  .nav-links .tbtn::after { content: "Тема"; font-size: 15px }
   header.site nav { position: relative }
   .nav-links { position: absolute; top: calc(100% + 1px); left: 0; right: 0; z-index: 9; isolation: isolate; display: grid; gap: 2px; background: var(--bg); background-color: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid var(--line); box-shadow: var(--shadow-lg); padding: 8px 16px 14px; max-height: calc(100dvh - 70px); overflow-y: auto; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out) }
   .nav-links.open { opacity: 1; transform: none; pointer-events: auto }
@@ -291,7 +291,8 @@ svg text:not([fill]) { fill: var(--fg) }
 
 /* Animated ambient background: GPU-only (transform/opacity), slow drift */
 .bg-field { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none }
-header.site, main.wrap, footer.site { position: relative; z-index: 1 }
+header.site { position: sticky; top: 0; z-index: 50 }
+main.wrap, footer.site { position: relative; z-index: 1 }
 .blob { position: absolute; border-radius: 9999px; filter: blur(90px); opacity: 0.5; will-change: transform }
 .blob.b1 { width: 44vmax; height: 44vmax; top: -14vmax; right: -10vmax;
   background: radial-gradient(circle, color-mix(in srgb, var(--brand) 26%, transparent), transparent 70%);
