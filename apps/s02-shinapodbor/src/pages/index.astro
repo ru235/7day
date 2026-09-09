@@ -56,7 +56,7 @@ const makes = [...new Set(db.cars.map(c => c.make))].sort();
 <section class="hero">
 <p class="eyebrow">Шинный калькулятор</p>
 <h1>Шины и диски по марке авто</h1>
-<p>114 моделей в базе, включая китайские. Сравните размер со штатным: диаметр, спидометр, клиренс. Проверка дисков по PCD, вылету и ступице.</p>
+<p>175 моделей в базе, включая китайские. Сравните размер со штатным: диаметр, спидометр, клиренс. Проверка дисков по PCD, вылету и ступице.</p>
 </section>
 <div class="answer" id="tldr"><b>Короткий ответ:</b> держите внешний диаметр в ±3% от штатного. 205/55R16 → 205/60R16 это +3.2% (уже много), а 215/55R16 это +1.2% (норма). Диски: разболтовка обязана совпасть, вылет ±5 мм, ступица — точно или через кольца.</div>
 <section class="calc" id="calc" aria-label="Шинный калькулятор">
@@ -65,7 +65,8 @@ const makes = [...new Set(db.cars.map(c => c.make))].sort();
 <label>Марка <select id="mk"><option value="">— выберите —</option>{makes.map(m => (<option value={m}>{m}</option>))}</select></label>
 <label>Модель <select id="md" disabled><option value="">— сначала марка —</option></select></label>
 <label>Штатный размер <select id="st" disabled><option value="">—</option></select></label>
-<label>Хочу поставить (напр. 215/55R16) <input id="nw" type="text" value="215/55R16" inputmode="text" /></label>
+<div class="vs-divider" aria-hidden="true"><span>сравнить с</span></div>
+<label class="vs-field">Хочу поставить <span class="vs-badge">сравнение</span> <input id="nw" type="text" value="215/55R16" inputmode="text" /></label>
 <label>Диски: штатные PCD/ET/DIA <input id="d0" type="text" value="5x114.3 ET50 DIA67.1" /></label>
 <label>Диски: кандидат <input id="d1" type="text" value="5x114.3 ET45 DIA67.1" /></label>
 <div><button class="btn" id="go">Сравнить</button>
@@ -93,7 +94,8 @@ const makes = [...new Set(db.cars.map(c => c.make))].sort();
 </svg>
 <h2>Справочник</h2>
 <div class="cards">
-<a class="card" href="/tablitsa-razmerov"><h3>Таблица размеров</h3><p>Штатные шины и диски 114 моделей: от Гранты до Tank 300.</p></a>
+<a class="card" href="/tablitsa-razmerov"><h3>Таблица размеров</h3><p>Штатные шины и диски 175 моделей: от Гранты до Tank 300.</p></a>
+<a class="card" href="/marki"><h3>Марки авто</h3><p>51 марка — отдельная страница со штатной резиной каждой.</p></a>
 <a class="card" href="/markirovka"><h3>Маркировка</h3><p>Типоразмер, индексы нагрузки и скорости, DOT-дата.</p></a>
 <a class="card" href="/davlenie"><h3>Давление</h3><p>Нормы по классам авто, поправки на загрузку и трассу.</p></a>
 <a class="card" href="/diski"><h3>Диски: ET и PCD</h3><p>Вылет, разболтовка, ступица — проверка совместимости.</p></a>

@@ -37,7 +37,7 @@ const groups = [...new Set(db.cars.map(c => c.make))].sort().map(mk => ({ mk, ca
 <label style="display:grid;gap:6px;max-width:420px;margin:16px 0">Быстрый поиск по таблице <input id="q" type="search" placeholder="Например: Creta или 215/60" style="padding:10px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:var(--bg);color:var(--fg)" /></label>
 {groups.map(g => (
 <section data-mk={g.mk}>
-<h2>{g.mk}</h2>
+<h2><a href={'/marki/' + g.mk.toLowerCase().replace(/\s+/g, '-')}>{g.mk}</a></h2>
 <table class="data"><caption>{g.mk}: штатные шины и диски</caption><tr><th>Модель</th><th>Годы</th><th>Шина</th><th>Диск</th><th>PCD / ET / DIA</th></tr>
 {g.cars.map(c => c.stock.map((s, i) => (
 <tr><td>{i === 0 ? c.model : ''}</td><td>{i === 0 ? (c.years || '—') : ''}</td><td>{s.tire}</td><td>{s.disk || '—'}</td><td>{s.pcd ? `${s.pcd} / ET${s.et} / ${s.dia}` : 'сверьтесь с руководством'}</td></tr>
