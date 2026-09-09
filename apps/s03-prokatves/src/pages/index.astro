@@ -1,17 +1,25 @@
 ---
+import db from '../../../../packages/datasets/metal-sortament.json';
 const SITE = 'https://prokatves.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | prokatves.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Металлокалькулятор: вес проката и цена | prokatves.ru';
+const desc = 'Вес металла: лист, трубы круглые и профильные, круг, арматура, уголок, швеллер, двутавр. Таблицы ГОСТ + расчёт цены.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Как посчитать вес листа?', a: 'Длина × ширина × толщина × 7850. Лист 1.5×6 м, 3 мм: 1.5×6×0.003×7850 ≈ 212 кг.' },
+  { q: 'Сколько весит метр 12-й арматуры?', a: '0.888 кг/м по теории (ГОСТ 34028). Тонна — около 1126 м, хлыст 11.7 м — 10.4 кг.' },
+  { q: 'Чем отличается швеллер У от П?', a: 'У — с уклоном полок, П — с параллельными. Масса близких номеров почти равна, несущая отличается.' },
+  { q: 'Что такое ВГП труба?', a: 'Водогазопроводная (ГОСТ 3262): измеряется условным проходом Ду, а не наружным диаметром. Ду25 — наружный 33.5 мм.' },
+  { q: 'Почему факт отличается от расчёта?', a: 'Допуски проката ±3–5%, окалина, немерная длина. Закладывайте запас 3–5% при заказе.' },
+  { q: 'Как посчитать цену?', a: 'Вес × цена за кг (или за тонну / 1000). Введите цену поставщика в калькуляторе.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'prokatves.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как посчитать вес металлопроката', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Выберите профиль', text: 'Лист, труба, круг, арматура, уголок, швеллер или балка.' }, { '@type': 'HowToStep', name: 'Введите размеры', text: 'Габариты в мм и длину в метрах, количество штук.' }, { '@type': 'HowToStep', name: 'Получите вес и цену', text: 'Масса по ГОСТ-плотности 7850 кг/м³ и стоимость по вашей цене.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +28,138 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="stylesheet" href="/_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>prokatves.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- METRIKA: вставить код счётчика prokatves.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="прокатвес — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 22 L16 7 L26 22 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><line x1="11" y1="22" x2="21" y2="22" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/></svg><span>прокатвес<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Калькулятор</a><a href="/sortament">Сортамент</a><a href="/truby">Трубы</a><a href="/list">Лист</a><a href="/armatura">Арматура</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Калькулятор металлопроката</p>
+<h1>Вес металла и цена заказа</h1>
+<p>Лист, трубы, круг, арматура, уголок, швеллер, двутавр. Считает по плотности 7850 кг/м³ и таблицам ГОСТ, сразу с ценой.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> вес = объём × 7850. Лист 1.5×6 м × 3 мм ≈ 212 кг. Метр 12-й арматуры — 0.888 кг. Труба 76×4 — 7.1 кг/м. Факт отличается на ±3–5% из-за допусков.</div>
+<section class="calc" id="calc" aria-label="Металлокалькулятор">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Профиль <select id="pr">
+<option value="list">Лист (Д×Ш×толщина)</option>
+<option value="tubeR">Труба круглая (D×стенка)</option>
+<option value="tubeS">Труба профильная (A×стенка, квадрат)</option>
+<option value="circle">Круг (диаметр)</option>
+<option value="rebar">Арматура (диаметр, теормасса)</option>
+<option value="square">Квадрат (сторона)</option>
+<option value="hex">Шестигранник (под ключ)</option>
+<option value="angle">Уголок (полка×толщина)</option>
+<option value="channel">Швеллер (номер)</option>
+<option value="beam">Двутавр (номер)</option>
+</select></label>
+<div id="dims" style="display:grid;gap:12px"></div>
+<label>Длина, м <input id="len" type="number" value="6" min="0.01" max="12000" step="any" /></label>
+<label>Количество, шт <input id="qty" type="number" value="1" min="1" max="100000" step="1" /></label>
+<label>Цена, ₽/кг <input id="price" type="number" value="80" min="0" max="100000" step="any" /></label>
+<div><button class="btn" id="go">Рассчитать</button>
+<button class="btn ghost" id="printBtn">Печать</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Результат</span>
 <div class="result" id="out">—</div>
 <p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Ходовые значения</h2>
+<table class="data"><caption>Теоретическая масса, кг/м</caption><tr><th>Прокат</th><th>Размер</th><th>кг/м</th></tr>
+<tr><td>Арматура А500С</td><td>12 мм</td><td>0.888</td></tr>
+<tr><td>Арматура А500С</td><td>16 мм</td><td>1.58</td></tr>
+<tr><td>Труба э/с</td><td>76×4</td><td>7.1</td></tr>
+<tr><td>Труба проф.</td><td>60×60×3</td><td>5.25</td></tr>
+<tr><td>Швеллер</td><td>16У</td><td>14.2</td></tr>
+<tr><td>Двутавр</td><td>20</td><td>21.0</td></tr></table>
+<p><a href="/sortament">Полные таблицы сортамента →</a></p>
+<h2>Справочник</h2>
+<div class="cards">
+<a class="card" href="/sortament"><h3>Сортамент</h3><p>Швеллер, двутавр, уголок: масса погонного метра.</p></a>
+<a class="card" href="/truby"><h3>Трубы</h3><p>Круглые и профильные, ВГП и э/с, калькулятор.</p></a>
+<a class="card" href="/list"><h3>Лист</h3><p>Вес листа и раскрой: сколько деталей влезет.</p></a>
+<a class="card" href="/armatura"><h3>Арматура</h3><p>Вес, метры в тонне, хлысты и мотки.</p></a>
+<a class="card" href="/primery"><h3>Примеры</h3><p>Забор, навес, перекрытие, фундамент — с цифрами.</p></a>
+</div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">prokatves.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
-<script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>prokatves.ru</h3><p>Металлокалькулятор и сортамент. Теормасса по ГОСТ, факт ±3–5%. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор веса</a></li><li><a href="/sortament">Сортамент</a></li><li><a href="/truby">Трубы</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/list">Лист</a></li><li><a href="/armatura">Арматура</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
+<script define:vars={{ db }}>
+const $=id=>document.getElementById(id);
+const RHO=db.density_steel, PI=Math.PI;
+const FIELDS={
+ list:[['Длина L, м','L',1.5],['Ширина B, м','B',6],['Толщина t, мм','t',3]],
+ tubeR:[['Диаметр D, мм','D',76],['Стенка s, мм','s',4]],
+ tubeS:[['Сторона A, мм','A',60],['Стенка s, мм','s',3]],
+ circle:[['Диаметр D, мм','D',20]],
+ rebar:[['Диаметр d, мм','d',12]],
+ square:[['Сторона a, мм','a',20]],
+ hex:[['Размер под ключ S, мм','S',24]],
+ angle:[['Полка b, мм','b',75],['Толщина t, мм','t',8]],
+ channel:[['Номер швеллера','N','16']],
+ beam:[['Номер двутавра','N','20']]};
+function renderFields(){const pr=$('pr').value,box=$('dims');box.innerHTML='';
+ FIELDS[pr].forEach(f=>{const lb=document.createElement('label');lb.innerHTML=`${f[0]} `;const inp=document.createElement('input');
+ inp.type='text';inp.inputMode='decimal';inp.id='f_'+f[1];inp.value=f[2];lb.appendChild(inp);box.appendChild(lb)});
+ $('len').disabled=(pr==='list');
+ $('len').closest('label').style.opacity=(pr==='list')?0.45:1;}
+function val(n){return parseFloat(String($('f_'+n).value).replace(',','.'))||0}
+function weightM(){
+ const pr=$('pr').value;
+ if(pr==='list'){const L=val('L'),B=val('B'),t=val('t');return {m:L*B*(t/1000)*RHO,per:'лист',note:`Лист ${L}×${B} м, ${t} мм`}}
+ if(pr==='tubeR'){const D=val('D'),s=val('s');const a=PI/4*(D*D-(D-2*s)*(D-2*s))/1e6;return {m:a*RHO,per:'метр',note:`Труба ${D}×${s}`}}
+ if(pr==='tubeS'){const A=val('A'),s=val('s');const a=(A*A-(A-2*s)*(A-2*s))/1e6;return {m:a*RHO,per:'метр',note:`Труба ${A}×${A}×${s}`}}
+ if(pr==='circle'){const D=val('D');return {m:PI/4*(D/1000)*(D/1000)*RHO,per:'метр',note:`Круг ${D}`}}
+ if(pr==='rebar'){const d=val('d');const t=db.rebar_kg_m[String(d)]||PI/4*(d/1000)*(d/1000)*RHO*1.02;return {m:t,per:'метр',note:`Арматура ${d} (теормасса)`}}
+ if(pr==='square'){const a=val('a');return {m:(a/1000)*(a/1000)*RHO,per:'метр',note:`Квадрат ${a}`}}
+ if(pr==='hex'){const S=val('S');return {m:0.866*(S/1000)*(S/1000)*RHO,per:'метр',note:`Шестигранник ${S}`}}
+ if(pr==='angle'){const b=val('b'),t=val('t');return {m:((2*b-t)*t/1e6)*RHO,per:'метр',note:`Уголок ${b}×${t}`}}
+ if(pr==='channel'){const N=String(val('N'));const t=db.channels_kg_m[N];if(!t)return null;return {m:t,per:'метр',note:`Швеллер ${N} (ГОСТ 8240)`}}
+ if(pr==='beam'){const N=String(val('N'));const t=db.beams_kg_m[N];if(!t)return null;return {m:t,per:'метр',note:`Двутавр ${N}`}}
+ return null;
+}
+function lastCalc(){const L=parseFloat(String($('len').value).replace(',','.'))||0,qty=Math.max(1,parseInt($('qty').value)||1),pr=+$('price').value||0;
+ const w=weightM();if(!w||!(L>0))return null;
+ const isList=($('pr').value==='list');
+ const perText=isList?w.m.toFixed(1)+' кг/лист':w.m.toFixed(3)+' кг/м';
+ const total=isList?w.m*qty:w.m*L*qty;
+ return {...w,perText,total,qty,price:total*pr,L};
+}
+function calc(){const out=$('out'),r=lastCalc();
+ if(!r){out.textContent='Проверьте размеры и длину.';return}
+ const t=r.total>=1000?(r.total/1000).toFixed(3)+' т':r.total.toFixed(2)+' кг';
+ out.innerHTML=`${r.note}<br>Масса: <b>${r.perText}</b> · Итого ${r.qty} шт: <b>${t}</b>${r.price>0?`<br>Цена: <b>${r.price.toFixed(0)} ₽</b>`:''}<br><span style="font-size:14px">Теормасса, факт ±3–5%. На заказ закладывайте запас.</span>`;
+ try{const h=JSON.parse(localStorage.getItem('s03')||'[]');h.unshift({n:r.note,t:Date.now()});localStorage.setItem('s03',JSON.stringify(h.slice(0,20)))}catch(e){}
+ try{window.s555ev&&s555ev('calc_run',{kg:+r.total.toFixed(1)})}catch(e){}
+ return r;
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)return;const d=new Date().toLocaleDateString('ru-RU');
+ sh.innerHTML=`<h1>Расчёт массы проката — prokatves.ru</h1><p>Дата: ${d}</p>
+ <h2>Позиция</h2><table><tr><td>${r.note}</td><td>${r.perText}</td></tr><tr><td>Количество</td><td>${r.qty} шт (длина ${r.L} м)</td></tr><tr><td>Итого</td><td>${r.total>=1000?(r.total/1000).toFixed(3)+' т':r.total.toFixed(2)+' кг'}${r.price>0?' / '+r.price.toFixed(0)+' ₽':''}</td></tr></table>
+ <h2>Нормативы</h2><ul><li>Плотность стали 7850 кг/м³.</li><li>Лист — ГОСТ 19903; труба э/с — ГОСТ 10704/10705; ВГП — ГОСТ 3262; б/ш — ГОСТ 8732.</li><li>Арматура — ГОСТ 34028; швеллер — ГОСТ 8240; двутавр — ГОСТ 8239; уголок — ГОСТ 8509.</li></ul>
+ <p><b>Важно:</b> масса теоретическая, допуски проката ±3–5%. Заказ — с запасом, резка и доставка — у поставщика.</p>`;
+}
+$('pr').onchange=renderFields;renderFields();
+$('go').onclick=calc;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+(function(){calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>
