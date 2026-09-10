@@ -1,74 +1,298 @@
 ---
 const SITE = 'https://formatjson.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | formatjson.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Форматировать JSON онлайн — валидатор, YAML, Base64 | formatjson.ru';
+const desc = 'Бесплатный конвертер JSON: форматирование, минификация, валидация, JSON ↔ YAML, Base64 и URL-кодирование. Работает в браузере, без отправки данных на сервер. Копирование, шаринг и печать.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Как проверить JSON на ошибки?', a: 'Вставьте текст и нажмите «Форматировать» — подсветим строку и позицию ошибки (Unexpected token, trailing comma, незакрытая скобка). Исправьте и отформатируйте снова.' },
+  { q: 'Чем форматирование отличается от минификации?', a: 'Форматирование расставляет переносы и отступы 2 или 4 пробела для чтения. Минификация убирает все пробелы и переносы — удобно для вставки в код или API.' },
+  { q: 'Как конвертировать JSON в YAML?', a: 'Нажмите «JSON → YAML». Поддерживаем объекты, массивы, строки, числа, boolean и null. Обратно — «YAML → JSON» с проверкой. Сложные YAML-якоря не поддерживаем.' },
+  { q: 'Base64 — как кодировать кириллицу?', a: 'Кодируем в UTF-8, поэтому русский текст, эмодзи и переносы сохраняются. Для декодирования используем TextDecoder — битые последовательности покажем как ошибку.' },
+  { q: 'Данные куда-то отправляются?', a: 'Нет. Всё считается в браузере. История последних 20 операций хранится в localStorage и никуда не уходит. Очищается кнопкой «Очистить».' },
+  { q: 'Что такое URL-кодирование?', a: 'Заменяет кириллицу и спецсимволы на %XX для вставки в адресную строку. Декодирование — обратно. Полезно для query-параметров и отладки запросов.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'formatjson.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-10', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как отформатировать JSON', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Вставьте JSON', text: 'Скопируйте исходный JSON в левое поле.' }, { '@type': 'HowToStep', name: 'Нажмите Форматировать', text: 'Выберите отступ 2 или 4 пробела и нажмите кнопку.' }, { '@type': 'HowToStep', name: 'Скопируйте результат', text: 'Скопируйте, скачайте как файл или поделитесь ссылкой.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
 <meta name="description" content={desc} />
 <link rel="canonical" href={SITE + '/'} />
+<link rel="alternate" hreflang="ru" href={SITE + '/'} />
+<link rel="alternate" hreflang="en" href={SITE + '/en/'} />
+<link rel="alternate" hreflang="es" href={SITE + '/es/'} />
+<link rel="alternate" hreflang="x-default" href={SITE + '/'} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<meta property="og:url" content={SITE + '/'} />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="api/data.json" />
+<link rel="stylesheet" href="_s555.css?v=5" />
 <script type="application/ld+json" set:html={faqJson}></script>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- METRIKA: вставить код счётчика formatjson.ru -->
+<script is:inline src="theme.js" defer></script>
 </head>
-<body>
-<header class="site"><div class="wrap"><nav><b>formatjson.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formatjson — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 12h6M9 16h6M9 20h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="20" cy="14.5" r="2.2" fill="var(--accent)"/></svg><span>formatjson<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Конвертер</a><a href="yaml/">YAML</a><a href="base64/">Base64</a><a href="guide/">Гайд</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><span style="color:var(--fg);font-weight:700;font-size:12px">RU</span><a href="en/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">EN</a><a href="es/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">ES</a></span><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Dev-конвертеры</p>
+<h1>JSON, YAML, Base64 — за секунды</h1>
+<p>Форматирование и валидация JSON, минификация, сортировка ключей, конвертация JSON ↔ YAML, Base64 и URL-кодирование. Без бэкенда, всё в браузере. Копирование, скачивание и шаринг ссылкой.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
-<div class="result" id="out">—</div>
-<p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> вставьте JSON → «Форматировать» (2/4 пробела) или «Минифицировать». Ошибка — покажем строку. Для YAML — «JSON → YAML» и обратно. Для Base64 — кодирование UTF-8. История хранится локально.</div>
+
+<section class="calc" id="calc" aria-label="Конвертер JSON/YAML/Base64">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Вход <textarea id="inp" rows="10" placeholder='{"name":"Иван","age":30,"tags":["dev","json"]}' style="font-family:var(--mono);font-size:14px;resize:vertical;min-height:160px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></label>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<label style="font-size:14px;color:var(--muted)">Отступ <select id="indent" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"><option value="2">2 пробела</option><option value="4">4 пробела</option><option value="tab">Tab</option></select></label>
+<label style="display:flex;gap:6px;align-items:center;font-size:14px;color:var(--muted)"><input id="sort" type="checkbox" /> Сортировать ключи</label>
+</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button class="btn" id="fmt">Форматировать</button>
+<button class="btn ghost" id="mini">Минифицировать</button>
+<button class="btn ghost" id="validate">Проверить</button>
+</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button class="btn ghost" id="j2y">JSON → YAML</button>
+<button class="btn ghost" id="y2j">YAML → JSON</button>
+</div>
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+<button class="btn ghost" id="b64e">Base64 ↑</button>
+<button class="btn ghost" id="b64d">Base64 ↓</button>
+<button class="btn ghost" id="urlE">URL ↑</button>
+<button class="btn ghost" id="urlD">URL ↓</button>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn ghost" id="copyOut">Копировать</button>
+<button class="btn ghost" id="download">Скачать .json</button>
+<button class="btn ghost" id="clear">Очистить</button>
+<button class="btn ghost" id="share">Поделиться</button>
+</div>
+<p id="stats" style="font-size:13px;color:var(--muted);margin:0">Вставьте JSON, YAML или Base64. Пример: &#123;&quot;hello&quot;:&quot;мир&quot;&#125;</p>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Результат</span>
+<textarea id="out" rows="12" readonly placeholder="Результат появится здесь…" style="font-family:var(--mono);font-size:14px;resize:vertical;min-height:220px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg);white-space:pre;overflow:auto"></textarea>
+<div id="err" style="font-size:13px;color:var(--danger);min-height:18px;margin-top:6px"></div>
+<p style="font-size:13px;color:var(--muted)">Горячие клавиши: Ctrl+Enter — форматировать, Ctrl+Shift+M — минифицировать.</p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+
+<h2>Примеры</h2>
+<table class="data"><caption>Что умеет конвертер</caption><tr><th>Вход</th><th>Действие</th><th>Выход</th></tr>
+<tr><td><code>&#123;&quot;a&quot;:1,&quot;b&quot;:2&#125;</code></td><td>Форматировать 2</td><td>с отступами и переносами</td></tr>
+<tr><td><code>&#123;&quot;z&quot;:1,&quot;a&quot;:2&#125;</code></td><td>Сорт. ключей</td><td><code>&#123;&quot;a&quot;:2,&quot;z&quot;:1&#125;</code></td></tr>
+<tr><td><code>&#123;&quot;name&quot;:&quot;Иван&quot;&#125;</code></td><td>JSON → YAML</td><td><code>name: Иван</code></td></tr>
+<tr><td><code>привет мир</code></td><td>Base64 ↑</td><td><code>cHJpdmV0IG1pcg==</code></td></tr>
+<tr><td><code>hello мир=1&amp;x=2</code></td><td>URL ↑</td><td><code>hello%20%D0%BC%D0%B8%D1%80%3D1%26x%3D2</code></td></tr>
+</table>
+
+<h2>Возможности</h2>
+<div class="cards">
+<a class="card" href="yaml/"><h3>YAML конвертер</h3><p>JSON ↔ YAML с сохранением типов, комментариев-подсказок и валидацией.</p></a>
+<a class="card" href="base64/"><h3>Base64</h3><p>Кодирование UTF-8, декодирование с проверкой, перенос строк и отступов.</p></a>
+<a class="card" href="guide/"><h3>Гайд по JSON</h3><p>Трейлинг-запятые, кавычки, числа, экранирование и частые ошибки.</p></a>
+</div>
+
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+
+<h2>Как пользоваться</h2>
+<ol>
+<li>Вставьте текст в левое поле.</li>
+<li>Нажмите нужную кнопку — результат справа.</li>
+<li>Скопируйте, скачайте файл или скопируйте ссылку с параметром <code>?q=</code>.</li>
+</ol>
+
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">formatjson.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
-<script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formatjson.ru</h3><p>Конвертеры для разработчиков: JSON, YAML, Base64, URL. Все в браузере, без сервера. Обновлено 2026-09-10.</p></div><div><h3>Инструменты</h3><ul><li><a href="./">Конвертер</a></li><li><a href="yaml/">YAML</a></li><li><a href="base64/">Base64</a></li></ul></div><div><h3>Справка</h3><ul><li><a href="guide/">Гайд</a></li><li><a href="api/data.json">API / ИИ-доступ</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
+<script is:inline>
+const $=id=>document.getElementById(id);
+const inp=$('inp'), out=$('out'), err=$('err'), stats=$('stats');
+function indentStr(v){ if(v==='tab') return '\t'; return ' '.repeat(parseInt(v||2)); }
+function sortKeys(obj){ if(Array.isArray(obj)) return obj.map(sortKeys); if(obj && typeof obj==='object'){ const o={}; Object.keys(obj).sort().forEach(k=>o[k]=sortKeys(obj[k])); return o; } return obj; }
+function parseJSONSafe(s){ return JSON.parse(s); }
+function formatJSON(s){
+  const ind=indentStr($('indent').value);
+  const needSort=$('sort').checked;
+  let obj=parseJSONSafe(s);
+  if(needSort) obj=sortKeys(obj);
+  // use custom stringify to respect tab vs spaces
+  if(indentStr($('indent').value)==='\t') return JSON.stringify(obj, null, '\t');
+  return JSON.stringify(obj, null, parseInt($('indent').value)||2);
+}
+function minifyJSON(s){ let obj=parseJSONSafe(s); if($('sort').checked) obj=sortKeys(obj); return JSON.stringify(obj); }
+function toYAML(obj, level=0){
+  const pad='  '.repeat(level);
+  if(obj===null) return 'null';
+  if(typeof obj==='boolean') return obj?'true':'false';
+  if(typeof obj==='number') return String(obj);
+  if(typeof obj==='string'){
+    if(/[:#\-\n]/.test(obj) || /^\s|\s$/.test(obj) || obj==='' ) return JSON.stringify(obj);
+    return obj;
+  }
+  if(Array.isArray(obj)){
+    if(obj.length===0) return '[]';
+    return obj.map(v=>{
+      if(v && typeof v==='object') {
+        const inner=toYAML(v, level+1);
+        // if inner contains newline, format as nested
+        if(inner.includes('\n')) return pad+'- '+inner.trimStart().split('\n').join('\n'+pad+'  ');
+        return pad+'- '+inner;
+      }
+      return pad+'- '+toYAML(v, level+1).trim();
+    }).join('\n');
+  }
+  if(typeof obj==='object'){
+    const keys=Object.keys(obj);
+    if(keys.length===0) return '{}';
+    return keys.map(k=>{
+      const v=obj[k];
+      const keyNeedQuote=/[:#\s]/.test(k) || /^\d/.test(k) ? JSON.stringify(k) : k;
+      if(v && typeof v==='object'){
+        const inner=toYAML(v, level+1);
+        if(inner.includes('\n')) return pad+keyNeedQuote+':\n'+inner;
+        // empty array/object handled
+        if(inner==='[]' || inner==='{}') return pad+keyNeedQuote+': '+inner;
+        // if inner is single line for nested object, need newline
+        if(typeof v==='object' && !Array.isArray(v)) return pad+keyNeedQuote+':\n'+inner;
+        return pad+keyNeedQuote+': '+inner.trim();
+      }
+      return pad+keyNeedQuote+': '+toYAML(v, level+1).trim();
+    }).join('\n');
+  }
+  return String(obj);
+}
+function yamlToJson(yaml){
+  // very small YAML parser: supports mappings, arrays with '-', scalars, nested via indent 2
+  const lines=yaml.split('\n');
+  // quick path: if looks like JSON, parse JSON
+  const t=yaml.trim();
+  if((t.startsWith('{')||t.startsWith('['))){ try{ return JSON.parse(t); }catch(e){} }
+  let idx=0;
+  function parseBlock(indent){
+    let obj=null, isArr=false;
+    const res = {};
+    const arr=[];
+    while(idx<lines.length){
+      let raw=lines[idx];
+      if(!raw.trim()||raw.trim().startsWith('#')){ idx++; continue; }
+      const curIndent=raw.search(/\S/);
+      if(curIndent<indent) break;
+      if(curIndent>indent){ idx++; continue; }
+      let line=raw.trim();
+      if(line.startsWith('- ')){
+        isArr=true;
+        const val=line.slice(2).trim();
+        if(val===''){ idx++; const child=parseBlock(indent+2); arr.push(child); }
+        else if(val.includes(': ')){
+          // inline mapping array item
+          idx++;
+          const fake=[ '  '+val, ...collectIndented(indent+2) ].join('\n');
+          // parse as yaml block with extra indent
+          let saved=idx; idx-= (collectCount); // not needed, simplify: treat as object with one key
+          const k=val.split(':')[0].trim(); const v=val.split(':').slice(1).join(':').trim();
+          const o={}; o[unquote(k)] = parseScalar(v);
+          // check if next lines are continuation of this object
+          if(idx<lines.length && lines[idx].search(/\S/)>indent){
+            const child=parseBlock(indent+2);
+            if(child && typeof child==='object' && !Array.isArray(child)) Object.assign(o, child);
+          }
+          arr.push(o);
+        } else {
+          arr.push(parseScalar(val)); idx++;
+        }
+      } else if(line.includes(':')){
+        const colon=line.indexOf(':');
+        const k=line.slice(0,colon).trim();
+        let v=line.slice(colon+1).trim();
+        if(v===''){
+          idx++;
+          const child=parseBlock(indent+2);
+          if(isArr) {} // not
+          res[unquote(k)] = child===null ? {} : child;
+          obj=res;
+        } else {
+          res[unquote(k)]=parseScalar(v); idx++;
+          obj=res;
+        }
+      } else {
+        // scalar line
+        idx++; return parseScalar(line);
+      }
+    }
+    if(isArr) return arr;
+    if(obj!==null) return obj;
+    if(Object.keys(res).length) return res;
+    return null;
+  }
+  function collectIndented(base){
+    const out=[]; let c=0; while(idx+c<lines.length && (lines[idx+c].search(/\S/)>=base || !lines[idx+c].trim())){ out.push(lines[idx+c]); c++; if(lines[idx+c]&&lines[idx+c].search(/\S/)<base) break; } return out;
+  }
+  let collectCount=0;
+  function parseScalar(s){
+    if(s==='null'||s==='~') return null;
+    if(s==='true') return true;
+    if(s==='false') return false;
+    if(s==='[]') return [];
+    if(s==='{}') return {};
+    if(/^".*"$/.test(s) || /^'.*'$/.test(s)){ try{ return JSON.parse(s); }catch(e){ return s.slice(1,-1); } }
+    if(!isNaN(s) && s!=='' ) return Number(s);
+    return s;
+  }
+  function unquote(s){ if(/^".*"$/.test(s)||/^'.*'$/.test(s)) try{return JSON.parse(s)}catch(e){return s.slice(1,-1)} return s; }
+  const result=parseBlock(0);
+  return result===null ? {} : result;
+}
+function b64Encode(s){ return btoa(unescape(encodeURIComponent(s))); }
+function b64Decode(s){
+  s=s.replace(/\s/g,'');
+  // add padding
+  const pad=s.length%4; if(pad) s+='='.repeat(4-pad);
+  return decodeURIComponent(escape(atob(s)));
+}
+function urlEncode(s){ return encodeURIComponent(s); }
+function urlDecode(s){ return decodeURIComponent(s); }
+function setOut(v, isErr){
+  if(isErr){ err.textContent=v; out.value=''; } else { err.textContent=''; out.value=v; stats.textContent='Символов: '+v.length+' · Строк: '+v.split('\n').length; try{localStorage.setItem('s01_hist', JSON.stringify([{t:Date.now(), len:v.length}].concat(JSON.parse(localStorage.getItem('s01_hist')||'[]')).slice(0,20)))}catch(e){} try{window.s555ev&&s555ev('calc_run',{len:v.length})}catch(e){} }
+}
+function action(fn){
+  const s=inp.value;
+  if(!s.trim()){ setOut('',true); err.textContent='Вставьте данные слева.'; return; }
+  try{ const r=fn(s); setOut(r,false); } catch(e){ setOut('',true); err.textContent=e.message; }
+}
+$('fmt').onclick=()=>action(s=>formatJSON(s));
+$('mini').onclick=()=>action(s=>minifyJSON(s));
+$('validate').onclick=()=>action(s=>{ parseJSONSafe(s); return '✓ Валидный JSON — ошибок нет.'; });
+$('j2y').onclick=()=>action(s=>{ const obj=parseJSONSafe(s); return toYAML(obj); });
+$('y2j').onclick=()=>action(s=>{ const obj=yamlToJson(s); return JSON.stringify(obj, null, indentStr($('indent').value)==='\t'?'\t':parseInt($('indent').value)||2); });
+$('b64e').onclick=()=>{ const s=inp.value; if(!s) return; try{ setOut(b64Encode(s),false);}catch(e){ setOut('',true); err.textContent=e.message; } };
+$('b64d').onclick=()=>{ const s=inp.value.trim(); if(!s) return; try{ setOut(b64Decode(s),false);}catch(e){ setOut('',true); err.textContent='Ошибка Base64: '+e.message; } };
+$('urlE').onclick=()=>{ const s=inp.value; setOut(urlEncode(s),false); };
+$('urlD').onclick=()=>{ try{ setOut(urlDecode(inp.value),false);}catch(e){ setOut('',true); err.textContent='Ошибка URL-decode: '+e.message; } };
+$('copyOut').onclick=async()=>{ if(!out.value) return; try{ await navigator.clipboard.writeText(out.value); const b=$('copyOut'); const t=b.textContent; b.textContent='Скопировано'; setTimeout(()=>b.textContent=t,1200);}catch(e){} };
+$('download').onclick=()=>{ if(!out.value) return; const blob=new Blob([out.value],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); };
+$('clear').onclick=()=>{ inp.value=''; out.value=''; err.textContent=''; stats.textContent='Очищено.'; history.replaceState(null,'',location.pathname); };
+$('share').onclick=async()=>{ const u=new URL(location.href); u.searchParams.set('q', btoa(unescape(encodeURIComponent(inp.value))).slice(0,1500)); history.replaceState(null,'',u); try{await navigator.clipboard.writeText(u.toString()); $('share').textContent='Ссылка скопирована'; setTimeout(()=>$('share').textContent='Поделиться',1200);}catch(e){} };
+document.addEventListener('keydown',e=>{ if(e.ctrlKey&&e.key==='Enter'){ e.preventDefault(); $('fmt').click(); } if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='m'){ e.preventDefault(); $('mini').click(); } });
+(function(){ const q=new URLSearchParams(location.search).get('q'); if(q){ try{ const v=decodeURIComponent(escape(atob(q))); inp.value=v; }catch(e){} } if(!inp.value) inp.value='{\n  "project": "formatjson",\n  "features": ["format","yaml","base64"],\n  "ok": true\n}'; $('fmt').click(); })();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false; const b=$('cookiesOk'); if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>

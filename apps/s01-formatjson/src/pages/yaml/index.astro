@@ -1,0 +1,62 @@
+---
+const SITE = 'https://formatjson.ru';
+const title = 'JSON ↔ YAML конвертер онлайн — без сервера | formatjson.ru';
+const desc = 'Конвертируйте JSON в YAML и обратно в браузере. Поддержка объектов, массивов, строк, чисел, boolean, null. Валидация, форматирование, копирование.';
+const faqs = [
+  { q: 'YAML чувствителен к отступам?', a: 'Да. Используйте 2 пробела, не табы. Наш конвертер ставит 2 пробела и проверяет вложенность.' },
+  { q: 'Комментарии сохранятся?', a: 'При JSON→YAML комментарии не нужны. При YAML→JSON комментарии-строки с # игнорируются.' },
+  { q: 'Что с кириллицей?', a: 'Кириллица остаётся как есть, без экранирования \\uXXXX. Это удобно для чтения.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<!doctype html><html lang="ru"><head><script is:inline src="../theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/yaml/'} /><link rel="alternate" hreflang="ru" href={SITE + '/yaml/'} /><link rel="alternate" hreflang="en" href={SITE + '/en/yaml/'} /><link rel="alternate" hreflang="es" href={SITE + '/es/yaml/'} /><link rel="alternate" hreflang="x-default" href={SITE + '/yaml/'} /><meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="article" /><meta property="article:section" content="Конвертеры" /><link rel="stylesheet" href="../_s555.css?v=5" /><script type="application/ld+json" set:html={faqJson}></script><script is:inline src="../theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="../"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 12h6M9 16h6M9 20h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="20" cy="14.5" r="2.2" fill="var(--accent)"/></svg><span>formatjson<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="../">Конвертер</a><a href="./" aria-current="page">YAML</a><a href="../base64/">Base64</a><a href="../guide/">Гайд</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><span style="color:var(--fg);font-weight:700;font-size:12px">RU</span><a href="../en/yaml/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">EN</a><a href="../es/yaml/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">ES</a></span><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="../">Главная</a> / <span aria-current="page">YAML</span></nav>
+<h1>JSON ↔ YAML</h1>
+<div class="answer" id="tldr"><b>Коротко:</b> JSON → YAML — человекочитаемый конфиг без скобок. YAML → JSON — строгий формат для API. Конвертация локально, без сервера.</div>
+<section class="calc" aria-label="YAML конвертер"><div class="calc-layout"><div class="calc-fields">
+<label>Вход <textarea id="inp" rows="12" placeholder='{"server":{"host":"localhost","port":3000}}' style="font-family:var(--mono);font-size:14px;min-height:180px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></label>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn" id="j2y">JSON → YAML</button><button class="btn ghost" id="y2j">YAML → JSON</button><button class="btn ghost" id="copy">Копировать</button></div>
+<p id="err" style="font-size:13px;color:var(--danger);min-height:18px"></p>
+</div><aside class="calc-side"><span class="result-label">Результат</span><textarea id="out" rows="12" readonly style="font-family:var(--mono);font-size:14px;min-height:180px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></aside></div></section>
+<h2>Пример</h2><table class="data"><tr><th>JSON</th><th>YAML</th></tr><tr><td><pre style="margin:0">&#123;&quot;name&quot;:&quot;Иван&quot;,&quot;skills&quot;:[&quot;js&quot;,&quot;yaml&quot;]&#125;</pre></td><td><pre style="margin:0">name: Иван
+skills:
+  - js
+  - yaml</pre></td></tr></table>
+<h2>Частые вопросы</h2><div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="../">← К главному конвертеру</a></p>
+</main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formatjson.ru</h3><p>YAML-конвертер в браузере. Обновлено 2026-09-10.</p></div><div><h3>Инструменты</h3><ul><li><a href="../">Конвертер</a></li><li><a href="../base64/">Base64</a></li></ul></div><div><h3>Справка</h3><ul><li><a href="../guide/">Гайд</a></li></ul></div></div></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+function toYAML(obj,level=0){
+  const pad='  '.repeat(level);
+  if(obj===null) return 'null'; if(typeof obj==='boolean') return obj?'true':'false'; if(typeof obj==='number') return String(obj);
+  if(typeof obj==='string'){ if(/[:#\-\n]/.test(obj)||/^\s|\s$/.test(obj)||obj==='') return JSON.stringify(obj); return obj; }
+  if(Array.isArray(obj)){ if(obj.length===0) return '[]'; return obj.map(v=>{ if(v&&typeof v==='object'){ const inner=toYAML(v,level+1); if(inner.includes('\n')) return pad+'- '+inner.trimStart().split('\n').join('\n'+pad+'  '); return pad+'- '+inner; } return pad+'- '+toYAML(v,level+1).trim(); }).join('\n'); }
+  const keys=Object.keys(obj); if(keys.length===0) return '{}';
+  return keys.map(k=>{ const v=obj[k]; const keyNeedQuote=/[:#\s]/.test(k)||/^\d/.test(k)?JSON.stringify(k):k; if(v&&typeof v==='object'){ const inner=toYAML(v,level+1); if(inner.includes('\n')) return pad+keyNeedQuote+':\n'+inner; if(inner==='[]'||inner==='{}') return pad+keyNeedQuote+': '+inner; return pad+keyNeedQuote+':\n'+inner; } return pad+keyNeedQuote+': '+toYAML(v,level+1).trim(); }).join('\n');
+}
+function yamlToJson(yaml){
+  const lines=yaml.split('\n'); let idx=0;
+  function parseScalar(s){ if(s==='null'||s==='~') return null; if(s==='true') return true; if(s==='false') return false; if(s==='[]') return []; if(s==='{}') return {}; if(/^".*"$/.test(s)||/^'.*'$/.test(s)){ try{return JSON.parse(s);}catch(e){return s.slice(1,-1);} } if(!isNaN(s)&&s!=='') return Number(s); return s; }
+  function unquote(s){ if(/^".*"$/.test(s)||/^'.*'$/.test(s)) try{return JSON.parse(s)}catch(e){return s.slice(1,-1)} return s; }
+  function parseBlock(indent){
+    let obj=null, isArr=false; const res={}; const arr=[];
+    while(idx<lines.length){
+      let raw=lines[idx]; if(!raw.trim()||raw.trim().startsWith('#')){ idx++; continue; }
+      const curIndent=raw.search(/\S/); if(curIndent<indent) break; if(curIndent>indent){ idx++; continue; }
+      let line=raw.trim();
+      if(line.startsWith('- ')){ isArr=true; const val=line.slice(2).trim(); if(val===''){ idx++; const child=parseBlock(indent+2); arr.push(child); } else { arr.push(parseScalar(val)); idx++; } }
+      else if(line.includes(':')){ const c=line.indexOf(':'); const k=line.slice(0,c).trim(); let v=line.slice(c+1).trim(); if(v===''){ idx++; const child=parseBlock(indent+2); res[unquote(k)]=child===null?{}:child; obj=res; } else { res[unquote(k)]=parseScalar(v); idx++; obj=res; } }
+      else { idx++; return parseScalar(line); }
+    }
+    if(isArr) return arr; if(obj!==null) return obj; if(Object.keys(res).length) return res; return null;
+  }
+  const r=parseBlock(0); return r===null?{}:r;
+}
+$('j2y').onclick=()=>{ try{ const obj=JSON.parse($('inp').value); $('out').value=toYAML(obj); $('err').textContent=''; }catch(e){ $('err').textContent=e.message; } };
+$('y2j').onclick=()=>{ try{ const obj=yamlToJson($('inp').value); $('out').value=JSON.stringify(obj,null,2); $('err').textContent=''; }catch(e){ $('err').textContent=e.message; } };
+$('copy').onclick=async()=>{ if(!$('out').value) return; await navigator.clipboard.writeText($('out').value); };
+</script></body></html>

@@ -1,0 +1,35 @@
+---
+const SITE = 'https://formatjson.ru';
+const title = 'Codificación Base64 Online — UTF-8 | formatjson.ru';
+const desc = 'Convertidor Base64: codifica texto y JSON a Base64 y viceversa. Soporte UTF-8, cirílico, saltos, validación.';
+const faqs = [
+  { q: '¿Por qué Base64?', a: 'Para enviar datos binarios como texto — en JSON, URL, email. Codifica 3 bytes en 4 caracteres A-Za-z0-9+/.' },
+  { q: '¿Cirílico dañado?', a: 'No, codificamos vía UTF-8. “hola” → aG9sYQ==, se decodifica correctamente.' },
+  { q: '¿Saltos importantes?', a: 'Codificación los preserva. Decodificación ignora espacios y saltos.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<!doctype html><html lang="es"><head><script is:inline src="../../theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/es/base64/'} /><link rel="alternate" hreflang="ru" href={SITE + '/base64/'} /><link rel="alternate" hreflang="en" href={SITE + '/en/base64/'} /><link rel="alternate" hreflang="es" href={SITE + '/es/base64/'} /><link rel="alternate" hreflang="x-default" href={SITE + '/base64/'} /><meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="article" /><link rel="stylesheet" href="../../_s555.css?v=5" /><script type="application/ld+json" set:html={faqJson}></script><script is:inline src="../../theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="../"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 12h6M9 16h6M9 20h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="20" cy="14.5" r="2.2" fill="var(--accent)"/></svg><span>formatjson<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Menú"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="../">Convertidor</a><a href="../yaml/">YAML</a><a href="./" aria-current="page">Base64</a><a href="../guide/">Guía</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><a href="../../base64/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">RU</a><a href="../../en/base64/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">EN</a><span style="color:var(--fg);font-weight:700;font-size:12px">ES</span></span><button id="ttheme" class="tbtn" type="button" aria-label="Tema oscuro" title="Tema oscuro">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs"><a href="../">Inicio</a> / <span aria-current="page">Base64</span></nav>
+<h1>Base64 — Codificar y Decodificar</h1>
+<div class="answer"><b>Resumen:</b> Base64 convierte cualquier texto (incluido JSON y Unicode) en ASCII seguro. Codificación UTF-8, decodificación validada.</div>
+<section class="calc"><div class="calc-layout"><div class="calc-fields">
+<label>Entrada <textarea id="inp" rows="10" placeholder="hola mundo" style="font-family:var(--mono);font-size:14px;min-height:160px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></label>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn" id="enc">Codificar</button><button class="btn ghost" id="dec">Decodificar</button><button class="btn ghost" id="copy">Copiar</button></div>
+<p id="err" style="font-size:13px;color:var(--danger);min-height:18px"></p>
+</div><aside class="calc-side"><span class="result-label">Resultado</span><textarea id="out" rows="10" readonly style="font-family:var(--mono);font-size:14px;min-height:160px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></aside></div></section>
+<h2>Ejemplos</h2><table class="data"><tr><th>Texto</th><th>Base64</th></tr><tr><td>hello</td><td>aGVsbG8=</td></tr><tr><td>hola</td><td>aG9sYQ==</td></tr><tr><td>&#123;&quot;a&quot;:1&#125;</td><td>eyJhIjoxfQ==</td></tr></table>
+<h2>FAQ</h2><div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="../">← Volver al convertidor</a></p>
+</main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formatjson.ru</h3><p>Base64 en el navegador. Actualizado 2026-09-10.</p></div><div><h3>Herramientas</h3><ul><li><a href="../">Convertidor</a></li><li><a href="../yaml/">YAML</a></li></ul></div></div></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+function b64Encode(s){ return btoa(unescape(encodeURIComponent(s))); }
+function b64Decode(s){ s=s.replace(/\s/g,''); const pad=s.length%4; if(pad) s+='='.repeat(4-pad); return decodeURIComponent(escape(atob(s))); }
+$('enc').onclick=()=>{ try{$('out').value=b64Encode($('inp').value); $('err').textContent='';}catch(e){$('err').textContent=e.message;}};
+$('dec').onclick=()=>{ try{$('out').value=b64Decode($('inp').value.trim()); $('err').textContent='';}catch(e){$('err').textContent='Error Base64: '+e.message;}};
+$('copy').onclick=async()=>{ await navigator.clipboard.writeText($('out').value); };
+</script></body></html>

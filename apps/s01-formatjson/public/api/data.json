@@ -1,0 +1,32 @@
+{
+  "site": "https://formatjson.ru",
+  "updated": "2026-09-10",
+  "pages": [
+    "/",
+    "/yaml",
+    "/base64",
+    "/guide"
+  ],
+  "features": [
+    "json_format",
+    "json_minify",
+    "json_validate",
+    "json_sort_keys",
+    "json_to_yaml",
+    "yaml_to_json",
+    "base64_encode",
+    "base64_decode",
+    "url_encode",
+    "url_decode"
+  ],
+  "faqs": [
+    {
+      "q": "Как проверить JSON на ошибки?",
+      "a": "Форматировать — покажем строку ошибки."
+    },
+    {
+      "q": "Как конвертировать JSON в YAML?",
+      "a": "Кнопка JSON -> YAML, поддержка объектов и массивов."
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+---
+const SITE = 'https://formatjson.ru';
+const title = 'Format JSON Online — Validator, YAML, Base64 | formatjson.ru';
+const desc = 'Free JSON converter: formatting, minification, validation, JSON ↔ YAML, Base64 and URL encoding. Runs in the browser, no data sent to server. Copy, download and share.';
+const faqs = [
+  { q: 'How to validate JSON?', a: 'Paste the text and click “Format” — we highlight the line and error position (Unexpected token, trailing comma, unclosed bracket). Fix and format again.' },
+  { q: 'Format vs minify?', a: 'Format adds line breaks and 2 or 4 spaces for readability. Minify removes all spaces and line breaks — handy for code or API payloads.' },
+  { q: 'How to convert JSON to YAML?', a: 'Click “JSON → YAML”. We support objects, arrays, strings, numbers, boolean and null. Reverse with “YAML → JSON”. Complex YAML anchors are not supported.' },
+  { q: 'Base64 and Cyrillic?', a: 'We encode in UTF-8, so Cyrillic, emoji and line breaks are preserved. Decoding uses TextDecoder — broken sequences are shown as errors.' },
+  { q: 'Is data sent anywhere?', a: 'No. Everything runs in the browser. Last 20 operations are stored in localStorage locally. Clear with the “Clear” button.' },
+  { q: 'What is URL encoding?', a: 'It replaces Cyrillic and special characters with %XX for the address bar. Decoding is the reverse. Useful for query params and request debugging.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'formatjson.ru', url: SITE, inLanguage: 'en' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/en/', inLanguage: 'en', dateModified: '2026-09-10', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'How to format JSON', inLanguage: 'en', step: [{ '@type': 'HowToStep', name: 'Paste JSON', text: 'Copy the source JSON into the left field.' }, { '@type': 'HowToStep', name: 'Click Format', text: 'Choose indent 2 or 4 spaces and click the button.' }, { '@type': 'HowToStep', name: 'Copy result', text: 'Copy, download as file or share the link.' }] });
+---
+<!doctype html>
+<html lang="en">
+<head>
+<script is:inline src="../theme-head.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={SITE + '/en/'} />
+<link rel="alternate" hreflang="ru" href={SITE + '/'} />
+<link rel="alternate" hreflang="en" href={SITE + '/en/'} />
+<link rel="alternate" hreflang="es" href={SITE + '/es/'} />
+<link rel="alternate" hreflang="x-default" href={SITE + '/'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={SITE + '/en/'} />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="alternate" type="application/json" title="Site data for AI" href="../api/data.json" />
+<link rel="stylesheet" href="../_s555.css?v=5" />
+<script type="application/ld+json" set:html={faqJson}></script>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<script is:inline src="../theme.js" defer></script>
+</head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formatjson — home"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 12h6M9 16h6M9 20h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="20" cy="14.5" r="2.2" fill="var(--accent)"/></svg><span>formatjson<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Converter</a><a href="yaml/">YAML</a><a href="base64/">Base64</a><a href="guide/">Guide</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><a href="../" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">RU</a><span style="color:var(--fg);font-weight:700;font-size:12px">EN</span><a href="../es/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">ES</a></span><button id="ttheme" class="tbtn" type="button" aria-label="Dark theme" title="Dark theme">◐</button></div></nav></div></header>
+<main class="wrap">
+<section class="hero">
+<p class="eyebrow">Dev converters</p>
+<h1>JSON, YAML, Base64 — in seconds</h1>
+<p>Formatting and validation for JSON, minification, key sorting, JSON ↔ YAML conversion, Base64 and URL encoding. No backend, everything in the browser. Copy, download and share via link.</p>
+</section>
+<div class="answer" id="tldr"><b>TL;DR:</b> paste JSON → “Format” (2/4 spaces) or “Minify”. On error we show the line. For YAML — “JSON → YAML” and back. For Base64 — UTF-8 encoding. History is stored locally.</div>
+
+<section class="calc" id="calc" aria-label="JSON/YAML/Base64 converter">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Input <textarea id="inp" rows="10" placeholder='{"name":"Ivan","age":30,"tags":["dev","json"]}' style="font-family:var(--mono);font-size:14px;resize:vertical;min-height:160px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"></textarea></label>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<label style="font-size:14px;color:var(--muted)">Indent <select id="indent" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg)"><option value="2">2 spaces</option><option value="4">4 spaces</option><option value="tab">Tab</option></select></label>
+<label style="display:flex;gap:6px;align-items:center;font-size:14px;color:var(--muted)"><input id="sort" type="checkbox" /> Sort keys</label>
+</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button class="btn" id="fmt">Format</button>
+<button class="btn ghost" id="mini">Minify</button>
+<button class="btn ghost" id="validate">Validate</button>
+</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button class="btn ghost" id="j2y">JSON → YAML</button>
+<button class="btn ghost" id="y2j">YAML → JSON</button>
+</div>
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+<button class="btn ghost" id="b64e">Base64 ↑</button>
+<button class="btn ghost" id="b64d">Base64 ↓</button>
+<button class="btn ghost" id="urlE">URL ↑</button>
+<button class="btn ghost" id="urlD">URL ↓</button>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn ghost" id="copyOut">Copy</button>
+<button class="btn ghost" id="download">Download .json</button>
+<button class="btn ghost" id="clear">Clear</button>
+<button class="btn ghost" id="share">Share</button>
+</div>
+<p id="stats" style="font-size:13px;color:var(--muted);margin:0">Paste JSON, YAML or Base64. Example: &#123;&quot;hello&quot;:&quot;world&quot;&#125;</p>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Result</span>
+<textarea id="out" rows="12" readonly placeholder="Result will appear here…" style="font-family:var(--mono);font-size:14px;resize:vertical;min-height:220px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--fg);white-space:pre;overflow:auto"></textarea>
+<div id="err" style="font-size:13px;color:var(--danger);min-height:18px;margin-top:6px"></div>
+<p style="font-size:13px;color:var(--muted)">Hotkeys: Ctrl+Enter — format, Ctrl+Shift+M — minify.</p>
+</aside>
+</div>
+</section>
+
+<h2>Examples</h2>
+<table class="data"><caption>What the converter can do</caption><tr><th>Input</th><th>Action</th><th>Output</th></tr>
+<tr><td><code>&#123;&quot;a&quot;:1,&quot;b&quot;:2&#125;</code></td><td>Format 2</td><td>with indents and line breaks</td></tr>
+<tr><td><code>&#123;&quot;z&quot;:1,&quot;a&quot;:2&#125;</code></td><td>Sort keys</td><td><code>&#123;&quot;a&quot;:2,&quot;z&quot;:1&#125;</code></td></tr>
+<tr><td><code>&#123;&quot;name&quot;:&quot;Ivan&quot;&#125;</code></td><td>JSON → YAML</td><td><code>name: Ivan</code></td></tr>
+<tr><td><code>hello world</code></td><td>Base64 ↑</td><td><code>aGVsbG8gd29ybGQ=</code></td></tr>
+<tr><td><code>hello world=1&amp;x=2</code></td><td>URL ↑</td><td><code>hello%20world%3D1%26x%3D2</code></td></tr>
+</table>
+
+<h2>Features</h2>
+<div class="cards">
+<a class="card" href="yaml/"><h3>YAML converter</h3><p>JSON ↔ YAML with type preservation and validation.</p></a>
+<a class="card" href="base64/"><h3>Base64</h3><p>UTF-8 encoding, decoding with validation.</p></a>
+<a class="card" href="guide/"><h3>JSON guide</h3><p>Trailing commas, quotes, numbers and escaping.</p></a>
+</div>
+
+<h2>FAQ</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+
+<h2>How to use</h2>
+<ol>
+<li>Paste text into the left field.</li>
+<li>Click the needed button — result on the right.</li>
+<li>Copy, download the file or copy a link with <code>?q=</code>.</li>
+</ol>
+
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
+</main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formatjson.ru</h3><p>Converters for developers: JSON, YAML, Base64, URL. Everything in the browser, no server. Updated 2026-09-10.</p></div><div><h3>Tools</h3><ul><li><a href="./">Converter</a></li><li><a href="yaml/">YAML</a></li><li><a href="base64/">Base64</a></li></ul></div><div><h3>Help</h3><ul><li><a href="guide/">Guide</a></li><li><a href="../api/data.json">API / AI access</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>We do not collect your data. For stats we use Yandex Metrica — it may use its own cookies. <button class="btn" id="cookiesOk" type="button">Got it</button></p></div></div>
+<script is:inline>
+const $=id=>document.getElementById(id);
+const inp=$('inp'), out=$('out'), err=$('err'), stats=$('stats');
+function indentStr(v){ if(v==='tab') return '\t'; return ' '.repeat(parseInt(v||2)); }
+function sortKeys(obj){ if(Array.isArray(obj)) return obj.map(sortKeys); if(obj && typeof obj==='object'){ const o={}; Object.keys(obj).sort().forEach(k=>o[k]=sortKeys(obj[k])); return o; } return obj; }
+function parseJSONSafe(s){ return JSON.parse(s); }
+function formatJSON(s){
+  const ind=indentStr($('indent').value);
+  const needSort=$('sort').checked;
+  let obj=parseJSONSafe(s);
+  if(needSort) obj=sortKeys(obj);
+  if(indentStr($('indent').value)==='\t') return JSON.stringify(obj, null, '\t');
+  return JSON.stringify(obj, null, parseInt($('indent').value)||2);
+}
+function minifyJSON(s){ let obj=parseJSONSafe(s); if($('sort').checked) obj=sortKeys(obj); return JSON.stringify(obj); }
+function toYAML(obj, level=0){
+  const pad='  '.repeat(level);
+  if(obj===null) return 'null';
+  if(typeof obj==='boolean') return obj?'true':'false';
+  if(typeof obj==='number') return String(obj);
+  if(typeof obj==='string'){
+    if(/[:#\-\n]/.test(obj) || /^\s|\s$/.test(obj) || obj==='' ) return JSON.stringify(obj);
+    return obj;
+  }
+  if(Array.isArray(obj)){
+    if(obj.length===0) return '[]';
+    return obj.map(v=>{
+      if(v && typeof v==='object') {
+        const inner=toYAML(v, level+1);
+        if(inner.includes('\n')) return pad+'- '+inner.trimStart().split('\n').join('\n'+pad+'  ');
+        return pad+'- '+inner;
+      }
+      return pad+'- '+toYAML(v, level+1).trim();
+    }).join('\n');
+  }
+  if(typeof obj==='object'){
+    const keys=Object.keys(obj);
+    if(keys.length===0) return '{}';
+    return keys.map(k=>{
+      const v=obj[k];
+      const keyNeedQuote=/[:#\s]/.test(k) || /^\d/.test(k) ? JSON.stringify(k) : k;
+      if(v && typeof v==='object'){
+        const inner=toYAML(v, level+1);
+        if(inner.includes('\n')) return pad+keyNeedQuote+':\n'+inner;
+        if(inner==='[]' || inner==='{}') return pad+keyNeedQuote+': '+inner;
+        if(typeof v==='object' && !Array.isArray(v)) return pad+keyNeedQuote+':\n'+inner;
+        return pad+keyNeedQuote+': '+inner.trim();
+      }
+      return pad+keyNeedQuote+': '+toYAML(v, level+1).trim();
+    }).join('\n');
+  }
+  return String(obj);
+}
+function yamlToJson(yaml){
+  const lines=yaml.split('\n');
+  const t=yaml.trim();
+  if((t.startsWith('{')||t.startsWith('['))){ try{ return JSON.parse(t); }catch(e){} }
+  let idx=0;
+  function parseBlock(indent){
+    let obj=null, isArr=false;
+    const res = {};
+    const arr=[];
+    while(idx<lines.length){
+      let raw=lines[idx];
+      if(!raw.trim()||raw.trim().startsWith('#')){ idx++; continue; }
+      const curIndent=raw.search(/\S/);
+      if(curIndent<indent) break;
+      if(curIndent>indent){ idx++; continue; }
+      let line=raw.trim();
+      if(line.startsWith('- ')){
+        isArr=true;
+        const val=line.slice(2).trim();
+        if(val===''){ idx++; const child=parseBlock(indent+2); arr.push(child); }
+        else if(val.includes(': ')){
+          idx++;
+          const k=val.split(':')[0].trim(); const v=val.split(':').slice(1).join(':').trim();
+          const o={}; o[unquote(k)] = parseScalar(v);
+          if(idx<lines.length && lines[idx].search(/\S/)>indent){
+            const child=parseBlock(indent+2);
+            if(child && typeof child==='object' && !Array.isArray(child)) Object.assign(o, child);
+          }
+          arr.push(o);
+        } else {
+          arr.push(parseScalar(val)); idx++;
+        }
+      } else if(line.includes(':')){
+        const colon=line.indexOf(':');
+        const k=line.slice(0,colon).trim();
+        let v=line.slice(colon+1).trim();
+        if(v===''){
+          idx++;
+          const child=parseBlock(indent+2);
+          res[unquote(k)] = child===null ? {} : child;
+          obj=res;
+        } else {
+          res[unquote(k)]=parseScalar(v); idx++;
+          obj=res;
+        }
+      } else {
+        idx++; return parseScalar(line);
+      }
+    }
+    if(isArr) return arr;
+    if(obj!==null) return obj;
+    if(Object.keys(res).length) return res;
+    return null;
+  }
+  function parseScalar(s){
+    if(s==='null'||s==='~') return null;
+    if(s==='true') return true;
+    if(s==='false') return false;
+    if(s==='[]') return [];
+    if(s==='{}') return {};
+    if(/^".*"$/.test(s) || /^'.*'$/.test(s)){ try{ return JSON.parse(s); }catch(e){ return s.slice(1,-1); } }
+    if(!isNaN(s) && s!=='' ) return Number(s);
+    return s;
+  }
+  function unquote(s){ if(/^".*"$/.test(s)||/^'.*'$/.test(s)) try{return JSON.parse(s)}catch(e){return s.slice(1,-1)} return s; }
+  const result=parseBlock(0);
+  return result===null ? {} : result;
+}
+function b64Encode(s){ return btoa(unescape(encodeURIComponent(s))); }
+function b64Decode(s){
+  s=s.replace(/\s/g,'');
+  const pad=s.length%4; if(pad) s+='='.repeat(4-pad);
+  return decodeURIComponent(escape(atob(s)));
+}
+function urlEncode(s){ return encodeURIComponent(s); }
+function urlDecode(s){ return decodeURIComponent(s); }
+function setOut(v, isErr){
+  if(isErr){ err.textContent=v; out.value=''; } else { err.textContent=''; out.value=v; stats.textContent='Chars: '+v.length+' · Lines: '+v.split('\n').length; try{localStorage.setItem('s01_hist', JSON.stringify([{t:Date.now(), len:v.length}].concat(JSON.parse(localStorage.getItem('s01_hist')||'[]')).slice(0,20)))}catch(e){} try{window.s555ev&&s555ev('calc_run',{len:v.length})}catch(e){} }
+}
+function action(fn){
+  const s=inp.value;
+  if(!s.trim()){ setOut('',true); err.textContent='Paste data on the left.'; return; }
+  try{ const r=fn(s); setOut(r,false); } catch(e){ setOut('',true); err.textContent=e.message; }
+}
+$('fmt').onclick=()=>action(s=>formatJSON(s));
+$('mini').onclick=()=>action(s=>minifyJSON(s));
+$('validate').onclick=()=>action(s=>{ parseJSONSafe(s); return '✓ Valid JSON — no errors.'; });
+$('j2y').onclick=()=>action(s=>{ const obj=parseJSONSafe(s); return toYAML(obj); });
+$('y2j').onclick=()=>action(s=>{ const obj=yamlToJson(s); return JSON.stringify(obj, null, indentStr($('indent').value)==='\t'?'\t':parseInt($('indent').value)||2); });
+$('b64e').onclick=()=>{ const s=inp.value; if(!s) return; try{ setOut(b64Encode(s),false);}catch(e){ setOut('',true); err.textContent=e.message; } };
+$('b64d').onclick=()=>{ const s=inp.value.trim(); if(!s) return; try{ setOut(b64Decode(s),false);}catch(e){ setOut('',true); err.textContent='Base64 error: '+e.message; } };
+$('urlE').onclick=()=>{ const s=inp.value; setOut(urlEncode(s),false); };
+$('urlD').onclick=()=>{ try{ setOut(urlDecode(inp.value),false);}catch(e){ setOut('',true); err.textContent='URL-decode error: '+e.message; } };
+$('copyOut').onclick=async()=>{ if(!out.value) return; try{ await navigator.clipboard.writeText(out.value); const b=$('copyOut'); const t=b.textContent; b.textContent='Copied'; setTimeout(()=>b.textContent=t,1200);}catch(e){} };
+$('download').onclick=()=>{ if(!out.value) return; const blob=new Blob([out.value],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); };
+$('clear').onclick=()=>{ inp.value=''; out.value=''; err.textContent=''; stats.textContent='Cleared.'; history.replaceState(null,'',location.pathname); };
+$('share').onclick=async()=>{ const u=new URL(location.href); u.searchParams.set('q', btoa(unescape(encodeURIComponent(inp.value))).slice(0,1500)); history.replaceState(null,'',u); try{await navigator.clipboard.writeText(u.toString()); $('share').textContent='Link copied'; setTimeout(()=>$('share').textContent='Share',1200);}catch(e){} };
+document.addEventListener('keydown',e=>{ if(e.ctrlKey&&e.key==='Enter'){ e.preventDefault(); $('fmt').click(); } if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='m'){ e.preventDefault(); $('mini').click(); } });
+(function(){ const q=new URLSearchParams(location.search).get('q'); if(q){ try{ const v=decodeURIComponent(escape(atob(q))); inp.value=v; }catch(e){} } if(!inp.value) inp.value='{\n  "project": "formatjson",\n  "features": ["format","yaml","base64"],\n  "ok": true\n}'; $('fmt').click(); })();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false; const b=$('cookiesOk'); if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
+</script>
+</body>
+</html>
