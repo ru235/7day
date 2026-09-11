@@ -1,17 +1,24 @@
 ---
 const SITE = 'https://fanerabox.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | fanerabox.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Ящик из фанеры: чертёж шип-паз + расчёт | fanerabox.ru';
+const desc = 'Генератор ящиков из фанеры для лазера и ЧПУ: шип-паз с компенсацией реза, SVG-чертёж для резки, расход листов, вес и цена.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Какой толщины фанеру брать на ящик?', a: 'Мелочи и посылки — 4–6 мм, переезд и инструмент — 9–12 мм, тяжёлое — 15–18 мм. Шип не уже двух толщин.' },
+  { q: 'ФК или ФСФ?', a: 'ФК — в помещение (мебель, упаковка). ФСФ — влагостойкая: улица, гараж, багажник.' },
+  { q: 'Какой рез закладывать?', a: 'Лазер 0.1–0.2 мм, фреза 3 мм (диаметр фрезы). Шипы чуть уже, пазы чуть шире — иначе не соберётся.' },
+  { q: 'Чем клеить шип-паз?', a: 'ПВА D3/D4 для помещения, полиуретановый или эпоксидка для улицы. Стянуть струбцинами до высыхания.' },
+  { q: 'Нужен ли чертёж для ЧПУ?', a: 'Да — скачайте SVG кнопкой. Проверьте масштаб (1 единица = 1 мм) и рез под свой станок.' },
+  { q: 'Сколько листов надо?', a: 'Считает генератор: площадь деталей / лист 1525×1525 с запасом 10% на перемычки.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'fanerabox.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как сделать ящик шип-паз', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Задайте размеры', text: 'Длина, ширина, высота и толщина фанеры.' }, { '@type': 'HowToStep', name: 'Скачайте SVG', text: 'Чертёж с шипами и компенсацией реза.' }, { '@type': 'HowToStep', name: 'Вырежьте и склейте', text: 'Лазер или фреза, клей ПВА D3, струбцины.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +27,138 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="stylesheet" href="/_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>fanerabox.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- METRIKA: вставить код счётчика fanerabox.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="фанерабокс — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="12" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M7 16h4M12 12v4M20 12v4M25 16h-4" stroke="var(--accent)" stroke-width="2"/></svg><span>фанерабокс<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Генератор</a><a href="/shippaz">Шип-паз</a><a href="/raskroy">Раскрой</a><a href="/material">Материал</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Генератор ящиков</p>
+<h1>Ящик из фанеры под лазер и ЧПУ</h1>
+<p>Наружные размеры, толщина, крышка. Шип-паз с компенсацией реза, готовый SVG для резки, расход листов и цена.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> стенки с шипами, торцы с пазами — стык держит сам. Ширина шипа 3–5 толщин, рез лазера 0.15 мм уже заложен. Чертёж скачивается кнопкой.</div>
+<section class="calc" id="calc" aria-label="Генератор ящика">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Длина L, мм <input id="bl" type="number" value="400" min="50" max="2900" /></label>
+<label>Ширина W, мм <input id="bw" type="number" value="300" min="50" max="1500" /></label>
+<label>Высота H, мм <input id="bh" type="number" value="200" min="40" max="1500" /></label>
+<label>Толщина фанеры, мм <select id="bt"><option>3</option><option>4</option><option selected>6</option><option>9</option><option>12</option><option>15</option><option>18</option><option>21</option></select></label>
+<label>Рез (керф), мм <input id="bk" type="number" value="0.15" min="0" max="4" step="0.05" /></label>
+<label>Крышка <select id="lid"><option value="no">Без крышки</option><option value="yes">С крышкой</option></select></label>
+<label>Цена фанеры, ₽/м² <input id="bp" type="number" value="950" min="0" max="100000" /></label>
+<div><button class="btn" id="go">Построить</button>
+<button class="btn ghost" id="dl">Скачать SVG</button>
+<button class="btn ghost" id="printBtn">Печать</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Результат</span>
 <div class="result" id="out">—</div>
 <p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Чертёж раскроя (схема + файл для резки)</h2>
+<svg id="draw" viewBox="0 0 1000 420" width="100%" role="img" aria-label="Раскрой ящика" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
+<p style="font-size:13px;color:var(--muted)">Схема для контроля. Точный файл с шипами — кнопка «Скачать SVG» (1 единица = 1 мм).</p>
+<h2>Справочник</h2>
+<div class="cards">
+<a class="card" href="/shippaz"><h3>Шип-паз</h3><p>Ширина шипов, компенсация реза, клей.</p></a>
+<a class="card" href="/raskroy"><h3>Раскрой</h3><p>Листы 1525×1525, перемычки, направление слоёв.</p></a>
+<a class="card" href="/material"><h3>Материал</h3><p>ФК и ФСФ, толщины, ориентир цен.</p></a>
+<a class="card" href="/primery"><h3>Примеры</h3><p>Посылка, инструмент, переезд — с чертежами.</p></a>
+</div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">fanerabox.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>fanerabox.ru</h3><p>Генератор ящиков шип-паз. Проверяйте рез под свой станок. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Генератор ящика</a></li><li><a href="/raskroy">Раскрой</a></li><li><a href="/material">Материал</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/shippaz">Шип-паз</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+function el(n,at,parent){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);if(parent)parent.appendChild(e);return e}
+// Точный путь с компенсацией реза k (шипы уже на k, пазы шире на k)
+function panelExact(x,y,w,h,t,f,n,dir,k){
+  const sh=dir>0?-k/2:k/2; // сдвиг границ шипа внутрь
+  let d=`M ${x} ${y+h}`;
+  for(let i=0;i<n;i++){const ya=y+h-2*i*f, yb=ya-f, yc=ya-2*f;
+    d+=` L ${x} ${ya-f+ (dir>0? k/2 : -k/2)} L ${x+dir*t} ${ya-f+(dir>0? k/2 : -k/2)} L ${x+dir*t} ${yc+(dir>0? -k/2 : k/2)} L ${x} ${yc+(dir>0? -k/2 : k/2)}`;}
+  d+=` L ${x} ${y} L ${x+w} ${y}`;
+  for(let i=0;i<n;i++){const ya=y+2*i*f, yb=ya+f, yc=ya+2*f;
+    d+=` L ${x+w} ${yb+(dir>0? k/2 : -k/2)} L ${x+w-dir*t} ${yb+(dir>0? k/2 : -k/2)} L ${x+w-dir*t} ${yc+(dir>0? -k/2 : k/2)} L ${x+w} ${yc+(dir>0? -k/2 : k/2)}`;}
+  d+=` L ${x+w} ${y+h} Z`;
+  return d;
+}
+function fingers(H,t){let n=Math.max(2,Math.round(H/(2*Math.max(3*t,10))));return {n,f:H/(2*n)}}
+function lastCalc(){const L=+$('bl').value,W=+$('bw').value,H=+$('bh').value,t=+$('bt').value,k=+$('bk').value||0,lid=$('lid').value==='yes',pr=+$('bp').value||0;
+  if(!(L>0&&W>0&&H>0&&t>0))return null;
+  if(L<2*t+20||W<2*t+20)return {err:'Слишком маленький ящик для толщины '+t+' мм.'};
+  const {n,f}=fingers(H,t);
+  const fb={w:L,h:H}, sd={w:W-2*t,h:H}, bot={w:L-2*t,h:W-2*t}, lidP=lid?{w:L,h:W}:null;
+  const areaM2=(2*L*H+2*(W-2*t)*H+(L-2*t)*(W-2*t)+(lid?L*W:0))/1e6;
+  const sheets=Math.max(1,Math.ceil(areaM2/(1.525*1.525*0.9)));
+  const weight=areaM2*(t/1000)*650;
+  const cutM=(2*(L+H)+2*((W-2*t)+H)+2*((L-2*t)+(W-2*t))+(lid?2*(L+W):0))/1000 + 8*n*(t/1000)*2;
+  return {L,W,H,t,k,lid,pr,n,f,fb,sd,bot,lidP,areaM2,sheets,weight,cutM};
+}
+function drawPreview(r){const svg=$('draw');svg.innerHTML='';if(!r)return;
+  const sc=Math.min(900/(2*r.L+2*(r.W)+60),300/(r.H+40));
+  const X=v=>30+v*sc, Y=v=>30+v*sc;
+  const ink='var(--brand)', acc='var(--accent)';
+  function box(x,y,w,h,label){el('rect',{x:X(x),y:Y(y),width:Math.max(2,w*sc),height:Math.max(2,h*sc),fill:'none',stroke:ink,'stroke-width':2},svg);
+    const t=el('text',{x:X(x+w/2),y:Y(y+h/2),'text-anchor':'middle','dominant-baseline':'middle','font-size':13},svg);t.textContent=label;}
+  box(0,0,r.L,r.H,`стенка ${r.L}×${r.H}`);
+  box(r.L+20,0,Math.max(1,r.W-2*r.t),r.H,`торец ${Math.round(r.W-2*r.t)}×${r.H}`);
+  box(0,r.H+20,Math.max(1,r.L-2*r.t),Math.max(1,r.W-2*r.t),'дно');
+  if(r.lidP)box(r.L+20,r.H+20,r.L,r.W,'крышка');
+  const cap=el('text',{x:30,y:395,'font-size':12,fill:'var(--muted)'},svg);
+  cap.textContent=`Шипов на стык: ${r.n}, ширина шипа ≈ ${r.f.toFixed(1)} мм · Рез ~${r.cutM.toFixed(1)} м · Листов 1525×1525: ${r.sheets}`;
+}
+function calc(){const out=$('out'),r=lastCalc();
+  if(!r){out.textContent='Проверьте размеры.';return}
+  if(r.err){out.textContent=r.err;drawPreview(null);return}
+  out.innerHTML=`Ящик <b>${r.L}×${r.W}×${r.H}</b>, фанера ${r.t} мм${r.lid?' + крышка':''}<br>Шипы: <b>${r.n} шт</b> ≈ ${r.f.toFixed(1)} мм · Рез ≈ ${r.cutM.toFixed(1)} м<br>Листов 1525×1525: <b>${r.sheets}</b> · Вес ≈ ${r.weight.toFixed(1)} кг${r.pr>0?`<br>Материал: <b>${(r.areaM2*r.pr).toFixed(0)} ₽</b>`:''}<br><span style="font-size:14px">Стенки с шипами, торцы с пазами, дно вкладное. Скачайте SVG для резки.</span>`;
+  drawPreview(r);
+  try{const h=JSON.parse(localStorage.getItem('s05')||'[]');h.unshift({L:r.L,W:r.W,H:r.H,t:r.t,dt:Date.now()});localStorage.setItem('s05',JSON.stringify(h.slice(0,20)))}catch(e){}
+  try{window.s555ev&&s555ev('calc_run',{L:r.L})}catch(e){}
+  return r;
+}
+function download(){const r=lastCalc()||calc();if(!r||r.err)return;
+  const s=el('svg',{xmlns:NS,viewBox:`0 0 ${2*r.L+40} ${2*r.H+(r.lid?r.W+40:r.W)+40}`});
+  function panel(x,y,w,h,dir){el('path',{d:panelExact(x,y,w,h,r.t,r.f,r.n,dir,r.k),fill:'none',stroke:'#000','stroke-width':0.5},s);}
+  panel(20,20,r.L,r.H,1);
+  panel(20+r.L+20,20,Math.max(1,r.W-2*r.t),r.H,-1);
+  panel(20,20+r.H+20,Math.max(1,r.L-2*r.t),Math.max(1,r.W-2*r.t),0);
+  if(r.lidP)panel(20+r.L+20,20+r.H+20,r.L,r.W,0);
+  const txt=document.createElementNS(NS,'text');txt.setAttribute('x',20);txt.setAttribute('y',2*r.H+(r.lid?r.W+40:r.W)+32);txt.setAttribute('font-size','10');txt.textContent=`fanerabox.ru ${r.L}x${r.W}x${r.H} t${r.t} kerf${r.k} (мм)`;s.appendChild(txt);
+  const blob=new Blob([new XMLSerializer().serializeToString(s)],{type:'image/svg+xml'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`yashik-${r.L}x${r.W}x${r.H}.svg`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  try{window.s555ev&&s555ev('svg_download',{})}catch(e){}
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r||r.err)return;const d=new Date().toLocaleDateString('ru-RU');
+  sh.innerHTML=`<h1>Ящик из фанеры — fanerabox.ru</h1><p>Дата: ${d}</p>
+  <h2>Деталировка (мм)</h2><table><tr><th>Деталь</th><th>Размер</th><th>Кол-во</th></tr><tr><td>Стенка (шипы)</td><td>${r.L}×${r.H}</td><td>2</td></tr><tr><td>Торец (пазы)</td><td>${Math.round(r.W-2*r.t)}×${r.H}</td><td>2</td></tr><tr><td>Дно вкладное</td><td>${Math.round(r.L-2*r.t)}×${Math.round(r.W-2*r.t)}</td><td>1</td></tr>${r.lid?`<tr><td>Крышка</td><td>${r.L}×${r.W}</td><td>1</td></tr>`:''}</table>
+  <p>Шипов на стык: ${r.n}, ширина ≈ ${r.f.toFixed(1)} мм, рез ${r.k} мм. Листов: ${r.sheets}, вес ≈ ${r.weight.toFixed(1)} кг.</p>
+  <h2>Нормативы</h2><ul><li>Фанера — ГОСТ 3916.1 (ФК), 3916.2 (ФСФ).</li><li>Клей ПВА D3/D4, сборка на струбцинах.</li></ul>
+  <p><b>Важно:</b> проверьте рез и масштаб (1 ед. = 1 мм) на обрезке перед чистовой резкой.</p>`;
+}
+$('go').onclick=calc;
+$('dl').onclick=download;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+['bl','bw','bh','bt','bk','lid','bp'].forEach(id=>$(id).addEventListener('change',calc));
+(function(){calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>
