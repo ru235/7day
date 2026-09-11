@@ -1,17 +1,24 @@
 ---
 const SITE = 'https://kartonkorob.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | kartonkorob.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Коробка FEFCO 0201: развёртка и прочность | kartonkorob.ru';
+const desc = 'Калькулятор гофрокороба: заготовка 0201 по внутренним размерам, площадь картона, вес, прочность штабеля BCT. Марки картона и профили.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Как посчитать заготовку 0201?', a: 'Длина = 2×(L+W) + припуски на биговки + клапан 35 мм. Ширина = H + W + припуски. Точный расчёт — в калькуляторе.' },
+  { q: 'Что такое BCT?', a: 'Прочность ящика на сжатие в ньютонах (по Макки). Делим на вес содержимого с запасом 3 — получаем ярусы штабеля.' },
+  { q: 'Какой профиль выбрать?', a: 'E — мелкая тара, B — штамповка, C — транспортная, BC — тяжёлое и высокое штабелирование.' },
+  { q: 'Марка Т-23 или П-32?', a: 'Т — трёхслойный, П — пятислойный. П-32 держит заметно больше, но дороже. Под штабель от 3 ярусов — пятислойный.' },
+  { q: 'Можно ли заказать 50 коробок?', a: 'Штанцформа стоит денег — малые тиражи режут на плоттере (дороже за штуку) или берут готовые типовые размеры.' },
+  { q: 'Влажность влияет?', a: 'Да: сырой картон теряет до 50% прочности. Для склада без отопления и улицы — влагостойкий (ФСФ-подобный) картон.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'kartonkorob.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как рассчитать коробку 0201', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Замерьте содержимое', text: 'Длина, ширина, высота + запас 10–20 мм.' }, { '@type': 'HowToStep', name: 'Выберите картон', text: 'Профиль и марку под вес и штабель.' }, { '@type': 'HowToStep', name: 'Получите заготовку', text: 'Размер листа, площадь, вес, BCT.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +27,108 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="stylesheet" href="/_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>kartonkorob.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- METRIKA: вставить код счётчика kartonkorob.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="картонкороб — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>картонкороб<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Калькулятор</a><a href="/fefco">Коробки FEFCO</a><a href="/gofro">Гофрокартон</a><a href="/prochnost">Прочность</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Калькулятор гофротары</p>
+<h1>Коробка 0201: заготовка и прочность</h1>
+<p>Внутренние размеры, профиль и марка картона. Размер заготовки, площадь, вес, BCT и ярусы штабеля.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> заготовка 0201 = 2×(L+W) + 35 мм клапан по длине. Прочность BCT по Макки: 5.87 × ECT × √(t × периметр). Под штабель от 3 ярусов — пятислойный картон.</div>
+<section class="calc" id="calc" aria-label="Калькулятор коробки">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Длина внутр., мм <input id="cl" type="number" value="400" min="50" max="2000" /></label>
+<label>Ширина внутр., мм <input id="cw" type="number" value="300" min="50" max="1500" /></label>
+<label>Высота внутр., мм <input id="ch" type="number" value="250" min="50" max="1500" /></label>
+<label>Профиль <select id="cf"><option value="B">B (3 мм)</option><option value="C" selected>C (4 мм)</option><option value="E">E (1.6 мм)</option><option value="BC">BC (7 мм)</option></select></label>
+<label>Марка картона <select id="cg"><option value="5.5">Т-22</option><option value="7" selected>Т-23</option><option value="8.5">Т-24</option><option value="9.5">П-32</option><option value="11">П-33</option></select></label>
+<label>Вес содержимого, кг <input id="cm" type="number" value="10" min="0" max="1000" step="any" /></label>
+<label>Тираж, шт <input id="cq" type="number" value="100" min="1" max="1000000" step="1" /></label>
+<label>Цена картона, ₽/м² <input id="cp" type="number" value="60" min="0" max="10000" step="any" /></label>
+<div><button class="btn" id="go">Рассчитать</button>
+<button class="btn ghost" id="printBtn">Печать</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Результат</span>
 <div class="result" id="out">—</div>
 <p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Схема заготовки 0201</h2>
+<svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
+<h2>Справочник</h2>
+<div class="cards">
+<a class="card" href="/fefco"><h3>Коробки FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — что куда.</p></a>
+<a class="card" href="/gofro"><h3>Гофрокартон</h3><p>Профили B/C/E/BC, слои, марки Т и П.</p></a>
+<a class="card" href="/prochnost"><h3>Прочность</h3><p>BCT по Макки, штабель, влажность.</p></a>
+<a class="card" href="/primery"><h3>Примеры</h3><p>Переезд, маркетплейсы, архив — с цифрами.</p></a>
+</div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">kartonkorob.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>kartonkorob.ru</h3><p>Калькулятор гофротары FEFCO. Оценочный расчёт, штампы — у производителя. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор 0201</a></li><li><a href="/prochnost">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/fefco">Типы FEFCO</a></li><li><a href="/gofro">Гофрокартон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+function el(n,at,parent){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);if(parent)parent.appendChild(e);return e}
+const FLUTE={E:{t:1.6,g:500},B:{t:3.0,g:650},C:{t:4.0,g:750},BC:{t:7.0,g:1200}};
+function lastCalc(){const L=+$('cl').value,W=+$('cw').value,H=+$('ch').value;
+  const F=FLUTE[$('cf').value]||FLUTE.C, t=F.t, ECT=+$('cg').value, M=+$('cm').value||0, Q=Math.max(1,parseInt($('cq').value)||1), P=+$('cp').value||0;
+  if(!(L>0&&W>0&&H>0))return null;
+  const joint=35, allow=6*t;
+  const Lb=2*(L+W)+allow+joint, Wb=H+W+allow;
+  const area=Lb*Wb/1e6, total=area*Q;
+  const mBox=area*F.g/1000;
+  const Z=2*(L+W), BCT=5.87*ECT*Math.sqrt(t*Z);
+  const tiers=M>0?Math.max(1,Math.floor(BCT/(M*9.81*3))):null;
+  return {L,W,H,t,ECT,M,Q,P,Lb,Wb,area,total,mBox,BCT,tiers,fl:$('cf').value};
+}
+function drawPreview(r){const svg=$('draw');svg.innerHTML='';if(!r)return;
+  const sc=Math.min(940/r.Lb,280/r.Wb), X=v=>30+v*sc, Y=v=>30+v*sc;
+  const ink='var(--brand)', mut='var(--muted)';
+  const flap=r.W/2;
+  function R(x,y,w,h){el('rect',{x:X(x),y:Y(y),width:Math.max(2,w*sc),height:Math.max(2,h*sc),fill:'none',stroke:ink,'stroke-width':2},svg)}
+  R(0,0,r.Lb,flap); R(0,flap,r.Lb,r.H); R(0,flap+r.H,r.Lb,flap);
+  [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>{el('line',{x1:X(x),y1:Y(flap),x2:X(x),y2:Y(flap+r.H),stroke:mut,'stroke-width':1.5,'stroke-dasharray':'6 4'},svg)});
+  [flap,flap+r.H].forEach(y=>{el('line',{x1:X(0),y1:Y(y),x2:X(r.Lb),y2:Y(y),stroke:mut,'stroke-width':1.5,'stroke-dasharray':'6 4'},svg)});
+  const a=el('text',{x:X(r.Lb/2),y:Y(r.Wb+18),'text-anchor':'middle','font-size':13,fill:mut},svg);
+  a.textContent=`Заготовка ${Math.round(r.Lb)}×${Math.round(r.Wb)} мм · клапан 35 мм`;
+}
+function calc(){const out=$('out'),r=lastCalc();
+  if(!r){out.textContent='Проверьте размеры.';return}
+  out.innerHTML=`Заготовка 0201: <b>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</b> (профиль ${r.fl})<br>Картон: <b>${r.area.toFixed(2)} м²/шт</b> · ${r.Q} шт = ${r.total.toFixed(1)} м² · Вес ящика ≈ ${r.mBox.toFixed(2)} кг${r.P>0?`<br>Картон: <b>${(r.total*r.P).toFixed(0)} ₽</b>`:''}<br>BCT ≈ <b>${Math.round(r.BCT)} Н</b> (${(r.BCT/9.81).toFixed(0)} кгс)${r.tiers?` · Штабель: <b>${r.tiers} яр.</b>`:''}<br><span style="font-size:14px">Оценка по Макки. Точные штампы и испытания — у производителя гофротары.</span>`;
+  drawPreview(r);
+  try{const h=JSON.parse(localStorage.getItem('s06')||'[]');h.unshift({L:r.L,W:r.W,H:r.H,t:Date.now()});localStorage.setItem('s06',JSON.stringify(h.slice(0,20)))}catch(e){}
+  try{window.s555ev&&s555ev('calc_run',{L:r.L})}catch(e){}
+  return r;
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)return;const d=new Date().toLocaleDateString('ru-RU');
+  sh.innerHTML=`<h1>Коробка 0201 — kartonkorob.ru</h1><p>Дата: ${d}</p>
+  <h2>Заказ</h2><table><tr><td>Внутренние, мм</td><td>${r.L}×${r.W}×${r.H}</td></tr><tr><td>Профиль / марка</td><td>${r.fl} / ECT ${r.ECT}</td></tr><tr><td>Заготовка</td><td>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</td></tr><tr><td>Картон</td><td>${r.area.toFixed(2)} м²/шт, всего ${r.total.toFixed(1)} м² (${r.Q} шт)</td></tr><tr><td>BCT</td><td>≈ ${Math.round(r.BCT)} Н${r.tiers?`, штабель ${r.tiers} яр.`:''}</td></tr></table>
+  <h2>Нормативы</h2><ul><li>Типы коробок — каталог FEFCO. BCT — оценка по формуле Макки.</li><li>Сырость снижает прочность до 50% — для склада без отопления берите влагостойкий картон.</li></ul>
+  <p><b>Важно:</b> расчёт оценочный. Штампы, биговки и испытания — у производителя гофротары.</p>`;
+}
+$('go').onclick=calc;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+['cl','cw','ch','cf','cg','cm','cq','cp'].forEach(id=>$(id).addEventListener('change',calc));
+(function(){calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>
