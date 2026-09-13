@@ -1,17 +1,24 @@
 ---
+import pdb from '../../../../packages/datasets/prompts.json';
 const SITE = 'https://promptaza.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | promptaza.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Промпты для нейросетей: каталог + сравнение ИИ | promptaza.ru';
+const desc = 'Каталог промптов: код, тексты, маркетинг, учёба. Копирование в 1 клик. Сравнение ChatGPT, Claude, Gemini, DeepSeek, GigaChat + калькулятор цены API.';
+const cats = [['kod','Код'],['tekst','Тексты'],['marketing','Маркетинг'],['seo','SEO'],['ucheba','Учёба'],['rabota','Работа'],['perevod','Перевод'],['analitika','Аналитика'],['idei','Идеи'],['povsednev','Быт']];
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Как пользоваться промптом?', a: 'Нажмите «Копировать», вставьте в ChatGPT/Claude/Gemini, замените текст в [скобках] своими данными.' },
+  { q: 'Какая нейросеть лучше для кода?', a: 'Claude Sonnet и DeepSeek — топ по коду, GPT-4o универсален. Подробнее в сравнении.' },
+  { q: 'Какая нейросеть доступна в России?', a: 'Официально и на русском: GigaChat и YandexGPT. Остальные — через VPN, другую страну или посредников.' },
+  { q: 'Что дешевле для API?', a: 'DeepSeek и Gemini Flash — копейки. Точную цену под свой объём посчитайте в калькуляторе API.' },
+  { q: 'Почему ответы слабые?', a: 'Дайте контекст, формат и пример. Формула: роль + задача + данные + формат + ограничения.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'promptaza.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +27,55 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="stylesheet" href="/_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>promptaza.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<!-- METRIKA: вставить код счётчика promptaza.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="промптаза — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M7 8h18v13H16l-5 4v-4H7Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="12" cy="14" r="1.4" fill="var(--accent)"/><circle cx="16.5" cy="14" r="1.4" fill="var(--accent)"/><circle cx="21" cy="14" r="1.4" fill="var(--accent)"/></svg><span>промптаза<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Промпты</a><a href="/sravnenie">Сравнение ИИ</a><a href="/api">Цены API</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Каталог промптов</p>
+<h1>Промпты для нейросетей</h1>
+<p>{pdb.prompts.length} шаблонов: код, тексты, маркетинг, учёба. Копирование в 1 клик, свои данные — в [скобках].</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
-<div class="result" id="out">—</div>
-<p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+<div class="answer" id="tldr"><b>Формула сильного промпта:</b> роль + задача + данные + формат + ограничения. Пример: «Ты редактор. Сожми [текст] в 3 раза тезисами, сохранив все цифры».</div>
+<section class="calc" aria-label="Фильтр промптов">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Поиск <input id="q" type="search" placeholder="Например: резюме или SQL" /></label>
+<label>Категория <select id="cat"><option value="">Все</option>{cats.map(c => (<option value={c[0]}>{c[1]}</option>))}</select></label>
+</div>
+<aside class="calc-side"><span class="result-label">Найдено</span><div class="result" id="count">—</div></aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<div class="cards" id="list" style="margin-top:16px"></div>
+<h2>Разделы</h2>
+<div class="cards">
+<a class="card" href="/sravnenie"><h3>Сравнение нейросетей</h3><p>ChatGPT, Claude, Gemini, DeepSeek, GigaChat: задачи, цены, доступность.</p></a>
+<a class="card" href="/api"><h3>Калькулятор API</h3><p>Цена под ваш объём токенов: ввод + вывод.</p></a>
+</div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
 </main>
-<footer class="site"><div class="wrap">promptaza.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
-<script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>promptaza.ru</h3><p>Каталог промптов и сравнение ИИ. Цены API ориентировочные. Обновлено 2026-09-09.</p></div><div><h3>Каталог</h3><ul><li><a href="/">Все промпты</a></li><li><a href="/sravnenie">Сравнение ИИ</a></li><li><a href="/api">Цены API</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
+<script define:vars={{ pdb }}>
+const $=id=>document.getElementById(id);
+const DB=pdb.prompts;
+function render(){const q=$('q').value.toLowerCase(),c=$('cat').value;
+ const items=DB.filter(p=>(!c||p.c===c)&&(!q||(p.t+' '+p.p).toLowerCase().includes(q)));
+ $('count').textContent=items.length+' шт.';
+ $('list').innerHTML=items.map((p,i)=>`<div class="card"><h3>${p.t}</h3><p>${p.p}</p><p><button class="btn ghost" data-i="${DB.indexOf(p)}" type="button">Копировать</button></p></div>`).join('')||'<p>Ничего не найдено. Попробуйте другой запрос.</p>';
+ document.querySelectorAll('#list [data-i]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(DB[+b.dataset.i].p);b.textContent='Скопировано';setTimeout(()=>b.textContent='Копировать',1200);try{window.s555ev&&s555ev('copy_prompt',{})}catch(e){}}catch(e){}});}
+$('q').addEventListener('input',render);$('cat').addEventListener('change',render);
+(function(){const q=new URLSearchParams(location.search);if(q.get('q'))$('q').value=q.get('q');if(q.get('cat'))$('cat').value=q.get('cat');render()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>
