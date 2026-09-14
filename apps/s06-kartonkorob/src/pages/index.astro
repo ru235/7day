@@ -57,13 +57,13 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <label>Конструкция <select id="ct"><option value="0201">0201 — четырёхклапанная</option><option value="0200">0200 — лоток без верха</option><option value="0202">0202 — клапаны внахлёст</option><option value="0203">0203 — полное перекрытие</option><option value="0301">0301 — телескоп (крышка+дно)</option><option value="0427">0427 — архивная складная</option><option value="0452">0452 — обёрточная</option><option value="0454">0454 — лоток с крышкой</option><option value="0471">0471 — самосборная</option><option value="0701">0701 — папка с замком</option><option value="0710">0710 — папка так-замок</option><option value="0711">0711 — папка автомат</option><option value="0713">0713 — почтовый самосбор</option><option value="0771">0771 — шоу-бокс SRP</option></select></label>
 <label>Профиль <select id="cf"><option value="B">B (3 мм)</option><option value="C" selected>C (4 мм)</option><option value="E">E (1.6 мм)</option><option value="BC">BC (7 мм)</option></select></label>
 <label>Марка картона <select id="cg"><option value="5.5">Т-22</option><option value="7" selected>Т-23</option><option value="8.5">Т-24</option><option value="9.5">П-32</option><option value="11">П-33</option></select></label>
-<div style="margin-top:8px;padding:12px;background:var(--bg);border:1px dashed var(--line);border-radius:10px">
-<div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Параметры заказа — не влияют на чертёж</div>
+<div style="margin-top:10px;padding:14px;background:var(--bg);border:1px dashed var(--line);border-radius:10px">
+<div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Параметры заказа — не влияют на чертёж</div>
 <label>Вес содержимого, кг <input id="cm" type="number" value="10" min="0" max="1000" step="any" /></label>
 <label>Тираж, шт <input id="cq" type="number" value="100" min="1" max="1000000" step="1" /></label>
 <label>Цена картона, ₽/м² <input id="cp" type="number" value="60" min="0" max="10000" step="any" /></label>
 </div>
-<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="go">Рассчитать</button>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="go">Рассчитать</button>
 <button class="btn ghost" id="dl">Скачать SVG</button>
 <button class="btn ghost" id="dlDxf">Скачать DXF</button>
 <button class="btn ghost" id="dlPdf">Скачать PDF</button>
@@ -78,7 +78,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 </section>
 <h2 id="drawTitle">Схема заготовки 0201</h2>
 <svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
-<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
+<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
 <h2>Справочник</h2>
 <div class="cards">
 <a class="card" href="fefco/"><h3>Коробки FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — что куда.</p></a>
