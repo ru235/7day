@@ -1,2 +1,2 @@
 import { defineConfig } from 'astro/config';
-export default defineConfig({ site: 'https://kartonkorob.ru', output: 'static', trailingSlash: 'ignore' });
+export default defineConfig({ site: 'https://formgen.ru', output: 'static', trailingSlash: 'ignore' });

@@ -1,9 +1,9 @@
 ---
-const SITE = 'https://kartonkorob.ru';
-const title = 'Коробка FEFCO 0201: развёртка и прочность | kartonkorob.ru';
+const SITE = 'https://formgen.ru';
+const title = 'Коробка FEFCO 0201: развёртка и прочность | formgen.ru';
 const desc = 'Калькулятор гофрокороба: заготовка 0201 по внутренним размерам, площадь картона, вес, прочность штабеля BCT. Марки картона и профили.';
 const faqs = [
-  { q: 'Как посчитать заготовку 0201?', a: 'Длина = 2×(L+W) + припуски на биговки + клапан 35 мм. Ширина = H + W + припуски. Точный расчёт — в калькуляторе.' },
+  { q: 'Как посчитать заготовку 0201?', a: 'Длина = 2×(L+W) + клапан 20–40 мм (0.15×W, как в PackGenerator). Ширина = H + W. Точный расчёт — в калькуляторе.' },
   { q: 'Что такое BCT?', a: 'Прочность ящика на сжатие в ньютонах (по Макки). Делим на вес содержимого с запасом 3 — получаем ярусы штабеля.' },
   { q: 'Какой профиль выбрать?', a: 'E — мелкая тара, B — штамповка, C — транспортная, BC — тяжёлое и высокое штабелирование.' },
   { q: 'Марка Т-23 или П-32?', a: 'Т — трёхслойный, П — пятислойный. П-32 держит заметно больше, но дороже. Под штабель от 3 ярусов — пятислойный.' },
@@ -11,14 +11,14 @@ const faqs = [
   { q: 'Влажность влияет?', a: 'Да: сырой картон теряет до 50% прочности. Для склада без отопления и улицы — влагостойкий (ФСФ-подобный) картон.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
-const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'kartonkorob.ru', url: SITE, inLanguage: 'ru' });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'formgen.ru', url: SITE, inLanguage: 'ru' });
 const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
 const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как рассчитать коробку 0201', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Замерьте содержимое', text: 'Длина, ширина, высота + запас 10–20 мм.' }, { '@type': 'HowToStep', name: 'Выберите картон', text: 'Профиль и марку под вес и штабель.' }, { '@type': 'HowToStep', name: 'Получите заготовку', text: 'Размер листа, площадь, вес, BCT.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
-<script is:inline src="/theme-head.js"></script>
+<script is:inline src="theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -27,37 +27,46 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
-<link rel="stylesheet" href="/_s555.css?v=1" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="api/data.json" />
+<link rel="stylesheet" href="_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
 <script type="application/ld+json" set:html={siteJson}></script>
 <script type="application/ld+json" set:html={pageJson}></script>
 <script type="application/ld+json" set:html={howtoJson}></script>
-<!-- METRIKA: вставить код счётчика kartonkorob.ru -->
-<script is:inline src="/theme.js" defer></script></head>
+<!-- METRIKA: вставить код счётчика formgen.ru -->
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script is:inline src="theme.js" defer></script></head>
 <body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
-<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="картонкороб — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>картонкороб<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Калькулятор</a><a href="/fefco">Коробки FEFCO</a><a href="/gofro">Гофрокартон</a><a href="/prochnost">Прочность</a><a href="/primery">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formgen — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>formgen<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Калькулятор</a><a href="fefco/">Коробки FEFCO</a><a href="gofro/">Гофрокартон</a><a href="prochnost/">Прочность</a><a href="primery/">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
 <p class="eyebrow">Калькулятор гофротары</p>
 <h1>Коробки FEFCO: заготовка и прочность</h1>
 <p>0201, 0200, 0471, 0427 — внутренние размеры, профиль и марка. Заготовка, площадь, вес, BCT и штабель.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> заготовка 0201 = 2×(L+W) + 35 мм клапан. BCT по Макки: 5.87 × ECT × √(t × периметр). Самосбор 0471 — для маркетплейсов, архив 0427 — для документов.</div>
+  <div class="answer" id="tldr"><b>Короткий ответ:</b> заготовка 0201 = 2×(L+W) + 20–40 мм клапан (0.15×W). BCT по Макки: 5.87 × ECT × √(t × периметр). Как в PackGenerator.</div>
 <section class="calc" id="calc" aria-label="Калькулятор коробки">
 <div class="calc-layout">
 <div class="calc-fields">
-<label>Длина внутр., мм <input id="cl" type="number" value="400" min="50" max="2000" /></label>
-<label>Ширина внутр., мм <input id="cw" type="number" value="300" min="50" max="1500" /></label>
-<label>Высота внутр., мм <input id="ch" type="number" value="250" min="50" max="1500" /></label>
+<div style="display:grid;gap:14px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px">
+<label>Длина внутр., мм <span id="clVal" style="float:right;font-weight:600;color:var(--brand)">400</span><input id="cl" type="range" value="400" min="50" max="2000" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+<label>Ширина внутр., мм <span id="cwVal" style="float:right;font-weight:600;color:var(--brand)">300</span><input id="cw" type="range" value="300" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+<label>Высота внутр., мм <span id="chVal" style="float:right;font-weight:600;color:var(--brand)">250</span><input id="ch" type="range" value="250" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+</div>
 <label>Конструкция <select id="ct"><option value="0201">0201 — четырёхклапанная</option><option value="0200">0200 — лоток без верха</option><option value="0202">0202 — клапаны внахлёст</option><option value="0203">0203 — полное перекрытие</option><option value="0301">0301 — телескоп (крышка+дно)</option><option value="0427">0427 — архивная складная</option><option value="0452">0452 — обёрточная</option><option value="0454">0454 — лоток с крышкой</option><option value="0471">0471 — самосборная</option><option value="0701">0701 — папка с замком</option><option value="0710">0710 — папка так-замок</option><option value="0711">0711 — папка автомат</option><option value="0713">0713 — почтовый самосбор</option><option value="0771">0771 — шоу-бокс SRP</option></select></label>
 <label>Профиль <select id="cf"><option value="B">B (3 мм)</option><option value="C" selected>C (4 мм)</option><option value="E">E (1.6 мм)</option><option value="BC">BC (7 мм)</option></select></label>
 <label>Марка картона <select id="cg"><option value="5.5">Т-22</option><option value="7" selected>Т-23</option><option value="8.5">Т-24</option><option value="9.5">П-32</option><option value="11">П-33</option></select></label>
+<div style="margin-top:8px;padding:12px;background:var(--bg);border:1px dashed var(--line);border-radius:10px">
+<div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Параметры заказа — не влияют на чертёж</div>
 <label>Вес содержимого, кг <input id="cm" type="number" value="10" min="0" max="1000" step="any" /></label>
 <label>Тираж, шт <input id="cq" type="number" value="100" min="1" max="1000000" step="1" /></label>
 <label>Цена картона, ₽/м² <input id="cp" type="number" value="60" min="0" max="10000" step="any" /></label>
-<div><button class="btn" id="go">Рассчитать</button>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="go">Рассчитать</button>
+<button class="btn ghost" id="dl">Скачать SVG</button>
+<button class="btn ghost" id="dlDxf">Скачать DXF</button>
+<button class="btn ghost" id="dlPdf">Скачать PDF</button>
 <button class="btn ghost" id="printBtn">Печать</button></div>
 </div>
 <aside class="calc-side" aria-live="polite">
@@ -69,20 +78,21 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 </section>
 <h2 id="drawTitle">Схема заготовки 0201</h2>
 <svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
+<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
 <h2>Справочник</h2>
 <div class="cards">
-<a class="card" href="/fefco"><h3>Коробки FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — что куда.</p></a>
-<a class="card" href="/gofro"><h3>Гофрокартон</h3><p>Профили B/C/E/BC, слои, марки Т и П.</p></a>
-<a class="card" href="/prochnost"><h3>Прочность</h3><p>BCT по Макки, штабель, влажность.</p></a>
-<a class="card" href="/primery"><h3>Примеры</h3><p>Переезд, маркетплейсы, архив — с цифрами.</p></a>
+<a class="card" href="fefco/"><h3>Коробки FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — что куда.</p></a>
+<a class="card" href="gofro/"><h3>Гофрокартон</h3><p>Профили B/C/E/BC, слои, марки Т и П.</p></a>
+<a class="card" href="prochnost/"><h3>Прочность</h3><p>BCT по Макки, штабель, влажность.</p></a>
+<a class="card" href="primery/"><h3>Примеры</h3><p>Переезд, маркетплейсы, архив — с цифрами.</p></a>
 </div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
 <section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>kartonkorob.ru</h3><p>Калькулятор гофротары FEFCO. Оценочный расчёт, штампы — у производителя. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="/">Калькулятор 0201</a></li><li><a href="/prochnost">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="/fefco">Типы FEFCO</a></li><li><a href="/gofro">Гофрокартон</a></li><li><a href="/primery">Примеры</a></li></ul></div></div></div></footer>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formgen.ru</h3><p>Калькулятор гофротары FEFCO. Оценочный расчёт, штампы — у производителя. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="./">Калькулятор 0201</a></li><li><a href="prochnost/">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="fefco/">Типы FEFCO</a></li><li><a href="gofro/">Гофрокартон</a></li><li><a href="primery/">Примеры</a></li></ul></div></div></div></footer>
 <div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
-<script>
+<script is:inline>
 const $=id=>document.getElementById(id);
 const NS='http://www.w3.org/2000/svg';
 function el(n,at,parent){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);if(parent)parent.appendChild(e);return e}
@@ -106,46 +116,99 @@ function lastCalc(){const L=+$('cl').value,W=+$('cw').value,H=+$('ch').value;
   const F=FLUTE[$('cf').value]||FLUTE.C, t=F.t, ECT=+$('cg').value, M=+$('cm').value||0, Q=Math.max(1,parseInt($('cq').value)||1), P=+$('cp').value||0;
   const ct=$('ct').value, T=TYPES[ct]||TYPES['0201'];
   if(!(L>0&&W>0&&H>0))return null;
-  const joint=35, allow=6*t;
+  const glue=Math.min(40,Math.max(20,0.15*W));
   let Lb,Wb,mul=1,flapTop=W/2,flapBot=W/2;
-  if(ct==='0200'){Lb=2*(L+W)+allow+joint;Wb=H+W/2+4*t;flapTop=0;}
-  else if(ct==='0202'){Lb=2*(L+W)+allow+joint;Wb=H+W+25+allow;flapTop=W/2+25;}
-  else if(ct==='0203'){Lb=2*(L+W)+allow+joint;Wb=H+2*(W+25)+allow;flapTop=W+25;flapBot=W+25;}
-  else if(ct==='0301'){Lb=2*(L+W)+allow+joint;Wb=H+W/2+4*t;mul=2;flapTop=0;}
-  else if(ct==='0452'){Lb=2*(L+W)+allow+joint;Wb=H+W+allow;mul=1.2;}
-  else if(ct==='0454'){Lb=2*(L+W)+allow+joint;Wb=H+W+allow;mul=1.3;}
-  else if(ct==='0471'){Lb=2*(L+W)+allow+joint;Wb=H+W+allow;mul=1.15;}
-  else if(ct==='0701'||ct==='0710'||ct==='0711'){Lb=2*L+W+8*t+40;Wb=2*H+W+8*t;}
-  else if(ct==='0713'){Lb=2*(L+W)+allow+joint;Wb=H+W+allow;mul=1.35;}
-  else if(ct==='0771'){Lb=2*(L+W)+allow+joint;Wb=H+W/2+4*t;mul=1.8;flapTop=0;}
-  else if(ct==='0427'){Lb=2*L+W+8*t+40;Wb=2*H+W+8*t;}
-  else{Lb=2*(L+W)+allow+joint;Wb=H+W+allow;}
+  if(ct==='0200'){Lb=2*(L+W)+glue;Wb=H+W/2;flapTop=0;}
+  else if(ct==='0202'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
+  else if(ct==='0203'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
+  else if(ct==='0301'){Lb=2*(L+W)+glue;Wb=H+W/2;mul=2;flapTop=0;}
+  else if(ct==='0427'){
+    const D=H, Th=t;
+    Lb = L + 2*D + W + 40 + 4*Th;
+    Wb = W + 2*D + W + 2*Th + 15;
+    mul=1; flapTop=0; flapBot=0;
+  }
+  else if(ct==='0452'||ct==='0454'||ct==='0471'||ct==='0713'){Lb=2*(L+W)+glue;Wb=H+W;mul=ct==='0471'?1.15:ct==='0452'?1.2:ct==='0454'?1.3:1.35;}
+  else if(ct==='0701'||ct==='0710'||ct==='0711'){Lb=2*L+W+40;Wb=2*H+W;}
+  else if(ct==='0771'){Lb=2*(L+W)+glue;Wb=H+W/2;mul=1.8;flapTop=0;}
+  else{Lb=2*(L+W)+glue;Wb=H+W;}
   const area=Lb*Wb/1e6*mul, total=area*Q;
   const mBox=area*F.g/1000;
   const Z=2*(L+W), BCT=5.87*ECT*Math.sqrt(t*Z);
   const tiers=M>0?Math.max(1,Math.floor(BCT/(M*9.81*3))):null;
-  return {L,W,H,t,ECT,M,Q,P,Lb,Wb,area,total,mBox,BCT,tiers,fl:$('cf').value,ct,T,flapTop,flapBot};
+  return {L,W,H,t,ECT,M,Q,P,Lb,Wb,area,total,mBox,BCT,tiers,fl:$('cf').value,ct,T,flapTop,flapBot,glue};
 }
 function drawPreview(r){const svg=$('draw');svg.innerHTML='';if(!r)return;
   $('drawTitle').textContent='Схема заготовки ' + r.ct;
   const sc=Math.min(940/r.Lb,280/r.Wb), X=v=>30+v*sc, Y=v=>30+v*sc;
-  const ink='var(--brand)', mut='var(--muted)';
+  const cut='var(--brand)', score='#f59e0b', dim='var(--muted)';
   const flapT=r.flapTop||0, flapB=r.flapBot||0;
-  function R(x,y,w,h){el('rect',{x:X(x),y:Y(y),width:Math.max(2,w*sc),height:Math.max(2,h*sc),fill:'none',stroke:ink,'stroke-width':2},svg)}
-  function H2(x1,y1,x2,y2){el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:mut,'stroke-width':1.5,'stroke-dasharray':'6 4'},svg)}
+  function R(x,y,w,h){el('rect',{x:X(x),y:Y(y),width:Math.max(2,w*sc),height:Math.max(2,h*sc),fill:'none',stroke:cut,'stroke-width':2},svg)}
+  function S(x1,y1,x2,y2){el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:score,'stroke-width':1.6},svg)}
+  function Dim(x1,y1,x2,y2,label){
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:dim,'stroke-width':1},svg);
+    el('line',{x1:X(x1),y1:Y(y1)-6,x2:X(x1),y2:Y(y1)+6,stroke:dim,'stroke-width':1},svg);
+    el('line',{x1:X(x2),y1:Y(y2)-6,x2:X(x2),y2:Y(y2)+6,stroke:dim,'stroke-width':1},svg);
+    const t=el('text',{x:X(mx),y:Y(my)-8,'text-anchor':'middle','font-size':10,fill:dim},svg);
+    t.textContent=label;
+  }
   if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){const bodyH=r.Wb-flapT;
     if(flapT>0)R(0,0,r.Lb,flapT); R(0,flapT,r.Lb,bodyH);
-    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>H2(x,flapT,x,flapT+bodyH)); if(flapT>0)H2(0,flapT,r.Lb,flapT);
-  }else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){const cx=r.Lb/2, cy=r.Wb/2;
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>S(x,flapT,x,flapT+bodyH)); if(flapT>0)S(0,flapT,r.Lb,flapT);
+    Dim(0,r.Wb+12,r.Lb,r.Wb+12,`${Math.round(r.Lb)}`);
+    Dim(r.Lb+12,0,r.Lb+12,r.Wb,`${Math.round(r.Wb)}`);
+  }else if(r.ct==='0427'){
+    const L=r.L, W=r.W, D=r.H, Th=r.t;
+    const cx=r.Lb/2, cy=r.Wb/2;
+    const x0=cx-L/2, y0=cy-W/2;
+    const yFront=y0-D, yBack=y0+W;
+    const xl1=x0-D, xl2=x0-D/2;
+    const xr1=x0+L, xr3=x0+L+D;
+    const yLid=yBack+D, yLidTop=yLid+W;
+    const earW=D*0.85, earR=D*0.35;
+    const inset=11;
+    S(x0,y0,x0+L,y0); S(x0,y0+W,x0+L,y0+W);
+    S(x0,y0,x0,y0+W); S(x0+L,y0,x0+L,y0+W);
+    S(x0,yFront,x0+L,yFront); S(x0,yFront,x0,y0); S(x0+L,yFront,x0+L,y0);
+    S(x0,yBack,x0+L,yBack);
+    S(xl1,y0,xl1,y0+W); S(xl1+D/2,y0,xl1+D/2,y0+W);
+    S(xr1,y0,xr1,y0+W); S(xr1+D/2,y0,xr1+D/2,y0+W); S(xr3,y0,xr3,y0+W);
+    S(x0,yLid,x0+L,yLid); S(x0,yLidTop,x0+L,yLidTop);
+    S(x0,yLid,x0,yLidTop); S(x0+L,yLid,x0+L,yLidTop);
+    const p=(pts)=>pts.map((pt,i)=>(i===0?`M${X(pt[0])} ${Y(pt[1])}`:`L${X(pt[0])} ${Y(pt[1])}`)).join(' ');
+    const tongueW=L*0.18, tongueR=7, tx0=cx-tongueW/2, tx1=cx+tongueW/2;
+    const notchD=6;
+    function C(d){el('path',{d,fill:'none',stroke:cut,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},svg)}
+    C(`${p([[xl1+notchD,y0],[xl1,y0],[xl1,y0+W],[xl1+notchD,y0+W]])} M${X(xl1)} ${Y(y0+W*0.35)} L${X(xl1)} ${Y(y0+W*0.45)} M${X(xl1)} ${Y(y0+W*0.55)} L${X(xl1)} ${Y(y0+W*0.65)}`);
+    C(`${p([[xr3-notchD,y0],[xr3,y0],[xr3,y0+W],[xr3-notchD,y0+W]])} M${X(xr3)} ${Y(y0+W*0.35)} L${X(xr3)} ${Y(y0+W*0.45)} M${X(xr3)} ${Y(y0+W*0.55)} L${X(xr3)} ${Y(y0+W*0.65)}`);
+    const cutPath=`M${X(x0+inset)} ${Y(yFront)} L${X(x0)} ${Y(yFront)} L${X(x0)} ${Y(y0)} L${X(xl1)} ${Y(y0)} L${X(xl1)} ${Y(y0+W)} L${X(x0)} ${Y(y0+W)} L${X(x0)} ${Y(yLid+W)} L${X(x0-earW)} ${Y(yLid+W)} L${X(x0-earW)} ${Y(yLid)} L${X(x0)} ${Y(yLid)} L${X(x0)} ${Y(yLidTop)} L${X(tx0)} ${Y(yLidTop)} A${earR*sc} ${earR*sc} 0 0 1 ${X(tx1)} ${Y(yLidTop)} L${X(x0+L)} ${Y(yLidTop)} L${X(x0+L)} ${Y(yLid)} L${X(x0+L+earW)} ${Y(yLid)} L${X(x0+L+earW)} ${Y(yLid+W)} L${X(x0+L)} ${Y(yLid+W)} L${X(x0+L)} ${Y(y0+W)} L${X(xr3)} ${Y(y0+W)} L${X(xr3)} ${Y(y0)} L${X(x0+L)} ${Y(y0)} L${X(x0+L)} ${Y(yFront)} L${X(x0+L-inset)} ${Y(yFront)} Z`;
+    C(cutPath);
+    const slotW=D*0.25, slotH=W*0.09;
+    R(x0+D*0.05,y0+W*0.15,slotW,slotH); R(x0+L-D*0.05-slotW,y0+W*0.15,slotW,slotH);
+    R(x0+D*0.05,y0+W*0.75-slotH,slotW,slotH); R(x0+L-D*0.05-slotW,y0+W*0.75-slotH,slotW,slotH);
+    C(`M${X(x0)} ${Y(yLid)} A${earR*sc} ${earR*sc} 0 0 0 ${X(x0-earW)} ${Y(yLid+earR)}`);
+    C(`M${X(x0+L)} ${Y(yLid)} A${earR*sc} ${earR*sc} 0 0 1 ${X(x0+L+earW)} ${Y(yLid+earR)}`);
+    Dim(x0,y0+W+12,x0+L,y0+W+12,`${L}`);
+    Dim(x0-12,y0,x0-12,y0+W,`${W}`);
+    Dim(x0+L+12,y0,x0+L+12,y0+W,`${W} × D ${D}`);
+  }else if(r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){const cx=r.Lb/2, cy=r.Wb/2;
     R(cx-r.L/2,cy-r.H/2,r.L,r.H);
     R(cx-r.L/2,cy-r.H/2-flapB,r.L,flapB);R(cx-r.L/2,cy+r.H/2,r.L,flapB);
     R(cx-r.L/2-(r.W/2),cy-r.H/2,r.W/2,r.H);R(cx+r.L/2,cy-r.H/2,r.W/2,r.H);
+    S(cx-r.L/2,cy-r.H/2,cx+r.L/2,cy-r.H/2); S(cx-r.L/2,cy+r.H/2,cx+r.L/2,cy+r.H/2);
+    S(cx-r.L/2,cy-r.H/2,cx-r.L/2,cy+r.H/2); S(cx+r.L/2,cy-r.H/2,cx+r.L/2,cy+r.H/2);
+    Dim(cx-r.L/2,cy+r.H/2+12,cx+r.L/2,cy+r.H/2+12,`${r.L}`);
+    Dim(cx-r.L/2-12,cy-r.H/2,cx-r.L/2-12,cy+r.H/2,`${r.H}`);
   }else{const flap=flapT;
     R(0,0,r.Lb,flap);R(0,flap,r.Lb,r.H);R(0,flap+r.H,r.Lb,flapB);
-    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>H2(x,flap,x,flap+r.H));
-    [flap,flap+r.H].forEach(y=>H2(0,y,r.Lb,y));}
-  const a=el('text',{x:X(r.Lb/2),y:Y(r.Wb+18),'text-anchor':'middle','font-size':13,fill:mut},svg);
-  a.textContent=`Заготовка ${Math.round(r.Lb)}×${Math.round(r.Wb)} мм · ${r.ct}${r.ct==='0201'?' · клапан 35 мм':''}`;
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>S(x,flap,x,flap+r.H));
+    S(0,flap,r.Lb,flap); S(0,flap+r.H,r.Lb,flap+r.H);
+    Dim(0,r.Wb+14,r.Lb,r.Wb+14,`${Math.round(r.Lb)}`);
+    Dim(r.Lb+14,0,r.Lb+14,r.Wb,`${Math.round(r.Wb)}`);
+    Dim(0,flap-8,r.L,flap-8,`${r.L}`); Dim(r.L,flap-8,r.L+r.W,flap-8,`${r.W}`);}
+  const a=el('text',{x:X(r.Lb/2),y:Y(r.Wb+28),'text-anchor':'middle','font-size':11,fill:dim},svg);
+  a.textContent=`${Math.round(r.Lb)}×${Math.round(r.Wb)} мм · ${r.ct} · клапан ${Math.round(r.glue)} мм`;
 }
 function calc(){const out=$('out'),r=lastCalc();
   if(!r){out.textContent='Проверьте размеры.';return}
@@ -156,15 +219,105 @@ function calc(){const out=$('out'),r=lastCalc();
   return r;
 }
 function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)return;const d=new Date().toLocaleDateString('ru-RU');
-  sh.innerHTML=`<h1>Коробка ${r.ct} — kartonkorob.ru</h1><p>Дата: ${d}</p>
+  sh.innerHTML=`<h1>Коробка ${r.ct} — formgen.ru</h1><p>Дата: ${d}</p>
   <h2>Заказ</h2><table><tr><td>Внутренние, мм</td><td>${r.L}×${r.W}×${r.H}</td></tr><tr><td>Конструкция</td><td>${r.T.name}</td></tr><tr><td>Профиль / марка</td><td>${r.fl} / ECT ${r.ECT}</td></tr><tr><td>Заготовка</td><td>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</td></tr><tr><td>Картон</td><td>${r.area.toFixed(2)} м²/шт, всего ${r.total.toFixed(1)} м² (${r.Q} шт)</td></tr><tr><td>BCT</td><td>≈ ${Math.round(r.BCT)} Н${r.tiers?`, штабель ${r.tiers} яр.`:''}</td></tr></table>
   <h2>Нормативы</h2><ul><li>Типы коробок — каталог FEFCO. BCT — оценка по формуле Макки.</li><li>Сырость снижает прочность до 50% — для склада без отопления берите влагостойкий картон.</li></ul>
   <p><b>Важно:</b> расчёт оценочный. Штампы, биговки и испытания — у производителя гофротары.</p>`;
 }
+function downloadSVG(){const svg=$('draw');const r=lastCalc()||calc();if(!svg||!r||!svg.innerHTML.trim())return;
+  const clone=svg.cloneNode(true);
+  clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  clone.querySelectorAll('[stroke="var(--brand)"]').forEach(el=>el.setAttribute('stroke','#1e3a8a'));
+  clone.querySelectorAll('[stroke="var(--muted)"]').forEach(el=>el.setAttribute('stroke','#64748b'));
+  clone.querySelectorAll('[fill="var(--muted)"]').forEach(el=>el.setAttribute('fill','#64748b'));
+  const titleEl=document.createElementNS(NS,'title');titleEl.textContent=`formgen.ru ${r.ct} ${r.L}x${r.W}x${r.H} заготовка ${Math.round(r.Lb)}x${Math.round(r.Wb)}`;
+  clone.insertBefore(titleEl, clone.firstChild);
+  const blob=new Blob([new XMLSerializer().serializeToString(clone)],{type:'image/svg+xml'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`korob-${r.ct}-${r.L}x${r.W}x${r.H}.svg`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  try{window.s555ev&&s555ev('svg_download',{ct:r.ct})}catch(e){}
+}
+function toDXF(r){
+  let dxf='0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n';
+  function line(x1,y1,x2,y2,layer){
+    dxf+=`0\nLINE\n8\n${layer}\n10\n${x1}\n20\n${y1}\n30\n0\n11\n${x2}\n21\n${y2}\n31\n0\n`;
+  }
+  function rect(x,y,w,h,layer){ line(x,y,x+w,y,layer); line(x+w,y,x+w,y+h,layer); line(x+w,y+h,x,y+h,layer); line(x,y+h,x,y,layer); }
+  const ft=r.flapTop||0, fb=r.flapBot||0;
+  // cut lines on layer 0, score on layer 1
+  if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){
+    const bh=r.Wb-ft;
+    if(ft>0) rect(0,0,r.Lb,ft,'CUT');
+    rect(0,ft,r.Lb,bh,'CUT');
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> line(x,ft,x,ft+bh,'SCORE'));
+    if(ft>0) line(0,ft,r.Lb,ft,'SCORE');
+  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+    const cx=r.Lb/2, cy=r.Wb/2;
+    rect(cx-r.L/2,cy-r.H/2,r.L,r.H,'CUT');
+    rect(cx-r.L/2,cy-r.H/2-fb,r.L,fb,'CUT');
+    rect(cx-r.L/2,cy+r.H/2,r.L,fb,'CUT');
+    rect(cx-r.L/2-r.W/2,cy-r.H/2,r.W/2,r.H,'CUT');
+    rect(cx+r.L/2,cy-r.H/2,r.W/2,r.H,'CUT');
+    // scores
+    line(cx-r.L/2,cy-r.H/2,cx+r.L/2,cy-r.H/2,'SCORE');
+    line(cx-r.L/2,cy+r.H/2,cx+r.L/2,cy+r.H/2,'SCORE');
+    line(cx-r.L/2,cy-r.H/2,cx-r.L/2,cy+r.H/2,'SCORE');
+    line(cx+r.L/2,cy-r.H/2,cx+r.L/2,cy+r.H/2,'SCORE');
+  } else {
+    rect(0,0,r.Lb,ft,'CUT');
+    rect(0,ft,r.Lb,r.H,'CUT');
+    rect(0,ft+r.H,r.Lb,fb,'CUT');
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> line(x,ft,x,ft+r.H,'SCORE'));
+    line(0,ft,r.Lb,ft,'SCORE');
+    line(0,ft+r.H,r.Lb,ft+r.H,'SCORE');
+  }
+  dxf+='0\nENDSEC\n0\nEOF';
+  return dxf;
+}
+function downloadDXF(){const r=lastCalc()||calc();if(!r)return;
+  const dxf=toDXF(r);
+  const blob=new Blob([dxf],{type:'application/dxf'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`korob-${r.ct}-${r.L}x${r.W}x${r.H}.dxf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  try{window.s555ev&&s555ev('dxf_download',{ct:r.ct})}catch(e){}
+}
+function downloadPDF(){const r=lastCalc()||calc();if(!r)return;
+  const {jsPDF}=window.jspdf||{};
+  if(!jsPDF){alert('PDF библиотека не загружена');return;}
+  const doc=new jsPDF({unit:'mm',format:[r.Lb+20,r.Wb+20]});
+  doc.setFontSize(8);
+  doc.text(`formgen.ru ${r.ct} ${r.L}x${r.W}x${r.H} заготовка ${Math.round(r.Lb)}x${Math.round(r.Wb)}`,10,10);
+  // draw outer
+  doc.setDrawColor(30,58,138); doc.setLineWidth(0.5);
+  const ft=r.flapTop||0, fb=r.flapBot||0;
+  function rct(x,y,w,h){doc.rect(10+x,10+y,w,h);}
+  function ln(x1,y1,x2,y2){doc.line(10+x1,10+y1,10+x2,10+y2);}
+  doc.setDrawColor(245,158,11); doc.setLineWidth(0.4); doc.setLineDash([]);
+  if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){
+    const bh=r.Wb-ft;
+    if(ft>0) rct(0,0,r.Lb,ft);
+    rct(0,ft,r.Lb,bh);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> ln(x,ft,x,ft+bh));
+  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+    const cx=r.Lb/2, cy=r.Wb/2;
+    rct(cx-r.L/2,cy-r.H/2,r.L,r.H);
+    rct(cx-r.L/2,cy-r.H/2-fb,r.L,fb); rct(cx-r.L/2,cy+r.H/2,r.L,fb);
+    rct(cx-r.L/2-r.W/2,cy-r.H/2,r.W/2,r.H); rct(cx+r.L/2,cy-r.H/2,r.W/2,r.H);
+  } else {
+    rct(0,0,r.Lb,ft); rct(0,ft,r.Lb,r.H); rct(0,ft+r.H,r.Lb,fb);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> ln(x,ft,x,ft+r.H));
+  }
+  doc.save(`korob-${r.ct}-${r.L}x${r.W}x${r.H}.pdf`);
+  try{window.s555ev&&s555ev('pdf_download',{ct:r.ct})}catch(e){}
+}
+function syncSliders(){ $('clVal').textContent=$('cl').value; $('cwVal').textContent=$('cw').value; $('chVal').textContent=$('ch').value; }
+['cl','cw','ch'].forEach(id=>$(id).addEventListener('input',()=>{syncSliders();calc();}));
+syncSliders();
 $('go').onclick=calc;
+$('dl').onclick=downloadSVG;
+$('dlDxf').onclick=downloadDXF;
+$('dlPdf').onclick=downloadPDF;
 $('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
 $('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
-['cl','cw','ch','ct','cf','cg','cm','cq','cp'].forEach(id=>$(id).addEventListener('change',calc));
+['ct','cf','cg','cm','cq','cp'].forEach(id=>$(id).addEventListener('change',calc));
 (function(){const q=new URLSearchParams(location.search);if(q.get('type')&&TYPES[q.get('type')])$('ct').value=q.get('type');calc()})();
 (function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
  const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
