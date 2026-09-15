@@ -34,6 +34,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="api/data.json" />
 <link rel="stylesheet" href="_s555.css?v=1" />
+<style>.wrap{max-width:1180px}.hero p,.answer{max-width:70ch}.calc-result-full{margin-top:14px;display:grid;gap:10px}@media(min-width:760px){.calc-layout.calc-tool{grid-template-columns:minmax(320px,380px) 1fr}}</style>
 <script type="application/ld+json" set:html={faqJson}></script>
 <script type="application/ld+json" set:html={siteJson}></script>
 <script type="application/ld+json" set:html={pageJson}></script>
@@ -64,7 +65,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 </section>
   <div class="answer" id="tldr"><b>Пример:</b> коробка 300×200×150 — это лист 1030×350 мм, клапан 30 мм. Свои размеры считайте ниже — с весом и штабелем.</div>
 <section class="calc" id="calc" aria-label="Калькулятор коробки">
-<div class="calc-layout">
+<div class="calc-layout calc-tool">
 <div class="calc-fields">
 <div style="display:grid;gap:14px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px">
 <label>Длина внутр., мм <span id="clVal" style="float:right;font-weight:600;color:var(--brand)">400</span><input id="cl" type="range" value="400" min="50" max="2000" step="10" style="width:100%;accent-color:var(--brand)" /></label>
@@ -87,15 +88,17 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <button class="btn ghost" id="printBtn">Печать</button></div>
 </div>
 <aside class="calc-side" aria-live="polite">
+<span class="result-label" id="drawTitle">Схема заготовки 0201</span>
+<svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);min-height:220px"></svg>
+<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
+</aside>
+</div>
+<div class="calc-result-full" aria-live="polite">
 <span class="result-label">Результат</span>
 <div class="result" id="out">—</div>
 <p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
-</aside>
 </div>
 </section>
-<h2 id="drawTitle">Схема заготовки 0201</h2>
-<svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
-<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
 <h2>Справочник</h2>
 <div class="cards">
 <a class="card" href="fefco/"><h3>Коробки FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — что куда.</p></a>
