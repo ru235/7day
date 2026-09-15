@@ -1,9 +1,9 @@
 ---
 const SITE = 'https://formgen.ru';
-const title = 'Коробка FEFCO 0201: развёртка и прочность | formgen.ru';
-const desc = 'Калькулятор гофрокороба: заготовка 0201 по внутренним размерам, площадь картона, вес, прочность штабеля BCT. Марки картона и профили.';
+const title = 'Калькулятор гофрокороба: размеры, чертёж, прочность | formgen.ru';
+const desc = 'Посчитайте коробку под свой размер: заготовка FEFCO 0201, площадь картона, вес, прочность штабеля BCT. Профили B/C/E/BC, марки Т и П.';
 const faqs = [
-  { q: 'Как посчитать заготовку 0201?', a: 'Длина = 2×(L+W) + клапан 20–40 мм (0.15×W, как в PackGenerator). Ширина = H + W. Точный расчёт — в калькуляторе.' },
+  { q: 'Как посчитать заготовку 0201?', a: 'Сложите периметр: 2×(длина+ширина) и добавьте клапан 20–40 мм. Ширина листа — высота плюс ширина коробки. Калькулятор выше считает точнее.' },
   { q: 'Что такое BCT?', a: 'Прочность ящика на сжатие в ньютонах (по Макки). Делим на вес содержимого с запасом 3 — получаем ярусы штабеля.' },
   { q: 'Какой профиль выбрать?', a: 'E — мелкая тара, B — штамповка, C — транспортная, BC — тяжёлое и высокое штабелирование.' },
   { q: 'Марка Т-23 или П-32?', a: 'Т — трёхслойный, П — пятислойный. П-32 держит заметно больше, но дороже. Под штабель от 3 ярусов — пятислойный.' },
@@ -12,7 +12,7 @@ const faqs = [
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
 const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'formgen.ru', url: SITE, inLanguage: 'ru' });
-const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-15', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
 const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как рассчитать коробку 0201', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Замерьте содержимое', text: 'Длина, ширина, высота + запас 10–20 мм.' }, { '@type': 'HowToStep', name: 'Выберите картон', text: 'Профиль и марку под вес и штабель.' }, { '@type': 'HowToStep', name: 'Получите заготовку', text: 'Размер листа, площадь, вес, BCT.' }] });
 ---
 <!doctype html>
@@ -24,6 +24,10 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <title>{title}</title>
 <meta name="description" content={desc} />
 <link rel="canonical" href={SITE + '/'} />
+<link rel="alternate" hreflang="ru" href={SITE + '/'} />
+<link rel="alternate" hreflang="en" href={SITE + '/en/'} />
+<link rel="alternate" hreflang="es" href={SITE + '/es/'} />
+<link rel="alternate" hreflang="x-default" href={SITE + '/'} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
@@ -51,14 +55,14 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script is:inline src="theme.js" defer></script></head>
 <body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
-<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formgen — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>formgen<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Калькулятор</a><a href="fefco/">Коробки FEFCO</a><a href="gofro/">Гофрокартон</a><a href="prochnost/">Прочность</a><a href="primery/">Примеры</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formgen — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>formgen<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Калькулятор</a><a href="fefco/">Коробки FEFCO</a><a href="gofro/">Гофрокартон</a><a href="prochnost/">Прочность</a><a href="primery/">Примеры</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><span style="color:var(--fg);font-weight:700;font-size:12px">RU</span><a href="en/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">EN</a><a href="es/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">ES</a></span><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
 <p class="eyebrow">Калькулятор гофротары</p>
-<h1>Коробки FEFCO: заготовка и прочность</h1>
-<p>0201, 0200, 0471, 0427 — внутренние размеры, профиль и марка. Заготовка, площадь, вес, BCT и штабель.</p>
+<h1>Какой будет коробка: размеры, чертёж, прочность</h1>
+<p>Ящик 300×200×150 собирается из листа 1030×350 мм. Введите свои размеры — получите заготовку, вес и штабель.</p>
 </section>
-  <div class="answer" id="tldr"><b>Короткий ответ:</b> заготовка 0201 = 2×(L+W) + 20–40 мм клапан (0.15×W). BCT по Макки: 5.87 × ECT × √(t × периметр). Как в PackGenerator.</div>
+  <div class="answer" id="tldr"><b>Пример:</b> коробка 300×200×150 — это лист 1030×350 мм, клапан 30 мм. Свои размеры считайте ниже — с весом и штабелем.</div>
 <section class="calc" id="calc" aria-label="Калькулятор коробки">
 <div class="calc-layout">
 <div class="calc-fields">
@@ -103,7 +107,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
 <section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formgen.ru</h3><p>Калькулятор гофротары FEFCO. Оценочный расчёт, штампы — у производителя. Обновлено 2026-09-09.</p></div><div><h3>Расчёты</h3><ul><li><a href="./">Калькулятор 0201</a></li><li><a href="prochnost/">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="fefco/">Типы FEFCO</a></li><li><a href="gofro/">Гофрокартон</a></li><li><a href="primery/">Примеры</a></li></ul></div></div></div></footer>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formgen.ru</h3><p>Калькулятор гофротары FEFCO. Перед тиражом проверьте чертёж на плоттере. Обновлено 2026-09-15.</p></div><div><h3>Расчёты</h3><ul><li><a href="./">Калькулятор 0201</a></li><li><a href="prochnost/">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="fefco/">Типы FEFCO</a></li><li><a href="gofro/">Гофрокартон</a></li><li><a href="primery/">Примеры</a></li></ul></div></div></div></footer>
 <div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script is:inline>
 const $=id=>document.getElementById(id);
@@ -225,7 +229,7 @@ function drawPreview(r){const svg=$('draw');svg.innerHTML='';if(!r)return;
 }
 function calc(){const out=$('out'),r=lastCalc();
   if(!r){out.textContent='Проверьте размеры.';return}
-  out.innerHTML=`${r.T.name}. Заготовка: <b>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</b> (профиль ${r.fl})${r.T.note?`<br><span style="font-size:14px">${r.T.note}</span>`:''}<br>Картон: <b>${r.area.toFixed(2)} м²/шт</b> · ${r.Q} шт = ${r.total.toFixed(1)} м² · Вес ящика ≈ ${r.mBox.toFixed(2)} кг${r.P>0?`<br>Картон: <b>${(r.total*r.P).toFixed(0)} ₽</b>`:''}<br>BCT ≈ <b>${Math.round(r.BCT)} Н</b> (${(r.BCT/9.81).toFixed(0)} кгс)${r.tiers?` · Штабель: <b>${r.tiers} яр.</b>`:''}<br><span style="font-size:14px">Оценка по Макки. Точные штампы и испытания — у производителя гофротары.</span>`;
+  out.innerHTML=`${r.T.name}. Заготовка: <b>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</b> (профиль ${r.fl})${r.T.note?`<br><span style="font-size:14px">${r.T.note}</span>`:''}<br>Картон: <b>${r.area.toFixed(2)} м²/шт</b> · ${r.Q} шт = ${r.total.toFixed(1)} м² · Вес ящика ≈ ${r.mBox.toFixed(2)} кг${r.P>0?`<br>Картон: <b>${(r.total*r.P).toFixed(0)} ₽</b>`:''}<br>BCT ≈ <b>${Math.round(r.BCT)} Н</b> (${(r.BCT/9.81).toFixed(0)} кгс)${r.tiers?` · Штабель: <b>${r.tiers} яр.</b>`:''}<br><span style="font-size:14px">BCT — оценка по Макки. Перед тиражом проверьте чертёж на плоттере.</span>`;
   drawPreview(r);
   try{const h=JSON.parse(localStorage.getItem('s06')||'[]');h.unshift({L:r.L,W:r.W,H:r.H,t:Date.now()});localStorage.setItem('s06',JSON.stringify(h.slice(0,20)))}catch(e){}
   try{window.s555ev&&s555ev('calc_run',{L:r.L})}catch(e){}
@@ -235,7 +239,7 @@ function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)retu
   sh.innerHTML=`<h1>Коробка ${r.ct} — formgen.ru</h1><p>Дата: ${d}</p>
   <h2>Заказ</h2><table><tr><td>Внутренние, мм</td><td>${r.L}×${r.W}×${r.H}</td></tr><tr><td>Конструкция</td><td>${r.T.name}</td></tr><tr><td>Профиль / марка</td><td>${r.fl} / ECT ${r.ECT}</td></tr><tr><td>Заготовка</td><td>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</td></tr><tr><td>Картон</td><td>${r.area.toFixed(2)} м²/шт, всего ${r.total.toFixed(1)} м² (${r.Q} шт)</td></tr><tr><td>BCT</td><td>≈ ${Math.round(r.BCT)} Н${r.tiers?`, штабель ${r.tiers} яр.`:''}</td></tr></table>
   <h2>Нормативы</h2><ul><li>Типы коробок — каталог FEFCO. BCT — оценка по формуле Макки.</li><li>Сырость снижает прочность до 50% — для склада без отопления берите влагостойкий картон.</li></ul>
-  <p><b>Важно:</b> расчёт оценочный. Штампы, биговки и испытания — у производителя гофротары.</p>`;
+  <p><b>Важно:</b> перед тиражом проверьте чертёж на плоттере.</p>`;
 }
 function downloadSVG(){const svg=$('draw');const r=lastCalc()||calc();if(!svg||!r||!svg.innerHTML.trim())return;
   const clone=svg.cloneNode(true);

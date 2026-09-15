@@ -1,0 +1,340 @@
+---
+const SITE = 'https://formgen.ru';
+const title = 'Calculadora caja cartón: medidas, plantilla, resistencia | formgen.ru';
+const desc = 'Calcula tu caja: plantilla FEFCO 0201, área de cartón, peso, resistencia de apilado BCT. Ondas B/C/E/BC, calidades.';
+const faqs = [
+  { q: '¿Cómo calcular la plantilla 0201?', a: 'Suma el perímetro: 2×(largo+ancho) y añade solapa de 20–40 mm. El ancho del pliego es alto más ancho de caja. La calculadora de arriba es exacta.' },
+  { q: '¿Qué es BCT?', a: 'Resistencia a la compresión en newtons (McKee). Divide por el peso con factor 3 — esos son tus niveles de apilado.' },
+  { q: '¿Qué onda elegir?', a: 'E — cajas pequeñas, B — troquelado, C — transporte, BC — cargas pesadas y pilas altas.' },
+  { q: '¿Calidad T-23 o P-32?', a: 'T es triple capa, P es quíntuple. P-32 aguanta mucho más pero cuesta más. Para pilas de 3+ niveles, quíntuple.' },
+  { q: '¿Puedo pedir 50 cajas?', a: 'El troquel cuesta dinero — tiradas cortas van en plotter (más por caja) o elige medidas estándar de stock.' },
+  { q: '¿Importa la humedad?', a: 'Sí: el cartón húmedo pierde hasta 50% de resistencia. Para almacén sin calefacción usa cartón resistente a la humedad.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'formgen.ru', url: SITE, inLanguage: 'es' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/es/', inLanguage: 'es', dateModified: '2026-09-15', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Cómo calcular una caja 0201', inLanguage: 'es', step: [{ '@type': 'HowToStep', name: 'Mide el contenido', text: 'Largo, ancho, alto más 10–20 mm.' }, { '@type': 'HowToStep', name: 'Elige cartón', text: 'Onda y calidad según peso y apilado.' }, { '@type': 'HowToStep', name: 'Obtén la plantilla', text: 'Medida del pliego, área, peso, BCT.' }] });
+---
+<!doctype html>
+<html lang="es">
+<head>
+<script is:inline src="../theme-head.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={SITE + '/es/'} />
+<link rel="alternate" hreflang="ru" href={SITE + '/'} />
+<link rel="alternate" hreflang="en" href={SITE + '/en/'} />
+<link rel="alternate" hreflang="es" href={SITE + '/es/'} />
+<link rel="alternate" hreflang="x-default" href={SITE + '/'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="alternate" type="application/json" title="Datos del sitio para IA" href="../api/data.json" />
+<link rel="stylesheet" href="../_s555.css?v=1" />
+<script type="application/ld+json" set:html={faqJson}></script>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112589281', 'ym');
+
+    ym(112589281, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112589281" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script is:inline src="../theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="./" aria-label="formgen — inicio"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 11 L16 6 L26 11 L26 23 L16 28 L6 23 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 11 L16 16 L26 11 M16 16 L16 28" stroke="var(--accent)" stroke-width="2"/></svg><span>formgen<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Menú"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="./" aria-current="page">Calculadora</a><a href="fefco/">Cajas FEFCO</a><a href="carton/">Cartón</a><a href="resistencia/">Resistencia</a><a href="ejemplos/">Ejemplos</a><span style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:20px;background:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h16M4 18h16" stroke="currentColor" stroke-width="1" opacity="0.6"/></svg><a href="../" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">RU</a><a href="../en/" style="color:var(--brand);font-weight:600;font-size:12px;text-decoration:none">EN</a><span style="color:var(--fg);font-weight:700;font-size:12px">ES</span></span><button id="ttheme" class="tbtn" type="button" aria-label="Tema oscuro" title="Tema oscuro">◐</button></div></nav></div></header>
+<main class="wrap">
+<section class="hero">
+<p class="eyebrow">Calculadora de cajas</p>
+<h1>Cómo será tu caja: medidas, plantilla, resistencia</h1>
+<p>Una caja de 300×200×150 sale de un pliego de 1030×350 mm. Pon tus medidas — obtén plantilla, peso y apilado.</p>
+</section>
+  <div class="answer" id="tldr"><b>Ejemplo:</b> una caja de 300×200×150 es un pliego de 1030×350 mm con solapa de 30 mm. Calcula la tuya abajo — con peso y apilado.</div>
+<section class="calc" id="calc" aria-label="Calculadora de cajas">
+<div class="calc-layout">
+<div class="calc-fields">
+<div style="display:grid;gap:14px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px">
+<label>Largo interior, mm <span id="clVal" style="float:right;font-weight:600;color:var(--brand)">400</span><input id="cl" type="range" value="400" min="50" max="2000" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+<label>Ancho interior, mm <span id="cwVal" style="float:right;font-weight:600;color:var(--brand)">300</span><input id="cw" type="range" value="300" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+<label>Alto interior, mm <span id="chVal" style="float:right;font-weight:600;color:var(--brand)">250</span><input id="ch" type="range" value="250" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
+</div>
+<label>Modelo <select id="ct"><option value="0201">0201 — regular con solapas</option><option value="0200">0200 — bandeja abierta</option><option value="0202">0202 — solapas solapadas</option><option value="0203">0203 — solape total</option><option value="0301">0301 — telescópica (tapa+base)</option><option value="0427">0427 — archivo plegable</option><option value="0452">0452 — envolvente</option><option value="0454">0454 — bandeja con tapa</option><option value="0471">0471 — autoarmable</option><option value="0701">0701 — carpeta con cierre</option><option value="0710">0710 — carpeta tuck</option><option value="0711">0711 — carpeta auto</option><option value="0713">0713 — postal autoarmable</option><option value="0771">0771 — expositor SRP</option></select></label>
+<label>Onda <select id="cf"><option value="B">B (3 mm)</option><option value="C" selected>C (4 mm)</option><option value="E">E (1.6 mm)</option><option value="BC">BC (7 mm)</option></select></label>
+<label>Calidad cartón <select id="cg"><option value="5.5">T-22</option><option value="7" selected>T-23</option><option value="8.5">T-24</option><option value="9.5">P-32</option><option value="11">P-33</option></select></label>
+<div style="margin-top:10px;padding:14px;background:var(--bg);border:1px dashed var(--line);border-radius:10px">
+<div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Extras del pedido — no van al dibujo</div>
+<label>Peso contenido, kg <input id="cm" type="number" value="10" min="0" max="1000" step="any" /></label>
+<label>Tirada, uds <input id="cq" type="number" value="100" min="1" max="1000000" step="1" /></label>
+<label>Precio cartón, ₽/m² <input id="cp" type="number" value="60" min="0" max="10000" step="any" /></label>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="go">Calcular</button>
+<button class="btn ghost" id="dl">Descargar SVG</button>
+<button class="btn ghost" id="dlDxf">Descargar DXF</button>
+<button class="btn ghost" id="dlPdf">Descargar PDF</button>
+<button class="btn ghost" id="printBtn">Imprimir</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Resultado</span>
+<div class="result" id="out">—</div>
+<p style="font-size:13px;color:var(--muted)">Historial local. <button class="btn ghost" id="share">Copiar enlace</button></p>
+</aside>
+</div>
+</section>
+<h2 id="drawTitle">Plantilla 0201</h2>
+<svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Plantilla caja 0201" style="background:var(--card);border:1px solid var(--line);border-radius:10px"></svg>
+<div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Corte</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Hendido (doblez)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Cota</span></div>
+<h2>Referencia</h2>
+<div class="cards">
+<a class="card" href="fefco/"><h3>Cajas FEFCO</h3><p>0201, 0200, 0471, 0427, 0770 — cuál para qué.</p></a>
+<a class="card" href="carton/"><h3>Cartón</h3><p>Ondas B/C/E/BC, capas, calidades T y P.</p></a>
+<a class="card" href="resistencia/"><h3>Resistencia</h3><p>BCT McKee, apilado, humedad.</p></a>
+<a class="card" href="ejemplos/"><h3>Ejemplos</h3><p>Mudanza, marketplaces, archivo — con números.</p></a>
+</div>
+<h2>FAQ</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
+</main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formgen.ru</h3><p>Calculadora de cajas FEFCO. Revisa el dibujo en plotter antes de la tirada. Actualizado 2026-09-15.</p></div><div><h3>Calcular</h3><ul><li><a href="./">Calculadora 0201</a></li><li><a href="resistencia/">Resistencia BCT</a></li></ul></div><div><h3>Referencia</h3><ul><li><a href="fefco/">Tipos FEFCO</a></li><li><a href="carton/">Cartón</a></li><li><a href="ejemplos/">Ejemplos</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>No recogemos tus datos. Para estadísticas usamos Yandex Metrica — puede usar sus cookies. <button class="btn" id="cookiesOk" type="button">Entendido</button></p></div></div>
+<script is:inline>
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+function el(n,at,parent){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);if(parent)parent.appendChild(e);return e}
+const FLUTE={E:{t:1.6,g:500},B:{t:3.0,g:650},C:{t:4.0,g:750},BC:{t:7.0,g:1200}};
+const TYPES={
+ '0201':{name:'0201 — regular con solapas'},
+ '0200':{name:'0200 — bandeja', note:'Arriba abierta, abajo con cinta.'},
+ '0202':{name:'0202 — solapas solapadas', note:'Solapas exteriores 25 mm más largas — junta más fuerte.'},
+ '0203':{name:'0203 — solape total', note:'Las solapas cubren todo el ancho: máxima resistencia, más cartón.'},
+ '0301':{name:'0301 — telescópica', note:'Dos piezas (tapa + base): solo troquel o plotter.'},
+ '0427':{name:'0427 — archivo', note:'Estimación: plantilla exacta — pide al fabricante.'},
+ '0452':{name:'0452 — envolvente', note:'Estimación: envuelve el producto, plantilla exacta — pide al fabricante.'},
+ '0454':{name:'0454 — bandeja con tapa', note:'Estimación: plantilla exacta — pide al fabricante.'},
+ '0471':{name:'0471 — autoarmable', note:'Base crash-lock: solo troquel o plotter. Área +15% por cierres.'},
+ '0701':{name:'0701 — carpeta con cierre', note:'Estimación: carpeta plegable, plantilla exacta — pide al fabricante.'},
+ '0710':{name:'0710 — carpeta tuck', note:'Estimación: carpeta plegable, plantilla exacta — pide al fabricante.'},
+ '0711':{name:'0711 — carpeta auto', note:'Estimación: carpeta plegable, plantilla exacta — pide al fabricante.'},
+ '0713':{name:'0713 — postal autoarmable', note:'Estimación: crash-lock para e-commerce, solo troquel o plotter.'},
+ '0771':{name:'0771 — expositor', note:'Estimación: bandeja + tapa para estantes, plantilla exacta — pide al fabricante.'}};
+function lastCalc(){const L=+$('cl').value,W=+$('cw').value,H=+$('ch').value;
+  const F=FLUTE[$('cf').value]||FLUTE.C, t=F.t, ECT=+$('cg').value, M=+$('cm').value||0, Q=Math.max(1,parseInt($('cq').value)||1), P=+$('cp').value||0;
+  const ct=$('ct').value, T=TYPES[ct]||TYPES['0201'];
+  if(!(L>0&&W>0&&H>0))return null;
+  const glue=Math.min(40,Math.max(20,0.15*W));
+  let Lb,Wb,mul=1,flapTop=W/2,flapBot=W/2;
+  if(ct==='0200'){Lb=2*(L+W)+glue;Wb=H+W/2;flapTop=0;}
+  else if(ct==='0202'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
+  else if(ct==='0203'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
+  else if(ct==='0301'){Lb=2*(L+W)+glue;Wb=H+W/2;mul=2;flapTop=0;}
+  else if(ct==='0427'){
+    const D=H, Th=t;
+    Lb = L + 2*D + W + 40 + 4*Th;
+    Wb = W + 2*D + W + 2*Th + 15;
+    mul=1; flapTop=0; flapBot=0;
+  }
+  else if(ct==='0452'||ct==='0454'||ct==='0471'||ct==='0713'){Lb=2*(L+W)+glue;Wb=H+W;mul=ct==='0471'?1.15:ct==='0452'?1.2:ct==='0454'?1.3:1.35;}
+  else if(ct==='0701'||ct==='0710'||ct==='0711'){Lb=2*L+W+40;Wb=2*H+W;}
+  else if(ct==='0771'){Lb=2*(L+W)+glue;Wb=H+W/2;mul=1.8;flapTop=0;}
+  else{Lb=2*(L+W)+glue;Wb=H+W;}
+  const area=Lb*Wb/1e6*mul, total=area*Q;
+  const mBox=area*F.g/1000;
+  const Z=2*(L+W), BCT=5.87*ECT*Math.sqrt(t*Z);
+  const tiers=M>0?Math.max(1,Math.floor(BCT/(M*9.81*3))):null;
+  return {L,W,H,t,ECT,M,Q,P,Lb,Wb,area,total,mBox,BCT,tiers,fl:$('cf').value,ct,T,flapTop,flapBot,glue};
+}
+function drawPreview(r){const svg=$('draw');svg.innerHTML='';if(!r)return;
+  $('drawTitle').textContent='Plantilla ' + r.ct;
+  const sc=Math.min(940/r.Lb,280/r.Wb), X=v=>30+v*sc, Y=v=>30+v*sc;
+  const cut='var(--brand)', score='#f59e0b', dim='var(--muted)';
+  const flapT=r.flapTop||0, flapB=r.flapBot||0;
+  function R(x,y,w,h){el('rect',{x:X(x),y:Y(y),width:Math.max(2,w*sc),height:Math.max(2,h*sc),fill:'none',stroke:cut,'stroke-width':2},svg)}
+  function S(x1,y1,x2,y2){el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:score,'stroke-width':1.6},svg)}
+  function Dim(x1,y1,x2,y2,label){
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:dim,'stroke-width':1},svg);
+    el('line',{x1:X(x1),y1:Y(y1)-6,x2:X(x1),y2:Y(y1)+6,stroke:dim,'stroke-width':1},svg);
+    el('line',{x1:X(x2),y1:Y(y2)-6,x2:X(x2),y2:Y(y2)+6,stroke:dim,'stroke-width':1},svg);
+    const t=el('text',{x:X(mx),y:Y(my)-8,'text-anchor':'middle','font-size':10,fill:dim},svg);
+    t.textContent=label;
+  }
+  if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){const bodyH=r.Wb-flapT;
+    if(flapT>0)R(0,0,r.Lb,flapT); R(0,flapT,r.Lb,bodyH);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>S(x,flapT,x,flapT+bodyH)); if(flapT>0)S(0,flapT,r.Lb,flapT);
+    Dim(0,r.Wb+12,r.Lb,r.Wb+12,`${Math.round(r.Lb)}`);
+    Dim(r.Lb+12,0,r.Lb+12,r.Wb,`${Math.round(r.Wb)}`);
+  }else if(r.ct==='0427'){
+    const L=r.L, W=r.W, D=r.H, Th=r.t;
+    const cx=r.Lb/2, cy=r.Wb/2;
+    const x0=cx-L/2, y0=cy-W/2;
+    const yFront=y0-D, yBack=y0+W;
+    const xl1=x0-D, xl2=x0-D/2;
+    const xr1=x0+L, xr3=x0+L+D;
+    const yLid=yBack+D, yLidTop=yLid+W;
+    const earW=D*0.85, earR=D*0.35;
+    const inset=11;
+    S(x0,y0,x0+L,y0); S(x0,y0+W,x0+L,y0+W);
+    S(x0,y0,x0,y0+W); S(x0+L,y0,x0+L,y0+W);
+    S(x0,yFront,x0+L,yFront); S(x0,yFront,x0,y0); S(x0+L,yFront,x0+L,y0);
+    S(x0,yBack,x0+L,yBack);
+    S(xl1,y0,xl1,y0+W); S(xl1+D/2,y0,xl1+D/2,y0+W);
+    S(xr1,y0,xr1,y0+W); S(xr1+D/2,y0,xr1+D/2,y0+W); S(xr3,y0,xr3,y0+W);
+    S(x0,yLid,x0+L,yLid); S(x0,yLidTop,x0+L,yLidTop);
+    S(x0,yLid,x0,yLidTop); S(x0+L,yLid,x0+L,yLidTop);
+    const p=(pts)=>pts.map((pt,i)=>(i===0?`M${X(pt[0])} ${Y(pt[1])}`:`L${X(pt[0])} ${Y(pt[1])}`)).join(' ');
+    const tongueW=L*0.18, tongueR=7, tx0=cx-tongueW/2, tx1=cx+tongueW/2;
+    const notchD=6;
+    function C(d){el('path',{d,fill:'none',stroke:cut,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},svg)}
+    C(`${p([[xl1+notchD,y0],[xl1,y0],[xl1,y0+W],[xl1+notchD,y0+W]])} M${X(xl1)} ${Y(y0+W*0.35)} L${X(xl1)} ${Y(y0+W*0.45)} M${X(xl1)} ${Y(y0+W*0.55)} L${X(xl1)} ${Y(y0+W*0.65)}`);
+    C(`${p([[xr3-notchD,y0],[xr3,y0],[xr3,y0+W],[xr3-notchD,y0+W]])} M${X(xr3)} ${Y(y0+W*0.35)} L${X(xr3)} ${Y(y0+W*0.45)} M${X(xr3)} ${Y(y0+W*0.55)} L${X(xr3)} ${Y(y0+W*0.65)}`);
+    const cutPath=`M${X(x0+inset)} ${Y(yFront)} L${X(x0)} ${Y(yFront)} L${X(x0)} ${Y(y0)} L${X(xl1)} ${Y(y0)} L${X(xl1)} ${Y(y0+W)} L${X(x0)} ${Y(y0+W)} L${X(x0)} ${Y(yLid+W)} L${X(x0-earW)} ${Y(yLid+W)} L${X(x0-earW)} ${Y(yLid)} L${X(x0)} ${Y(yLid)} L${X(x0)} ${Y(yLidTop)} L${X(tx0)} ${Y(yLidTop)} A${earR*sc} ${earR*sc} 0 0 1 ${X(tx1)} ${Y(yLidTop)} L${X(x0+L)} ${Y(yLidTop)} L${X(x0+L)} ${Y(yLid)} L${X(x0+L+earW)} ${Y(yLid)} L${X(x0+L+earW)} ${Y(yLid+W)} L${X(x0+L)} ${Y(yLid+W)} L${X(x0+L)} ${Y(y0+W)} L${X(xr3)} ${Y(y0+W)} L${X(xr3)} ${Y(y0)} L${X(x0+L)} ${Y(y0)} L${X(x0+L)} ${Y(yFront)} L${X(x0+L-inset)} ${Y(yFront)} Z`;
+    C(cutPath);
+    const slotW=D*0.25, slotH=W*0.09;
+    R(x0+D*0.05,y0+W*0.15,slotW,slotH); R(x0+L-D*0.05-slotW,y0+W*0.15,slotW,slotH);
+    R(x0+D*0.05,y0+W*0.75-slotH,slotW,slotH); R(x0+L-D*0.05-slotW,y0+W*0.75-slotH,slotW,slotH);
+    C(`M${X(x0)} ${Y(yLid)} A${earR*sc} ${earR*sc} 0 0 0 ${X(x0-earW)} ${Y(yLid+earR)}`);
+    C(`M${X(x0+L)} ${Y(yLid)} A${earR*sc} ${earR*sc} 0 0 1 ${X(x0+L+earW)} ${Y(yLid+earR)}`);
+    Dim(x0,y0+W+12,x0+L,y0+W+12,`${L}`);
+    Dim(x0-12,y0,x0-12,y0+W,`${W}`);
+    Dim(x0+L+12,y0,x0+L+12,y0+W,`${W} × D ${D}`);
+  }else if(r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){const cx=r.Lb/2, cy=r.Wb/2;
+    R(cx-r.L/2,cy-r.H/2,r.L,r.H);
+    R(cx-r.L/2,cy-r.H/2-flapB,r.L,flapB);R(cx-r.L/2,cy+r.H/2,r.L,flapB);
+    R(cx-r.L/2-(r.W/2),cy-r.H/2,r.W/2,r.H);R(cx+r.L/2,cy-r.H/2,r.W/2,r.H);
+    S(cx-r.L/2,cy-r.H/2,cx+r.L/2,cy-r.H/2); S(cx-r.L/2,cy+r.H/2,cx+r.L/2,cy+r.H/2);
+    S(cx-r.L/2,cy-r.H/2,cx-r.L/2,cy+r.H/2); S(cx+r.L/2,cy-r.H/2,cx+r.L/2,cy+r.H/2);
+    Dim(cx-r.L/2,cy+r.H/2+12,cx+r.L/2,cy+r.H/2+12,`${r.L}`);
+    Dim(cx-r.L/2-12,cy-r.H/2,cx-r.L/2-12,cy+r.H/2,`${r.H}`);
+  }else{const flap=flapT;
+    R(0,0,r.Lb,flap);R(0,flap,r.Lb,r.H);R(0,flap+r.H,r.Lb,flapB);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=>S(x,flap,x,flap+r.H));
+    S(0,flap,r.Lb,flap); S(0,flap+r.H,r.Lb,flap+r.H);
+    Dim(0,r.Wb+14,r.Lb,r.Wb+14,`${Math.round(r.Lb)}`);
+    Dim(r.Lb+14,0,r.Lb+14,r.Wb,`${Math.round(r.Wb)}`);
+    Dim(0,flap-8,r.L,flap-8,`${r.L}`); Dim(r.L,flap-8,r.L+r.W,flap-8,`${r.W}`);}
+  const a=el('text',{x:X(r.Lb/2),y:Y(r.Wb+28),'text-anchor':'middle','font-size':11,fill:dim},svg);
+  a.textContent=`${Math.round(r.Lb)}×${Math.round(r.Wb)} mm · ${r.ct} · solapa ${Math.round(r.glue)} mm`;
+}
+function calc(){const out=$('out'),r=lastCalc();
+  if(!r){out.textContent='Revisa las medidas.';return}
+  out.innerHTML=`${r.T.name}. Plantilla: <b>${Math.round(r.Lb)}×${Math.round(r.Wb)} mm</b> (onda ${r.fl})${r.T.note?`<br><span style="font-size:14px">${r.T.note}</span>`:''}<br>Cartón: <b>${r.area.toFixed(2)} m²/ud</b> · ${r.Q} uds = ${r.total.toFixed(1)} m² · Peso caja ≈ ${r.mBox.toFixed(2)} kg${r.P>0?`<br>Cartón: <b>${(r.total*r.P).toFixed(0)} ₽</b>`:''}<br>BCT ≈ <b>${Math.round(r.BCT)} N</b> (${(r.BCT/9.81).toFixed(0)} kgf)${r.tiers?` · Apilado: <b>${r.tiers} niv.</b>`:''}<br><span style="font-size:14px">BCT estimado McKee. Revisa el dibujo en plotter antes de la tirada.</span>`;
+  drawPreview(r);
+  try{const h=JSON.parse(localStorage.getItem('s06')||'[]');h.unshift({L:r.L,W:r.W,H:r.H,t:Date.now()});localStorage.setItem('s06',JSON.stringify(h.slice(0,20)))}catch(e){}
+  try{window.s555ev&&s555ev('calc_run',{L:r.L})}catch(e){}
+  return r;
+}
+function printSheet(){const r=lastCalc()||calc();const sh=$('psheet');if(!r)return;const d=new Date().toLocaleDateString('es-ES');
+  sh.innerHTML=`<h1>Caja ${r.ct} — formgen.ru</h1><p>Fecha: ${d}</p>
+  <h2>Pedido</h2><table><tr><td>Interior, mm</td><td>${r.L}×${r.W}×${r.H}</td></tr><tr><td>Modelo</td><td>${r.T.name}</td></tr><tr><td>Onda / calidad</td><td>${r.fl} / ECT ${r.ECT}</td></tr><tr><td>Plantilla</td><td>${Math.round(r.Lb)}×${Math.round(r.Wb)} mm</td></tr><tr><td>Cartón</td><td>${r.area.toFixed(2)} m²/ud, total ${r.total.toFixed(1)} m² (${r.Q} uds)</td></tr><tr><td>BCT</td><td>≈ ${Math.round(r.BCT)} N${r.tiers?`, apilado ${r.tiers} niv.`:''}</td></tr></table>
+  <h2>Notas</h2><ul><li>Modelos — catálogo FEFCO. BCT — estimado McKee.</li><li>La humedad corta la resistencia a la mitad — usa cartón resistente para almacén sin calefacción.</li></ul>
+  <p><b>Nota:</b> revisa el dibujo en plotter antes de la tirada.</p>`;
+}
+function downloadSVG(){const svg=$('draw');const r=lastCalc()||calc();if(!svg||!r||!svg.innerHTML.trim())return;
+  const clone=svg.cloneNode(true);
+  clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  clone.querySelectorAll('[stroke="var(--brand)"]').forEach(el=>el.setAttribute('stroke','#1e3a8a'));
+  clone.querySelectorAll('[stroke="var(--muted)"]').forEach(el=>el.setAttribute('stroke','#64748b'));
+  clone.querySelectorAll('[fill="var(--muted)"]').forEach(el=>el.setAttribute('fill','#64748b'));
+  const titleEl=document.createElementNS(NS,'title');titleEl.textContent=`formgen.ru ${r.ct} ${r.L}x${r.W}x${r.H} plantilla ${Math.round(r.Lb)}x${Math.round(r.Wb)}`;
+  clone.insertBefore(titleEl, clone.firstChild);
+  const blob=new Blob([new XMLSerializer().serializeToString(clone)],{type:'image/svg+xml'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`caja-${r.ct}-${r.L}x${r.W}x${r.H}.svg`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  try{window.s555ev&&s555ev('svg_download',{ct:r.ct})}catch(e){}
+}
+function toDXF(r){
+  let dxf='0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n';
+  function line(x1,y1,x2,y2,layer){
+    dxf+=`0\nLINE\n8\n${layer}\n10\n${x1}\n20\n${y1}\n30\n0\n11\n${x2}\n21\n${y2}\n31\n0\n`;
+  }
+  function rect(x,y,w,h,layer){ line(x,y,x+w,y,layer); line(x+w,y,x+w,y+h,layer); line(x+w,y+h,x,y+h,layer); line(x,y+h,x,y,layer); }
+  const ft=r.flapTop||0, fb=r.flapBot||0;
+  if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){
+    const bh=r.Wb-ft;
+    if(ft>0) rect(0,0,r.Lb,ft,'CUT');
+    rect(0,ft,r.Lb,bh,'CUT');
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> line(x,ft,x,ft+bh,'SCORE'));
+    if(ft>0) line(0,ft,r.Lb,ft,'SCORE');
+  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+    const cx=r.Lb/2, cy=r.Wb/2;
+    rect(cx-r.L/2,cy-r.H/2,r.L,r.H,'CUT');
+    rect(cx-r.L/2,cy-r.H/2-fb,r.L,fb,'CUT');
+    rect(cx-r.L/2,cy+r.H/2,r.L,fb,'CUT');
+    rect(cx-r.L/2-r.W/2,cy-r.H/2,r.W/2,r.H,'CUT');
+    rect(cx+r.L/2,cy-r.H/2,r.W/2,r.H,'CUT');
+    line(cx-r.L/2,cy-r.H/2,cx+r.L/2,cy-r.H/2,'SCORE');
+    line(cx-r.L/2,cy+r.H/2,cx+r.L/2,cy+r.H/2,'SCORE');
+    line(cx-r.L/2,cy-r.H/2,cx-r.L/2,cy+r.H/2,'SCORE');
+    line(cx+r.L/2,cy-r.H/2,cx+r.L/2,cy+r.H/2,'SCORE');
+  } else {
+    rect(0,0,r.Lb,ft,'CUT');
+    rect(0,ft,r.Lb,r.H,'CUT');
+    rect(0,ft+r.H,r.Lb,fb,'CUT');
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> line(x,ft,x,ft+r.H,'SCORE'));
+    line(0,ft,r.Lb,ft,'SCORE');
+    line(0,ft+r.H,r.Lb,ft+r.H,'SCORE');
+  }
+  dxf+='0\nENDSEC\n0\nEOF';
+  return dxf;
+}
+function downloadDXF(){const r=lastCalc()||calc();if(!r)return;
+  const dxf=toDXF(r);
+  const blob=new Blob([dxf],{type:'application/dxf'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`caja-${r.ct}-${r.L}x${r.W}x${r.H}.dxf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  try{window.s555ev&&s555ev('dxf_download',{ct:r.ct})}catch(e){}
+}
+function downloadPDF(){const r=lastCalc()||calc();if(!r)return;
+  const {jsPDF}=window.jspdf||{};
+  if(!jsPDF){alert('Librería PDF no cargada');return;}
+  const doc=new jsPDF({unit:'mm',format:[r.Lb+20,r.Wb+20]});
+  doc.setFontSize(8);
+  doc.text(`formgen.ru ${r.ct} ${r.L}x${r.W}x${r.H} plantilla ${Math.round(r.Lb)}x${Math.round(r.Wb)}`,10,10);
+  doc.setDrawColor(30,58,138); doc.setLineWidth(0.5);
+  const ft=r.flapTop||0, fb=r.flapBot||0;
+  function rct(x,y,w,h){doc.rect(10+x,10+y,w,h);}
+  function ln(x1,y1,x2,y2){doc.line(10+x1,10+y1,10+x2,10+y2);}
+  doc.setDrawColor(245,158,11); doc.setLineWidth(0.4); doc.setLineDash([]);
+  if(r.ct==='0200'||r.ct==='0301'||r.ct==='0771'){
+    const bh=r.Wb-ft;
+    if(ft>0) rct(0,0,r.Lb,ft);
+    rct(0,ft,r.Lb,bh);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> ln(x,ft,x,ft+bh));
+  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+    const cx=r.Lb/2, cy=r.Wb/2;
+    rct(cx-r.L/2,cy-r.H/2,r.L,r.H);
+    rct(cx-r.L/2,cy-r.H/2-fb,r.L,fb); rct(cx-r.L/2,cy+r.H/2,r.L,fb);
+    rct(cx-r.L/2-r.W/2,cy-r.H/2,r.W/2,r.H); rct(cx+r.L/2,cy-r.H/2,r.W/2,r.H);
+  } else {
+    rct(0,0,r.Lb,ft); rct(0,ft,r.Lb,r.H); rct(0,ft+r.H,r.Lb,fb);
+    [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> ln(x,ft,x,ft+r.H));
+  }
+  doc.save(`caja-${r.ct}-${r.L}x${r.W}x${r.H}.pdf`);
+  try{window.s555ev&&s555ev('pdf_download',{ct:r.ct})}catch(e){}
+}
+function syncSliders(){ $('clVal').textContent=$('cl').value; $('cwVal').textContent=$('cw').value; $('chVal').textContent=$('ch').value; }
+['cl','cw','ch'].forEach(id=>$(id).addEventListener('input',()=>{syncSliders();calc();}));
+syncSliders();
+$('go').onclick=calc;
+$('dl').onclick=downloadSVG;
+$('dlDxf').onclick=downloadDXF;
+$('dlPdf').onclick=downloadPDF;
+$('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
+$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Enlace copiado'}catch(e){}};
+['ct','cf','cg','cm','cq','cp'].forEach(id=>$(id).addEventListener('change',calc));
+(function(){const q=new URLSearchParams(location.search);if(q.get('type')&&TYPES[q.get('type')])$('ct').value=q.get('type');calc()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
+</script>
+</body>
+</html>
