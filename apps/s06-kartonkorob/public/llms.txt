@@ -1,6 +1,7 @@
-# formgen.ru — калькулятор гофрокороба
+# formgen.ru — калькулятор гофрокороба + печать этикеток
 Коробка 300×200×150 — лист 1030×350, клапан 30 мм.
 BCT ≈ 5.87×ECT×√(t×периметр). Профили E/B/C/BC. Марки Т-22..П-33.
+/label/ — печать этикеток 24×80 мм для биговок, рицовок, перфорации, ножей.
 EN: /en/ calculator, /en/fefco/ catalog, /en/board/ board, /en/strength/ BCT, /en/examples/.
 ES: /es/ calculadora, /es/fefco/, /es/carton/, /es/resistencia/, /es/ejemplos/.
-Обновлено: 2026-09-15
+Обновлено: 2026-09-20
