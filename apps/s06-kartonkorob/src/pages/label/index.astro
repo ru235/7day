@@ -19,18 +19,18 @@ const desc = 'Сервис печати этикеток 24×80 мм для би
 <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
 <link rel="stylesheet" href="../_s555.css?v=1" />
 <style>
-  .label-paste { min-height: 200px; font-family: var(--mono); font-size: 13px; line-height: 1.4; resize: vertical; width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--fg); }
+  .label-paste { min-height: 180px; font-family: var(--mono); font-size: 13px; line-height: 1.4; resize: vertical; width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--fg); }
   .label-paste:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
   .label-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
   .label-table th, .label-table td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; }
   .label-table th { background: var(--card); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
   .label-table tr:nth-child(even) td { background: var(--card); }
-  .label-preview { display: grid; gap: 8px; margin: 16px 0; }
+  .label-preview { display: grid; gap: 10px; margin: 20px 0; }
   .label-card { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card); }
-  .label-card .info { padding: 10px 14px; font-size: 13px; color: var(--muted); }
+  .label-card .info { padding: 8px 14px; font-size: 13px; color: var(--muted); }
   .label-card .info b { color: var(--fg); }
-  .label-svg-wrap { padding: 8px; background: #fff; border-bottom: 1px solid var(--line); }
-  .label-svg-wrap svg { display: block; width: 100%; max-width: 320px; margin: 0 auto; }
+  .label-svg-wrap { padding: 10px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .label-svg-wrap svg { display: block; width: 320px; height: 96px; }
   .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
   .hint { font-size: 13px; color: var(--muted); margin: 8px 0; }
   .error { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); border-radius: var(--radius); padding: 12px 16px; margin: 12px 0; font-size: 14px; }
@@ -85,7 +85,6 @@ const desc = 'Сервис печати этикеток 24×80 мм для би
   <div class="actions">
     <button class="btn" id="parseBtn">Разобрать таблицу</button>
     <button class="btn ghost" id="pdfBtn" disabled>Скачать PDF</button>
-    <button class="btn ghost" id="printBtn" disabled>Печать</button>
   </div>
 
   <div id="preview" class="label-preview" hidden></div>
@@ -127,51 +126,65 @@ function showError(msg) {
   el.hidden = !msg;
 }
 
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+const FF = 'Calibri,Segoe UI,Arial,sans-serif';
+
 function renderLabelSVG(item) {
   const W = 80, H = 24;
   const isKnife = item.type === 'Н';
-  const typeNames = { 'Б': 'Б', 'Р': 'Р', 'П': 'П', 'Н': 'Н' };
-  const letter = typeNames[item.type] || item.type;
+  const typeNames = { 'Б': 'Б', 'Р': 'Р', 'П': 'П' };
+
+  // Б/Р/П layout:
+  // Letter zone: 0-24mm wide, full height 24mm
+  // Top zone (0-15mm): thickness (24-52) | black block with height (52-80)
+  // Bottom zone (15-24mm): manufacturer centered (24-80)
+  const letterW = 24;
+  const topH = 15;
+  const botY = topH;
+  const botH = H - topH;
+  const rightStart = letterW;
+  const rightW = W - letterW;
+  const midX = letterW + rightW / 2;
 
   if (isKnife) {
-    // Knife label: black left with thickness, then edge type, manufacturer
-    const leftW = 20;
-    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial,sans-serif">
-      <rect x="0" y="0" width="${W}" height="${H}" fill="#fff" stroke="#000" stroke-width="0.3"/>
-      <rect x="0" y="0" width="${leftW}" height="${H}" fill="#000"/>
-      <text x="${leftW/2}" y="${H/2 - 1}" text-anchor="middle" fill="#fff" font-size="6" font-weight="700">${item.thickness}</text>
-      <text x="${leftW/2}" y="${H/2 + 4.5}" text-anchor="middle" fill="#fff" font-size="5" font-weight="400">пт</text>
-      <text x="${leftW + 8}" y="${H/2 - 1}" text-anchor="middle" fill="#000" font-size="8" font-weight="800">${item.edge || ''}</text>
-      <line x1="${leftW + 2}" y1="${H/2 + 2}" x2="${W - 2}" y2="${H/2 + 2}" stroke="#000" stroke-width="0.2"/>
-      <text x="${leftW + 8}" y="${H/2 + 6}" text-anchor="middle" fill="#000" font-size="5">${item.manufacturer}</text>
+    // Knife: black block 0-24 full height, edge type 24-80 top half, manufacturer bottom
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:${FF}">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
+      <rect x="0" y="0" width="${letterW}" height="${H}" fill="#000"/>
+      <text x="${letterW/2}" y="${H/2 + 5}" text-anchor="middle" fill="#fff" font-size="20" font-weight="900">${esc(item.thickness.replace(/\s*пт\s*/,''))}</text>
+      <text x="${letterW/2}" y="${H/2 + 11}" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">пт</text>
+      <line x1="${letterW}" y1="0" x2="${letterW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+      <text x="${letterW + rightW/2}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="14" font-weight="900">${esc(item.edge || '')}</text>
+      <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+      <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
     </svg>`;
   }
 
-  // Bigovki / Ritsovki / Perforation label
-  const leftW = 14;
+  const letter = typeNames[item.type] || item.type;
+
   if (item.type === 'П') {
-    // Perforation: letter + thickness | dimensions (e.g. 3x3)
-    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial,sans-serif">
-      <rect x="0" y="0" width="${W}" height="${H}" fill="#fff" stroke="#000" stroke-width="0.3"/>
-      <text x="${leftW/2 + 1}" y="${H/2 + 3}" text-anchor="middle" fill="#000" font-size="14" font-weight="900" letter-spacing="-0.5">${letter}</text>
-      <line x1="${leftW + 1}" y1="1" x2="${leftW + 1}" y2="${H - 1}" stroke="#000" stroke-width="0.2"/>
-      <text x="${leftW + 10}" y="${H/2 - 0.5}" text-anchor="middle" fill="#000" font-size="7" font-weight="700">${item.thickness}</text>
-      <line x1="${leftW + 18}" y1="${H/2 + 1}" x2="${W - 2}" y2="${H/2 + 1}" stroke="#000" stroke-width="0.2"/>
-      <text x="${leftW + 10}" y="${H/2 + 5.5}" text-anchor="middle" fill="#000" font-size="5.5">${item.manufacturer}</text>
-      <text x="${W - 4}" y="${H/2 - 0.5}" text-anchor="end" fill="#000" font-size="7" font-weight="700">${item.height || ''}</text>
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:${FF}">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
+      <text x="${letterW/2}" y="${H/2 + 7}" text-anchor="middle" fill="#000" font-size="22" font-weight="900">${esc(letter)}</text>
+      <line x1="${letterW}" y1="0" x2="${letterW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+      <text x="${letterW + rightW/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="700">${esc(item.thickness)}</text>
+      <text x="${letterW + rightW*3/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="900">${esc(item.height || '')}</text>
+      <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+      <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
     </svg>`;
   }
 
-  // Bigovki / Ritsovki: letter + thickness + height (black bg) + manufacturer
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:Arial,sans-serif">
-    <rect x="0" y="0" width="${W}" height="${H}" fill="#fff" stroke="#000" stroke-width="0.3"/>
-    <text x="${leftW/2 + 1}" y="${H/2 + 3}" text-anchor="middle" fill="#000" font-size="14" font-weight="900" letter-spacing="-0.5">${letter}</text>
-    <line x1="${leftW + 1}" y1="1" x2="${leftW + 1}" y2="${H - 1}" stroke="#000" stroke-width="0.2"/>
-    <text x="${leftW + 10}" y="${H/2 - 0.5}" text-anchor="middle" fill="#000" font-size="7" font-weight="700">${item.thickness}</text>
-    <rect x="${W - 22}" y="1" width="21" height="${H - 2}" fill="#000" rx="1"/>
-    <text x="${W - 11.5}" y="${H/2 + 0.5}" text-anchor="middle" fill="#fff" font-size="7" font-weight="800">${item.height || ''}</text>
-    <line x1="${leftW + 18}" y1="${H/2 + 1}" x2="${W - 24}" y2="${H/2 + 1}" stroke="#000" stroke-width="0.2"/>
-    <text x="${leftW + 10}" y="${H/2 + 5.5}" text-anchor="middle" fill="#000" font-size="5.5">${item.manufacturer}</text>
+  // Б / Р: letter 0-24 | thickness 24-52 top | black block 52-80 top | manufacturer bottom
+  const blkX = 52, blkW = 28;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:${FF}">
+    <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
+    <text x="${letterW/2}" y="${H/2 + 7}" text-anchor="middle" fill="#000" font-size="22" font-weight="900">${esc(letter)}</text>
+    <line x1="${letterW}" y1="0" x2="${letterW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+    <text x="${letterW + rightW/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="700">${esc(item.thickness)}</text>
+    <rect x="${blkX}" y="0" width="${blkW}" height="${topH}" fill="#000"/>
+    <text x="${blkX + blkW/2}" y="${topH/2 + 4}" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">${esc(item.height || '')}</text>
+    <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+    <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
   </svg>`;
 }
 
@@ -183,9 +196,8 @@ $('parseBtn').onclick = function() {
   if (!text.trim()) { showError('Вставьте таблицу из Excel'); return; }
 
   parsedData = parseTable(text);
-  if (!parsedData.length) { showError('Не удалось распознать строки. Проверьте формат: Тип \\t Толщина \\t Заточка \\t Высота \\t Производитель \\t Количество'); return; }
+  if (!parsedData.length) { showError('Не удалось распознать строки. Формат: Тип \\t Толщина \\t Заточка \\t Высота \\t Производитель \\t Количество'); return; }
 
-  // Show table
   const tbody = $('tbody');
   tbody.innerHTML = '';
   let totalLabels = 0;
@@ -198,7 +210,6 @@ $('parseBtn').onclick = function() {
   $('parsedInfo').hidden = false;
   $('stats').innerHTML = `<span class="stat">${parsedData.length} типов · ${totalLabels} этикеток</span>`;
 
-  // Show preview (first of each type)
   const preview = $('preview');
   preview.hidden = false;
   preview.innerHTML = '<span class="result-label">Примеры этикеток</span>';
@@ -208,15 +219,35 @@ $('parseBtn').onclick = function() {
     shown.add(row.type);
     const card = document.createElement('div');
     card.className = 'label-card';
-    card.innerHTML = `<div class="label-svg-wrap">${renderLabelSVG(row)}</div><div class="info"><b>${row.type}</b> · ${row.thickness} · ${row.edge} · ${row.manufacturer} · ${row.qty} шт</div>`;
+    card.innerHTML = `<div class="label-svg-wrap">${renderLabelSVG(row)}</div><div class="info"><b>${row.type}</b> · ${row.thickness} · ${row.edge} · ${row.height || '—'} · ${row.manufacturer} · ${row.qty} шт</div>`;
     preview.appendChild(card);
   }
 
   $('pdfBtn').disabled = false;
-  $('printBtn').disabled = false;
 };
 
-function generatePDF() {
+function svgToCanvas(svgStr, w, h) {
+  return new Promise((resolve, reject) => {
+    const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const scale = 4;
+      canvas.width = w * scale;
+      canvas.height = h * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(scale, scale);
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(canvas);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('SVG render failed')); };
+    img.src = url;
+  });
+}
+
+async function generatePDF() {
   const { jsPDF } = window.jspdf || {};
   if (!jsPDF) { alert('PDF библиотека не загружена'); return; }
 
@@ -229,50 +260,50 @@ function generatePDF() {
   const marginX = (pageW - cols * labelW) / 2;
   const marginY = (pageH - rows * labelH) / 2;
 
-  // Expand data by quantity
   const allLabels = [];
   for (const item of parsedData) {
-    for (let i = 0; i < item.qty; i++) {
-      allLabels.push(item);
-    }
+    for (let i = 0; i < item.qty; i++) allLabels.push(item);
   }
 
   let labelIdx = 0;
-  let page = 0;
 
   while (labelIdx < allLabels.length) {
-    if (labelIdx > 0) { doc.addPage(); page++; }
+    if (labelIdx > 0) doc.addPage();
 
-    // Draw cut marks (corner marks)
+    // Cut marks — crosses at every grid intersection
     doc.setDrawColor(0);
-    doc.setLineWidth(0.1);
-    const markLen = 3;
+    doc.setLineWidth(0.15);
+    const m = 3;
     for (let r = 0; r <= rows; r++) {
       for (let c = 0; c <= cols; c++) {
         const x = marginX + c * labelW;
         const y = marginY + r * labelH;
-        // Top-left corner mark
-        if (c > 0 && r > 0) {
-          doc.line(x - markLen/2, y, x + markLen/2, y);
-          doc.line(x, y - markLen/2, x, y + markLen/2);
-        }
+        doc.line(x - m/2, y, x + m/2, y);
+        doc.line(x, y - m/2, x, y + m/2);
       }
     }
-    // Bottom-right page corner mark
-    const ex = marginX + cols * labelW;
-    const ey = marginY + rows * labelH;
-    doc.line(ex - markLen/2, ey, ex + markLen/2, ey);
-    doc.line(ex, ey - markLen/2, ex, ey + markLen/2);
 
-    // Draw labels
-    for (let i = 0; i < labelsPerPage && labelIdx < allLabels.length; i++) {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
+    // Render labels as canvas images
+    const renderBatch = [];
+    for (let i = 0; i < labelsPerPage && labelIdx + i < allLabels.length; i++) {
+      renderBatch.push({ idx: i, item: allLabels[labelIdx + i] });
+    }
+
+    const canvases = await Promise.all(
+      renderBatch.map(async ({ idx, item }) => {
+        const svg = renderLabelSVG(item);
+        const c = await svgToCanvas(svg, labelW * 10, labelH * 10);
+        return { idx, canvas: c };
+      })
+    );
+
+    for (const { idx, canvas } of canvases) {
+      const col = idx % cols;
+      const row = Math.floor(idx / cols);
       const x = marginX + col * labelW;
       const y = marginY + row * labelH;
-      const item = allLabels[labelIdx];
-
-      drawLabelOnPDF(doc, item, x, y, labelW, labelH);
+      const dataUrl = canvas.toDataURL('image/png');
+      doc.addImage(dataUrl, 'PNG', x, y, labelW, labelH);
       labelIdx++;
     }
   }
@@ -280,98 +311,8 @@ function generatePDF() {
   doc.save('etiketki-24x80.pdf');
 }
 
-function drawLabelOnPDF(doc, item, x, y, w, h) {
-  const isKnife = item.type === 'Н';
-
-  // Label border
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.2);
-  doc.setFillColor(255, 255, 255);
-  doc.rect(x, y, w, h, 'FD');
-
-  if (isKnife) {
-    // Knife: black left block with thickness
-    const leftW = 7;
-    doc.setFillColor(0, 0, 0);
-    doc.rect(x, y, leftW, h, 'F');
-    doc.setTextColor(255);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text(item.thickness, x + leftW/2, y + h/2 - 1, { align: 'center' });
-    doc.setFontSize(5);
-    doc.setFont('helvetica', 'normal');
-    doc.text('пт', x + leftW/2, y + h/2 + 3, { align: 'center' });
-
-    // Edge type (A/AA)
-    doc.setTextColor(0);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(item.edge || '', x + leftW + 12, y + h/2 + 0.5, { align: 'center' });
-
-    // Separator line
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.1);
-    doc.line(x + leftW + 3, y + h/2 + 2.5, x + w - 3, y + h/2 + 2.5);
-
-    // Manufacturer
-    doc.setFontSize(5.5);
-    doc.setFont('helvetica', 'normal');
-    doc.text(item.manufacturer || '', x + leftW + 12, y + h/2 + 5.5, { align: 'center' });
-    return;
-  }
-
-  // Bigovki / Ritsovki / Perforation
-  const leftW = 7;
-
-  // Large type letter
-  doc.setTextColor(0);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text(item.type, x + leftW/2 + 0.5, y + h/2 + 2, { align: 'center' });
-
-  // Separator line after letter
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.1);
-  doc.line(x + leftW + 1, y + 1, x + leftW + 1, y + h - 1);
-
-  // Thickness
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.text(item.thickness, x + leftW + 9, y + h/2 - 0.5, { align: 'center' });
-
-  // Separator line under thickness
-  doc.line(x + leftW + 2, y + h/2 + 2, x + w - 24, y + h/2 + 2);
-
-  // Manufacturer
-  doc.setFontSize(5.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(item.manufacturer || '', x + leftW + 9, y + h/2 + 5.5, { align: 'center' });
-
-  // Black block with height (for Б/Р) or dimensions (for П)
-  if (item.type === 'П') {
-    // Perforation: show dimensions
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text(item.height || '', x + w - 4, y + h/2 - 0.5, { align: 'right' });
-  } else {
-    // Black block
-    doc.setFillColor(0, 0, 0);
-    doc.rect(x + w - 22, y + 1, 21, h - 2, 'F');
-    doc.setTextColor(255);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text(item.height || '', x + w - 11.5, y + h/2 + 0.5, { align: 'center' });
-  }
-}
-
 $('pdfBtn').onclick = generatePDF;
 
-$('printBtn').onclick = function() {
-  if (!parsedData.length) return;
-  generatePDF();
-};
-
-// Auto-parse on paste
 $('paste').addEventListener('paste', function() {
   setTimeout(() => { $('parseBtn').click(); }, 100);
 });
