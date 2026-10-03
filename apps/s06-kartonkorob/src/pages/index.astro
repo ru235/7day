@@ -91,6 +91,8 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <span class="result-label" id="drawTitle">Схема заготовки 0201</span>
 <svg id="draw" viewBox="0 0 1000 360" width="100%" role="img" aria-label="Развёртка коробки 0201" style="background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);min-height:220px"></svg>
 <div id="legend" style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--brand);display:inline-block;border-radius:1px"></i> Рез</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:#f59e0b;display:inline-block;border-radius:1px"></i> Биговка (сгиб)</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:3px;background:var(--muted);display:inline-block;border-radius:1px"></i> Размер</span></div>
+<div class="viewbar" role="tablist" aria-label="Вид"><button class="btn ghost vbtn on" id="vDraw" role="tab" aria-selected="true" type="button">Чертёж</button><button class="btn ghost vbtn" id="v3d" role="tab" aria-selected="false" type="button">3D-сборка</button><button class="btn ghost vbtn" id="vReplay" type="button" title="Собрать заново">↻ Собрать</button><button class="btn ghost vbtn" id="vSpin" type="button" aria-pressed="true" title="Поворотный стол">⟳ Вращение</button></div>
+<div class="stage3d" id="stage3d" hidden><div class="spin" id="spin"><div class="cube" id="cube"></div></div><p class="note3d">Схематичная сборка по наружным L×W×H, без толщины стенок.</p></div>
 </aside>
 </div>
 <div class="calc-result-full" aria-live="polite">
@@ -111,6 +113,23 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
 <footer class="site"><div class="wrap"><div class="fgrid"><div><h3>formgen.ru</h3><p>Калькулятор гофротары FEFCO. Перед тиражом проверьте чертёж на плоттере. Обновлено 2026-09-15.</p></div><div><h3>Расчёты</h3><ul><li><a href="./">Калькулятор 0201</a></li><li><a href="prochnost/">Прочность BCT</a></li></ul></div><div><h3>Справочник</h3><ul><li><a href="fefco/">Типы FEFCO</a></li><li><a href="gofro/">Гофрокартон</a></li><li><a href="primery/">Примеры</a></li></ul></div></div></div></footer>
+<style is:global>
+.viewbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.vbtn.on{border-color:var(--brand);color:var(--brand);background:var(--brand-light)}
+.stage3d[hidden]{display:none}
+.stage3d{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;perspective:900px;overflow:hidden}
+.spin{height:300px;position:relative;transform-style:preserve-3d}
+.spin.rot{animation:turn 26s linear infinite}
+@keyframes turn{from{transform:rotateX(-12deg) rotateY(0)}to{transform:rotateX(-12deg) rotateY(360deg)}}
+.cube{position:absolute;left:50%;top:0;margin-left:-180px;transform-style:preserve-3d}
+.face{position:absolute;border:1.5px solid var(--brand);background:color-mix(in srgb, var(--brand) 10%, transparent);opacity:0;transform:var(--pl) translateY(26px);transition:opacity 450ms var(--ease-out),transform 450ms var(--ease-out)}
+.cube.on .face{opacity:1;transform:var(--pl)}
+.flap{position:absolute;border:1.5px dashed var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);transform-origin:bottom center;transform:var(--rz);transition:transform 500ms var(--ease-out)}
+.flap.f1{transition-delay:150ms}.flap.f2{transition-delay:350ms}
+.cube.closed .flap{transform:var(--rzc)}
+.note3d{font-size:12px;color:var(--muted);margin:6px 2px 2px}
+@media (prefers-reduced-motion: reduce){.spin.rot{animation:none}.face{transition-duration:150ms}.flap{transition-duration:150ms}}
+</style>
 <div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script is:inline>
 const $=id=>document.getElementById(id);
@@ -249,6 +268,7 @@ function calc(){const out=$('out'),r=lastCalc();
   const warnTxt=r.warns.length?`<br><span style="font-size:14px">⚠ ${r.warns.join('<br>⚠ ')}</span>`:'';
   out.innerHTML=`${r.T.name}. Заготовка: <b>${Math.round(r.Lb)}×${Math.round(r.Wb)} мм</b> (профиль ${r.fl})${r.T.note?`<br><span style="font-size:14px">${r.T.note}</span>`:''}<br>Картон: <b>${r.area.toFixed(2)} м²/шт</b> · ${r.Q} шт = ${r.total.toFixed(1)} м² · Вес ящика ≈ ${r.mBox.toFixed(2)} кг${r.P>0?`<br>Картон: <b>${(r.total*r.P).toFixed(0)} ₽</b>`:''}<br>${bctTxt}${warnTxt}<br><span style="font-size:14px">Оценка по Макки × коэффициент типа. Перед тиражом проверьте чертёж на плоттере.</span>`;
   drawPreview(r);
+  try{build3D(r)}catch(e){}
   try{const h=JSON.parse(localStorage.getItem('s06')||'[]');h.unshift({L:r.L,W:r.W,H:r.H,t:Date.now()});localStorage.setItem('s06',JSON.stringify(h.slice(0,20)))}catch(e){}
   try{window.s555ev&&s555ev('calc_run',{L:r.L})}catch(e){}
   return r;
@@ -352,6 +372,52 @@ $('dlDxf').onclick=downloadDXF;
 $('dlPdf').onclick=downloadPDF;
 $('printBtn').onclick=()=>{try{calc()}catch(e){} try{printSheet()}catch(e){} window.print();};
 $('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Скопировано'}catch(e){}};
+// --- 3D-сборка: параметрический кубоид, только transform/opacity ---
+const FLAP_CT=['0201','0202','0203','0204','0452','0454','0471','0713'];
+let spinOn=true, view3d=false, asmT=[];
+function setView(v){view3d=(v==='3d');
+  $('draw').style.display=view3d?'none':'';
+  $('stage3d').hidden=!view3d;
+  $('vDraw').classList.toggle('on',!view3d);$('vDraw').setAttribute('aria-selected',String(!view3d));
+  $('v3d').classList.toggle('on',view3d);$('v3d').setAttribute('aria-selected',String(view3d));
+  if(view3d)assemble();}
+function build3D(r){const cube=$('cube');cube.innerHTML='';cube.classList.remove('on','closed');
+  asmT.forEach(clearTimeout);asmT=[];
+  if(!r||r.err)return;
+  const SW=360,SH=300,CY=176;
+  const s=Math.min(300/r.L,220/r.W,150/r.H);
+  const Ls=r.L*s,Ws=r.W*s,Hs=r.H*s;
+  const cx=SW/2, cy=CY;
+  function face(w,h,l,t,pl){const d=document.createElement('div');d.className='face';
+    d.style.cssText=`width:${w}px;height:${h}px;left:${l}px;top:${t}px;--pl:${pl}`;cube.appendChild(d);}
+  face(Ls,Hs,cx-Ls/2,cy-Hs/2,`translateZ(${Ws/2}px)`);
+  face(Ls,Hs,cx-Ls/2,cy-Hs/2,`rotateY(180deg) translateZ(${Ws/2}px)`);
+  face(Ws,Hs,cx-Ws/2,cy-Hs/2,`rotateY(90deg) translateZ(${Ls/2}px)`);
+  face(Ws,Hs,cx-Ws/2,cy-Hs/2,`rotateY(-90deg) translateZ(${Ls/2}px)`);
+  face(Ls,Ws,cx-Ls/2,cy-Hs/2,`rotateX(90deg) translateZ(${Hs/2}px)`);
+  if(FLAP_CT.includes(r.ct)){const fh=Math.min(Ws/2,90);
+    [['f1',`translateZ(${Ws/2}px) rotateX(0deg)`,`translateZ(${Ws/2}px) rotateX(90deg)`],
+     ['f2',`translateZ(${-Ws/2}px) rotateX(0deg)`,`translateZ(${-Ws/2}px) rotateX(-90deg)`]].forEach(([cls,rz,rzc])=>{
+      const f=document.createElement('div');f.className='flap '+cls;
+      f.style.cssText=`width:${Ls}px;height:${fh}px;left:${cx-Ls/2}px;top:${cy-Hs/2-fh}px;--rz:${rz};--rzc:${rzc}`;
+      cube.appendChild(f);});}
+  if(view3d)assemble();
+}
+function assemble(){const cube=$('cube');
+  asmT.forEach(clearTimeout);asmT=[];
+  cube.classList.remove('on','closed');
+  void cube.offsetWidth;
+  asmT.push(setTimeout(()=>cube.classList.add('on'),60));
+  asmT.push(setTimeout(()=>cube.classList.add('closed'),650));
+}
+$('vDraw').onclick=()=>setView('draw');
+$('v3d').onclick=()=>setView('3d');
+$('vReplay').onclick=()=>{setView('3d');assemble();};
+$('vSpin').onclick=()=>{spinOn=!spinOn;$('spin').classList.toggle('rot',spinOn);
+  $('vSpin').setAttribute('aria-pressed',String(spinOn));$('vSpin').textContent=spinOn?'⟳ Вращение':'▶ Стоп';};
+(function(){const reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){spinOn=false;$('spin').classList.remove('rot');$('vSpin').setAttribute('aria-pressed','false');}
+  else $('spin').classList.add('rot');})();
 ['ct','cf','cg','cm','cq','cp'].forEach(id=>$(id).addEventListener('change',calc));
 (function(){const q=new URLSearchParams(location.search);if(q.get('type')&&TYPES[q.get('type')])$('ct').value=q.get('type');calc()})();
 (function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
