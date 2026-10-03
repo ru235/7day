@@ -132,6 +132,9 @@ header.site nav a[aria-current="page"] { color: var(--fg); background: var(--car
   .calc-side { position: sticky; top: 76px }
 }
 
+/* Heavy blocks render lazily (below fold); print forces full render */
+.faq, .cards, table.data, footer.site { content-visibility: auto; contain-intrinsic-size: auto 600px }
+
 /* Breadcrumbs */
 .crumbs { font-size: 13px; color: var(--muted); margin: 18px 0 0 }
 .crumbs a { color: var(--muted); text-decoration: none }
@@ -290,7 +293,7 @@ svg { max-width: 100%; height: auto }
 svg text:not([fill]) { fill: var(--fg) }
 
 /* Animated ambient background: GPU-only (transform/opacity), slow drift */
-.bg-field { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none }
+.bg-field { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; contain: strict }
 header.site { position: sticky; top: 0; z-index: 50 }
 main.wrap, footer.site { position: relative; z-index: 1 }
 .blob { position: absolute; border-radius: 9999px; filter: blur(90px); opacity: 0.5; will-change: transform }
@@ -307,6 +310,11 @@ html[data-theme="dark"] .blob { opacity: 0.32 }
 @keyframes drift1 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-6vmax, 5vmax) scale(1.12) } }
 @keyframes drift2 { from { transform: translate(0, 0) scale(1.08) } to { transform: translate(5vmax, -4vmax) scale(0.95) } }
 @keyframes drift3 { from { transform: translate(0, 0) scale(1) } to { transform: translate(-4vmax, -5vmax) scale(1.15) } }
+/* Mobile GPU: two blobs instead of three, smaller blur */
+@media (max-width: 759px) {
+  .blob.b3 { display: none }
+  .blob { filter: blur(60px) }
+}
 
 /* One-time entrance: opacity + small rise, staggered, never from scale(0) */
 .hero h1, .hero p, main.wrap > h1 {
@@ -350,6 +358,7 @@ html[data-theme="dark"] .blob { opacity: 0.32 }
 
 /* Print: only the report fits on A4 */
 @media print {
+  .faq, .cards, table.data, footer.site { content-visibility: visible }
   .bg-field, .tbtn, .burger, .cookies { display: none !important }
   header.site, footer.site { display: none !important }
   main.wrap > * { display: none !important }
