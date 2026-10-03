@@ -1,17 +1,23 @@
 ---
 const SITE = 'https://domenpodbor.ru';
-const title = 'Подбор сечения кабеля и автомата — калькулятор по мощности | domenpodbor.ru';
-const desc = 'Калькулятор сечения кабеля по мощности и току: медь/алюминий, 220В/380В/12В, длина и падение напряжения. Подбор автомата по ПУЭ. Таблицы, FAQ, печать.';
+const title = 'Подбор домена: генератор имён + проверка занятости | domenpodbor.ru';
+const desc = 'Генератор доменных имён: транслит, префиксы, короткие варианты. Проверка DNS прямо в браузере + кнопка проверки на reg.ru.';
 const faqs = [
-  { q: 'Какое сечение нужно на 5 кВт в 220В?', a: 'Ток ≈ 22.7А. Медь скрытая — 4 мм² (38А) + автомат 25А. 2.5 мм² (27А) — на пределе, не рекомендуется.' },
-  { q: 'Какой автомат ставить на 2.5 мм² меди?', a: 'Не более 25А (лучше 20А для розеток), т.к. длительный ток 2.5 мм² — 27А.' },
-  { q: 'Как учесть длину кабеля?', a: 'Считаем падение напряжения: dU=2·I·L·ρ/S. Для 220В держите падение <3–5%. При длине >30м сечение обычно +1 шаг.' },
+  { q: 'Как проверить, свободен ли домен?', a: 'Вбейте имя — проверим DNS. Нет записей — скорее свободен, но точно скажет только whois регистратора: кнопка «Проверить на reg.ru».' },
+  { q: 'Какой длины должен быть домен?', a: 'До 12–15 символов, без дефисов и цифр, если возможно. Короткое и произносимое бьёт точное вхождение ключа.' },
+  { q: 'Транслит или перевод?', a: 'Транслит (shinapodbor) понятнее русским, перевод (tirefinder) — если целитесь в англоязычных. Не смешивайте оба в одном имени.' },
+  { q: 'Стоит ли брать .ru?', a: 'Для России — да: доверие и ранжирование в Яндексе. Зеркало в .рф — по желанию, с редиректом.' },
+  { q: 'Домен занят — что делать?', a: 'Префикс (get, pro, my), суффикс (online, pro, guru) или другое окончание. Генератор ниже выдаст 40 вариантов.' },
 ];
 const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const siteJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'domenpodbor.ru', url: SITE, inLanguage: 'ru' });
+const pageJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: SITE + '/', inLanguage: 'ru', dateModified: '2026-09-09', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['#tldr'] } });
+const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'HowTo', name: 'Как подобрать и проверить домен', inLanguage: 'ru', step: [{ '@type': 'HowToStep', name: 'Придумайте основу', text: 'Ключ бизнеса латиницей или транслитом.' }, { '@type': 'HowToStep', name: 'Сгенерируйте варианты', text: 'Префиксы и суффиксы, фильтр длины.' }, { '@type': 'HowToStep', name: 'Проверьте', text: 'DNS здесь, whois — у регистратора, затем регистрация.' }] });
 ---
 <!doctype html>
 <html lang="ru">
 <head>
+<script is:inline src="/theme-head.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
@@ -20,55 +26,83 @@ const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQ
 <meta property="og:title" content={title} />
 <meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="/_s555.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate" type="application/json" title="Данные сайта для ИИ" href="/api/data.json" />
+<link rel="stylesheet" href="/_s555.css?v=1" />
 <script type="application/ld+json" set:html={faqJson}></script>
-</head>
-<body>
-<header class="site"><div class="wrap"><nav><b>domenpodbor.ru</b><a href="/">Калькулятор</a><a href="/sechenie-tok-tablica/">Таблица</a><a href="/avtomat-vybor/">Автомат</a></nav></div></header>
+<script type="application/ld+json" set:html={siteJson}></script>
+<script type="application/ld+json" set:html={pageJson}></script>
+<script type="application/ld+json" set:html={howtoJson}></script>
+<!-- METRIKA: вставить код счётчика domenpodbor.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="доменподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="5" fill="none" stroke="var(--accent)" stroke-width="2.5"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/></svg><span>доменподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/" aria-current="page">Генератор</a><a href="/kak-pridumat">Как придумать</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
 <main class="wrap">
 <section class="hero">
-<h1>Сечение кабеля и автомат по мощности — за 30 секунд</h1>
-<p>Медь и алюминий, 220 / 380 / 12 В, длина линии и падение напряжения. По методике ПУЭ, с таблицами и печатью результата.</p>
+<p class="eyebrow">Генератор доменов</p>
+<h1>Придумать и проверить домен</h1>
+<p>Ключевое слово — 40 вариантов с транслитом. Проверка DNS прямо в браузере, финал — у регистратора.</p>
 </section>
-<div class="answer" id="tldr"><b>Короткий ответ:</b> ток I = P / U. Для 5 кВт в 220 В → 22.7 А → медь 4 мм² + автомат 25А. Для 3.5 кВт → 15.9 А → медь 2.5 мм² + автомат 16А. Длину свыше 30 м — сечение +1 шаг.</div>
-<section class="calc" id="calc">
-<label>Мощность, Вт <input id="p" type="number" value="5000" min="50" max="100000" /></label>
-<label>Напряжение <select id="u"><option value="220">220 В (дом)</option><option value="380">380 В (3 фазы)</option><option value="12">12 В (авто)</option></select></label>
-<label>Материал <select id="m"><option value="cu">Медь</option><option value="al">Алюминий</option></select></label>
-<label>Длина линии, м <input id="l" type="number" value="20" min="1" max="500" /></label>
-<button class="btn" id="go">Рассчитать</button>
-<button class="btn ghost" id="print">Печать</button>
+<div class="answer" id="tldr"><b>Короткий ответ:</b> хорошее имя — до 15 символов, без дефисов, произносится вслух. DNS без записей ≠ гарантия свободы: точный ответ даёт только whois.</div>
+<section class="calc" aria-label="Генератор доменов">
+<div class="calc-layout">
+<div class="calc-fields">
+<label>Ключевое слово <input id="kw" type="text" value="шина" /></label>
+<label>Зона <select id="zone"><option value=".ru">.ru</option><option value=".su">.su</option><option value=".рф">.рф</option></select></label>
+<label>Макс. длина <select id="maxlen"><option value="12">12</option><option value="15" selected>15</option><option value="20">20</option><option value="63">без лимита</option></select></label>
+<div><button class="btn" id="go">Сгенерировать</button>
+<button class="btn ghost" id="csv">Скачать CSV</button></div>
+</div>
+<aside class="calc-side" aria-live="polite">
+<span class="result-label">Проверка</span>
 <div class="result" id="out">—</div>
-<p style="font-size:13px;color:var(--muted)">История сохраняется локально. <button class="btn ghost" id="share">Скопировать ссылку</button></p>
+<p style="font-size:13px;color:var(--muted)"><button class="btn ghost" id="check">Проверить все DNS</button></p>
+</aside>
+</div>
 </section>
-<h2>Таблица: медь скрытая (ПУЭ)</h2>
-<table class="data"><tr><th>Сечение, мм²</th><th>Ток, А</th><th>Мощность 220В, кВт</th><th>Автомат</th></tr>
-<tr><td>1.5</td><td>19</td><td>4.1</td><td>16А</td></tr>
-<tr><td>2.5</td><td>27</td><td>5.9</td><td>20–25А</td></tr>
-<tr><td>4</td><td>38</td><td>8.3</td><td>32А</td></tr>
-<tr><td>6</td><td>50</td><td>11</td><td>40А</td></tr>
-<tr><td>10</td><td>70</td><td>15.4</td><td>63А</td></tr></table>
-<h2>Как пользоваться</h2>
-<ol><li>Введите мощность и напряжение.</li><li>Укажите длину — учтём падение.</li><li>Возьмите результат в магазин / распечатайте.</li></ol>
+<h2>Варианты (<span id="cnt">0</span>)</h2>
+<div class="cards" id="list"></div>
 <h2>Частые вопросы</h2>
 <div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
-<p><a href="/sechenie-tok-tablica/">Полная таблица сечение–ток →</a> · <a href="/avtomat-vybor/">Как выбрать автомат →</a></p>
+<section class="print-sheet" id="psheet" aria-hidden="true"></section>
 </main>
-<footer class="site"><div class="wrap">domenpodbor.ru · расчёт ориентировочный, сверяйтесь с ПУЭ и электриком · Обновлено 2026-09-06</div></footer>
-<style>@import url('/_s555.css');</style>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>domenpodbor.ru</h3><p>Генератор и проверка доменов. DNS — предварительно, финал — whois. Обновлено 2026-09-09.</p></div><div><h3>Сервис</h3><ul><li><a href="/">Генератор</a></li><li><a href="/kak-pridumat">Как придумать имя</a></li></ul></div></div></div></footer>
+<div class="cookies" id="cookies" hidden><div class="wrap"><p>Мы не собираем ваши данные и не ставим собственные куки. Для статистики используем Яндекс.Метрику — она может использовать свои куки. <button class="btn" id="cookiesOk" type="button">Понятно</button></p></div></div>
 <script>
-const RHO={cu:0.0175,al:0.028},TAB={cu:[[1.5,19],[2.5,27],[4,38],[6,50],[10,70]],al:[[2.5,20],[4,28],[6,36],[10,50]]},BR=[6,10,16,20,25,32,40,50,63];
-function calc(){const P=+p.value,U=+u.value,M=m.value,L=+l.value;
-const I=U===380?P/(1.732*380*0.95):P/U;
-const row=TAB[M].find(r=>r[1]>=I)||[16,I];
-const S=row[0],Imax=row[1],br=BR.filter(b=>b<=Imax).pop();
-const dU=U===380?(1.732*I*L*RHO[M]/S):(2*I*L*RHO[M]/S),pct=dU/U*100;
-out.innerHTML=`Ток: <b>${I.toFixed(1)} А</b> · Сечение: <b>${S} мм² (${M==='cu'?'медь':'алюминий'})</b> · Автомат: <b>${br}А</b><br>Падение: ${dU.toFixed(1)} В (${pct.toFixed(1)}%) ${pct>5?'— увеличьте сечение':''}`;
-try{const h=JSON.parse(localStorage.getItem('s04')||'[]');h.unshift({P,U,M,L,t:Date.now()});localStorage.setItem('s04',JSON.stringify(h.slice(0,20)))}catch(e){}
-try{window.s555ev&&s555ev('calc_run',{P,U})}catch(e){}}
-go.onclick=calc;print.onclick=()=>window.print();
-share.onclick=async()=>{const s=location.href;try{await navigator.clipboard.writeText(s);share.textContent='Скопировано'}catch(e){}};
-(function(){const q=new URLSearchParams(location.search);if(q.get('p'))p.value=q.get('p');calc()})();
+const $=id=>document.getElementById(id);
+const TR={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+const PRE=['get','go','my','pro','top','best','super','online'];
+const SUF=['online','pro','guru','hub','lab','shop','box','master','info','24'];
+function translit(s){return String(s||'').toLowerCase().split('').map(ch=>TR[ch]!==undefined?TR[ch]:ch).join('').replace(/[^a-z0-9]+/g,'');}
+let VARIANTS=[];
+function gen(){const base=translit($('kw').value),zone=$('zone').value,max=+($('maxlen').value);
+  const set=new Set();if(base)set.add(base);
+  PRE.forEach(p=>set.add(p+base));SUF.forEach(s=>set.add(base+s));
+  set.add(base+base.slice(0,3));
+  VARIANTS=[...set].map(n=>n.slice(0,63)).filter(n=>n.length>=2&&n.length<=max).slice(0,40).map(n=>({name:n+zone,short:n,st:'?'}));
+  render();try{window.s555ev&&s555ev('calc_run',{n:VARIANTS.length})}catch(e){}
+  return VARIANTS;}
+function render(){$('cnt').textContent=VARIANTS.length;
+  $('list').innerHTML=VARIANTS.map((v,i)=>{const dot=v.st==='free'?'var(--accent)':v.st==='taken'?'var(--danger)':'var(--muted)';
+    return `<div class="card"><h3><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${dot};margin-right:8px"></span>${v.name}</h3><p>${v.st==='free'?'DNS пуст — вероятно свободен':v.st==='taken'?'Есть DNS-записи — скорее занят':'Не проверен'}</p><p><a class="btn ghost" href="https://www.reg.ru/whois/?dname=${encodeURIComponent(v.name)}" target="_blank" rel="noopener">Проверить на reg.ru</a></p></div>`}).join('')||'<p>Введите ключевое слово.</p>';}
+async function doh(name){try{const r=await fetch('https://dns.google/resolve?name='+encodeURIComponent(name)+'&type=A');const j=await r.json();
+  return j.Status===3?'free':(j.Status===0&&j.Answer&&j.Answer.length?'taken':'?');}catch(e){return '?'}
+  try{const r=await fetch('https://cloudflare-dns.com/dns-query?name='+encodeURIComponent(name)+'&type=A',{headers:{accept:'application/dns-json'}});const j=await r.json();
+  return j.Status===3?'free':(j.Status===0&&j.Answer&&j.Answer.length?'taken':'?');}catch(e){return '?'}}
+async function checkAll(){const out=$('out');let free=0;
+  for(let i=0;i<VARIANTS.length;i++){VARIANTS[i].st='…';render();
+    VARIANTS[i].st=await doh(VARIANTS[i].name);
+    if(VARIANTS[i].st==='free')free++;
+    if(i%5===4)render();}
+  render();
+  out.innerHTML=`Проверено: <b>${VARIANTS.length}</b> · Вероятно свободны: <b>${free}</b><br><span style="font-size:14px">DNS — предварительно. Точный ответ — whois регистратора по кнопкам выше.</span>`;}
+$('go').onclick=()=>{gen();$('out').textContent='Нажмите «Проверить все DNS».';};
+$('check').onclick=checkAll;
+$('csv').onclick=()=>{if(!VARIANTS.length)return;const csv='domain,status\n'+VARIANTS.map(v=>v.name+','+v.st).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='domains.csv';a.click();};
+(function(){const q=new URLSearchParams(location.search);if(q.get('kw'))$('kw').value=q.get('kw');gen()})();
+(function(){const c=$('cookies');let ok=null;try{ok=localStorage.getItem('s555cookies')}catch(e){} if(!ok&&c)c.hidden=false;
+ const b=$('cookiesOk');if(b)b.onclick=()=>{try{localStorage.setItem('s555cookies','1')}catch(e){} if(c)c.hidden=true;};})();
 </script>
 </body>
 </html>

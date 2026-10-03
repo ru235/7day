@@ -1,0 +1,30 @@
+---
+const SITE = 'https://domenpodbor.ru';
+const title = 'Как придумать доменное имя: 7 правил | domenpodbor.ru';
+const desc = 'Длина, транслит, без дефисов, проверка истории и товарных знаков. Чек-лист перед регистрацией.';
+const faqs = [
+  { q: 'Проверять ли историю домена?', a: 'Да: web.archive.org + whois. Домен с санкциями или спамом принесёт проблемы в поиске.' },
+  { q: 'Нужен ли товарный знак?', a: 'Проверьте znakoved и Роспатент: чужой бренд в домене — повод для суда и отъёма.' },
+];
+const faqJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+const crumbs = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Главная', item: SITE + '/' }, { '@type': 'ListItem', position: 2, name: 'Как придумать', item: SITE + '/kak-pridumat' }] });
+const article = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Article', headline: 'Как придумать доменное имя', description: desc, inLanguage: 'ru', datePublished: '2026-09-09', dateModified: '2026-09-09', author: { '@type': 'Organization', name: 'domenpodbor.ru' } });
+---
+<!doctype html><html lang="ru"><head><script is:inline src="/theme-head.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><meta name="description" content={desc} /><link rel="canonical" href={SITE + '/kak-pridumat'} />
+<meta property="og:title" content={title} /><meta property="og:description" content={desc} /><meta property="og:type" content="article" /><meta property="article:section" content="Гайд" /><meta property="article:published_time" content="2026-09-09" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_s555.css?v=1" /><script type="application/ld+json" set:html={faqJson}></script><script type="application/ld+json" set:html={crumbs}></script><script type="application/ld+json" set:html={article}></script>
+<!-- METRIKA: вставить код счётчика domenpodbor.ru -->
+<script is:inline src="/theme.js" defer></script></head>
+<body><div class="bg-field" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<header class="site"><div class="wrap"><nav><a class="brand" href="/" aria-label="доменподбор — на главную"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="5" fill="none" stroke="var(--accent)" stroke-width="2.5"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/></svg><span>доменподбор<small>.ru</small></span></a><button class="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="l1" d="M2 5h16"/><path class="l2" d="M2 10h16"/><path class="l3" d="M2 15h16"/></svg></button><div class="nav-links" id="navlinks"><a href="/">Генератор</a><a href="/kak-pridumat" aria-current="page">Как придумать</a><button id="ttheme" class="tbtn" type="button" aria-label="Тёмная тема" title="Тёмная тема">◐</button></div></nav></div></header>
+<main class="wrap"><nav class="crumbs" aria-label="Хлебные крошки"><a href="/">Главная</a> / <span aria-current="page">Как придумать</span></nav>
+<h1>Как придумать доменное имя: 7 правил</h1>
+<div class="answer"><b>Коротко:</b> до 15 символов, без дефисов и цифр, произносится вслух, без чужих брендов, история чистая.</div>
+<ol><li><b>Короче.</b> Каждый лишний символ − запоминаемость. Идеал — до 12.</li><li><b>Без дефисов и цифр.</b> Их невозможно продиктовать без ошибок.</li><li><b>Произносится.</b> Тест бара: скажите вслух — поймут и запишут?</li><li><b>Транслит или перевод — не смесь.</b> shinapodbor да, tirepodbor нет.</li><li><b>История.</b> web.archive + whois: санкции и спам прошлого владельца — ваши проблемы.</li><li><b>Товарные знаки.</b> Чужой бренд в имени — суд и потеря домена.</li><li><b>Зона.</b> .ru для России, .рф — редиректом, занятое — префикс/суффикс.</li></ol>
+<h2>Частые вопросы</h2>
+<div class="faq">{faqs.map(f => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}</div>
+<p><a href="/">← к генератору</a></p></main>
+<footer class="site"><div class="wrap"><div class="fgrid"><div><h3>domenpodbor.ru</h3><p>Генератор и проверка доменов. DNS — предварительно, финал — whois. Обновлено 2026-09-09.</p></div><div><h3>Сервис</h3><ul><li><a href="/">Генератор</a></li><li><a href="/kak-pridumat">Как придумать имя</a></li></ul></div></div></div></footer>
+</body></html>
