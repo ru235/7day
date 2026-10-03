@@ -72,7 +72,7 @@ const howtoJson = JSON.stringify({ '@context': 'https://schema.org', '@type': 'H
 <label>Ширина внутр., мм <span id="cwVal" style="float:right;font-weight:600;color:var(--brand)">300</span><input id="cw" type="range" value="300" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
 <label>Высота внутр., мм <span id="chVal" style="float:right;font-weight:600;color:var(--brand)">250</span><input id="ch" type="range" value="250" min="50" max="1500" step="10" style="width:100%;accent-color:var(--brand)" /></label>
 </div>
-<label>Конструкция <select id="ct"><option value="0201">0201 — четырёхклапанная</option><option value="0200">0200 — лоток без верха</option><option value="0202">0202 — клапаны внахлёст</option><option value="0203">0203 — полное перекрытие</option><option value="0204">0204 — RSC усиленная</option><option value="0301">0301 — телескоп</option><option value="0310">0310 — крышка телескоп</option><option value="0312">0312 — дно телескоп</option><option value="0320">0320 — телескоп половинный</option><option value="0427">0427 — архивная складная</option><option value="0452">0452 — обёрточная</option><option value="0454">0454 — лоток с крышкой</option><option value="0471">0471 — самосборная</option><option value="0701">0701 — папка с замком</option><option value="0710">0710 — папка так-замок</option><option value="0711">0711 — папка автомат</option><option value="0713">0713 — почтовый самосбор</option><option value="0733">0733 — папка с авто-дном</option><option value="0760">0760 — обёртка шоу-бокс</option><option value="0771">0771 — шоу-бокс SRP</option></select></label>
+<label>Конструкция <select id="ct"><option value="0201">0201 — четырёхклапанная</option><option value="0200">0200 — лоток без верха</option><option value="0202">0202 — клапаны внахлёст</option><option value="0203">0203 — полное перекрытие</option><option value="0204">0204 — удлинённый верх</option><option value="0301">0301 — телескоп</option><option value="0310">0310 — крышка телескоп</option><option value="0312">0312 — дно телескоп</option><option value="0320">0320 — обечайка-рукав</option><option value="0427">0427 — архивная складная</option><option value="0452">0452 — обёрточная</option><option value="0454">0454 — лоток с крышкой</option><option value="0471">0471 — самосборная</option><option value="0701">0701 — папка с замком</option><option value="0710">0710 — папка так-замок</option><option value="0711">0711 — папка автомат</option><option value="0713">0713 — почтовый самосбор</option><option value="0733">0733 — папка с авто-дном</option><option value="0426">0426 — самосборная с крышкой</option><option value="0771">0771 — шоу-бокс SRP</option></select></label>
 <label>Профиль <select id="cf"><option value="B">B (3 мм)</option><option value="C" selected>C (4 мм)</option><option value="E">E (1.6 мм)</option><option value="BC">BC (7 мм)</option></select></label>
 <label>Марка картона <select id="cg"><option value="5.5">Т-22</option><option value="7" selected>Т-23</option><option value="8.5">Т-24</option><option value="9.5">П-32</option><option value="11">П-33</option></select></label>
 <div style="margin-top:10px;padding:14px;background:var(--bg);border:1px dashed var(--line);border-radius:10px">
@@ -122,11 +122,12 @@ const TYPES={
  '0200':{name:'0200 — лоток', note:'Верх открыт, дно на скотч. Высота борта = H.'},
  '0202':{name:'0202 — клапаны внахлёст', note:'Наружные клапаны длиннее на 25 мм — прочнее стык.'},
  '0203':{name:'0203 — полное перекрытие', note:'Клапаны перекрывают всю ширину: максимум прочности, больше расход.', bct:1.15},
- '0204':{name:'0204 — RSC усиленная', note:'Усиленные клапаны.', bct:1.05},
+ '0204':{name:'0204 — удлинённый верх', note:'Высокие верхние клапаны для высоких товаров и дисплеев.', bct:1.0},
  '0301':{name:'0301 — телескоп', note:'Две детали (крышка + дно): только штамп или плоттер.', bct:1.1},
  '0310':{name:'0310 — крышка телескоп', note:'Только крышка: дно считается отдельно.', bct:0},
  '0312':{name:'0312 — дно телескоп', note:'Только дно: крышка считается отдельно.', bct:0.7},
- '0320':{name:'0320 — телескоп половинный', note:'Две детали: только штамп или плоттер.', bct:1.15},
+ '0320':{name:'0320 — обечайка-рукав', note:'Открытый рукав поверх ящика: усиливает штабель. Прочность — у основного ящика.', bct:0},
+ '0426':{name:'0426 — самосборная с крышкой', note:'Самозапирающаяся крышка, собирается без скотча.', bct:0.65},
  '0427':{name:'0427 — архивная', note:'Оценка: точная развёртка — по штампу производителя.', bct:0.6},
  '0452':{name:'0452 — обёрточная', note:'Оценка: оборачивается вокруг товара, точная развёртка — по штампу.', bct:0.9},
  '0454':{name:'0454 — лоток с крышкой', note:'Оценка: точная развёртка — по штампу производителя.', bct:0.8},
@@ -136,7 +137,6 @@ const TYPES={
  '0711':{name:'0711 — папка-автомат', note:'Оценка: складная папка, точная развёртка — по штампу.', bct:0.6},
  '0713':{name:'0713 — почтовый самосбор', note:'Оценка: crash-lock для e-commerce, только штамп или плоттер.', bct:0.7},
  '0733':{name:'0733 — папка с авто-дном', note:'Оценка: точная развёртка — по штампу.', bct:0.65},
- '0760':{name:'0760 — обёртка шоу-бокс', note:'Оценка: точная развёртка — по штампу.', bct:0.7},
  '0771':{name:'0771 — шоу-бокс', note:'Оценка: лоток + крышка для полок, точная развёртка — по штампу.', bct:0.8}};
 function lastCalc(){const L=+$('cl').value,W=+$('cw').value,H=+$('ch').value;
   const F=FLUTE[$('cf').value]||FLUTE.C, t=F.t, ECT=+$('cg').value, M=+$('cm').value||0, Q=Math.max(1,parseInt($('cq').value)||1), P=+$('cp').value||0;
@@ -145,12 +145,13 @@ function lastCalc(){const L=+$('cl').value,W=+$('cw').value,H=+$('ch').value;
   if(H<2*t)return {err:'Высота меньше двух толщин картона — такой ящик не соберётся.'};
   const glue=Math.min(40,Math.max(20,0.15*W));
   let Lb,Wb,mul=1,flapTop=W/2,flapBot=W/2;
-  if(ct==='0200'||ct==='0301'||ct==='0310'||ct==='0312'||ct==='0320'){Lb=2*(L+W)+glue;Wb=H+W/2;flapTop=0;
-    mul=ct==='0301'?2:ct==='0320'?1.6:ct==='0310'?0.6:ct==='0312'?0.7:1;}
+  if(ct==='0200'||ct==='0301'||ct==='0310'||ct==='0312'){Lb=2*(L+W)+glue;Wb=H+W/2;flapTop=0;
+    mul=ct==='0301'?2:ct==='0310'?0.6:ct==='0312'?0.7:1;}
+  else if(ct==='0320'){Lb=2*(L+W)+glue;Wb=H+4*t;flapTop=0;flapBot=0;}
+  else if(ct==='0204'){Lb=2*(L+W)+glue;Wb=H+W+W/2+6*t;flapTop=W;}
   else if(ct==='0202'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
   else if(ct==='0203'){Lb=2*(L+W)+glue;Wb=H+2*W;flapTop=W;flapBot=W;}
-  else if(ct==='0204'){Lb=2*(L+W)+glue;Wb=H+W;mul=1.05;}
-  else if(ct==='0701'||ct==='0710'||ct==='0711'||ct==='0733'||ct==='0760'){Lb=2*L+W+40;Wb=2*H+W;mul=(ct==='0733'||ct==='0760')?1.3:1;}
+  else if(ct==='0701'||ct==='0710'||ct==='0711'||ct==='0733'||ct==='0426'){Lb=2*L+W+40;Wb=2*H+W;mul=(ct==='0733')?1.3:(ct==='0426'?1.1:1);}
   else if(ct==='0427'){
     const D=H, Th=t;
     Lb = L + 2*D + W + 40 + 4*Th;
@@ -284,7 +285,7 @@ function toDXF(r){
     rect(0,ft,r.Lb,bh,'CUT');
     [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> line(x,ft,x,ft+bh,'SCORE'));
     if(ft>0) line(0,ft,r.Lb,ft,'SCORE');
-  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+  } else if(r.ct==='0426'||r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
     const cx=r.Lb/2, cy=r.Wb/2;
     rect(cx-r.L/2,cy-r.H/2,r.L,r.H,'CUT');
     rect(cx-r.L/2,cy-r.H/2-fb,r.L,fb,'CUT');
@@ -330,7 +331,7 @@ function downloadPDF(){const r=lastCalc()||calc();if(!r)return;
     if(ft>0) rct(0,0,r.Lb,ft);
     rct(0,ft,r.Lb,bh);
     [0,r.L,r.L+r.W,2*r.L+r.W].forEach(x=> ln(x,ft,x,ft+bh));
-  } else if(r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
+  } else if(r.ct==='0426'||r.ct==='0427'||r.ct.indexOf('07')===0||r.ct==='0452'||r.ct==='0454'){
     const cx=r.Lb/2, cy=r.Wb/2;
     rct(cx-r.L/2,cy-r.H/2,r.L,r.H);
     rct(cx-r.L/2,cy-r.H/2-fb,r.L,fb); rct(cx-r.L/2,cy+r.H/2,r.L,fb);
