@@ -30,13 +30,14 @@ const desc = 'Сервис печати этикеток 24×80 мм для би
   .label-card .info { padding: 8px 14px; font-size: 13px; color: var(--muted); }
   .label-card .info b { color: var(--fg); }
   .label-svg-wrap { padding: 10px; background: #fff; display: flex; align-items: center; justify-content: center; }
-  .label-svg-wrap svg { display: block; width: 320px; height: 96px; }
+  .label-svg-wrap svg { display: block; width: 420px; height: 96px; }
   .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
   .hint { font-size: 13px; color: var(--muted); margin: 8px 0; }
   .error { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); border-radius: var(--radius); padding: 12px 16px; margin: 12px 0; font-size: 14px; }
   .stat { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 600; margin: 8px 0; }
 </style>
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script is:inline src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script is:inline src="../theme.js" defer></script>
 </head>
 <body>
@@ -121,35 +122,65 @@ function showError(msg) {
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 const FF = 'Calibri,Segoe UI,Arial,sans-serif';
+let labelCounter = 0;
+
+function translit(s) {
+  const map = {'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'E','Ж':'Zh','З':'Z','И':'I','Й':'Y','К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R','С':'S','Т':'T','У':'U','Ф':'F','Х':'Kh','Ц':'Ts','Ч':'Ch','Ш':'Sh','Щ':'Shch','Ъ':'','Ы':'Y','Ь':'','Э':'E','Ю':'Yu','Я':'Ya','а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'};
+  return s.replace(/[^\x00-\x7F]/g, ch => map[ch] || ch);
+}
+
+function makeQR(text, size) {
+  const qr = qrcode(0, 'L');
+  qr.addData(text);
+  qr.make();
+  const modules = qr.getModuleCount();
+  const cellSize = size / modules;
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+  for (let r = 0; r < modules; r++) {
+    for (let c = 0; c < modules; c++) {
+      if (qr.isDark(r, c)) {
+        svg += `<rect x="${c * cellSize}" y="${r * cellSize}" width="${cellSize + 0.1}" height="${cellSize + 0.1}" fill="#000"/>`;
+      }
+    }
+  }
+  svg += '</svg>';
+  return svg;
+}
 
 function renderLabelSVG(item) {
-  const W = 80, H = 24;
+  const W = 100, H = 24;
+  const qrZone = 20;
+  const qrPad = 2;
+  const qrImg = qrZone - qrPad * 2;
+  const qrX = W - qrZone + qrPad;
+  const qrY = (H - qrImg) / 2;
+  const contentW = W - qrZone;
   const isKnife = item.type === 'Н';
   const typeNames = { 'Б': 'Б', 'Р': 'Р', 'П': 'П' };
-
-  // Б/Р/П layout:
-  // Letter zone: 0-24mm wide, full height 24mm
-  // Top zone (0-15mm): thickness (24-52) | black block with height (52-80)
-  // Bottom zone (15-24mm): manufacturer centered (24-80)
   const letterW = 24;
   const topH = 15;
   const botY = topH;
   const botH = H - topH;
-  const rightStart = letterW;
-  const rightW = W - letterW;
-  const midX = letterW + rightW / 2;
+  const rightW = contentW - letterW;
+  const rightMid = letterW + rightW / 2;
+
+  labelCounter++;
+  const uid = 'FRM-' + String(labelCounter).padStart(5, '0');
+  const qrText = translit(`${item.type} ${item.thickness} ${item.edge} ${item.height} ${item.manufacturer} ${uid}`);
+  const qrSvg = makeQR(qrText, qrImg * 10);
 
   if (isKnife) {
-    // Knife: black block 0-24 full height, edge type 24-80 top half, manufacturer bottom
     return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:${FF}">
       <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
       <rect x="0" y="0" width="${letterW}" height="${H}" fill="#000"/>
       <text x="${letterW/2}" y="${H/2 + 5}" text-anchor="middle" fill="#fff" font-size="20" font-weight="900">${esc(item.thickness.replace(/\s*пт\s*/,''))}</text>
       <text x="${letterW/2}" y="${H/2 + 11}" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">пт</text>
       <line x1="${letterW}" y1="0" x2="${letterW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
-      <text x="${letterW + rightW/2}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="14" font-weight="900">${esc(item.edge || '')}</text>
-      <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
-      <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+      <text x="${rightMid}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="14" font-weight="900">${esc(item.edge || '')}</text>
+      <line x1="${letterW}" y1="${topH}" x2="${contentW}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+      <text x="${rightMid}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+      <line x1="${contentW}" y1="0" x2="${contentW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+      <image x="${qrX}" y="${qrY}" width="${qrImg}" height="${qrImg}" href="data:image/svg+xml,${encodeURIComponent(qrSvg)}"/>
     </svg>`;
   }
 
@@ -162,13 +193,15 @@ function renderLabelSVG(item) {
       <line x1="${letterW}" y1="0" x2="${letterW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
       <text x="${letterW + rightW/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="700">${esc(item.thickness)}</text>
       <text x="${letterW + rightW*3/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="900">${esc(item.height || '')}</text>
-      <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
-      <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+      <line x1="${letterW}" y1="${topH}" x2="${contentW}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+      <text x="${rightMid}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+      <line x1="${contentW}" y1="0" x2="${contentW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+      <image x="${qrX}" y="${qrY}" width="${qrImg}" height="${qrImg}" href="data:image/svg+xml,${encodeURIComponent(qrSvg)}"/>
     </svg>`;
   }
 
-  // Б / Р: letter 0-24 | thickness 24-52 top | black block 52-80 top | manufacturer bottom
-  const blkX = 52, blkW = 28;
+  const blkX = rightMid;
+  const blkW = rightW / 2;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:${FF}">
     <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
     <text x="${letterW/2}" y="${H/2 + 7}" text-anchor="middle" fill="#000" font-size="22" font-weight="900">${esc(letter)}</text>
@@ -176,8 +209,10 @@ function renderLabelSVG(item) {
     <text x="${letterW + rightW/4}" y="${topH/2 + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="700">${esc(item.thickness)}</text>
     <rect x="${blkX}" y="0" width="${blkW}" height="${topH}" fill="#000"/>
     <text x="${blkX + blkW/2}" y="${topH/2 + 4}" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">${esc(item.height || '')}</text>
-    <line x1="${letterW}" y1="${topH}" x2="${W}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
-    <text x="${W/2}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+    <line x1="${letterW}" y1="${topH}" x2="${contentW}" y2="${topH}" stroke="#000" stroke-width="0.3"/>
+    <text x="${rightMid}" y="${botY + botH/2 + 2.5}" text-anchor="middle" fill="#000" font-size="7">${esc(item.manufacturer)}</text>
+    <line x1="${contentW}" y1="0" x2="${contentW}" y2="${H}" stroke="#000" stroke-width="0.3"/>
+    <image x="${qrX}" y="${qrY}" width="${qrImg}" height="${qrImg}" href="data:image/svg+xml,${encodeURIComponent(qrSvg)}"/>
   </svg>`;
 }
 
@@ -226,11 +261,9 @@ function svgToCanvas(svgStr, w, h) {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const scale = 4;
-      canvas.width = w * scale;
-      canvas.height = h * scale;
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext('2d');
-      ctx.scale(scale, scale);
       ctx.drawImage(img, 0, 0, w, h);
       URL.revokeObjectURL(url);
       resolve(canvas);
@@ -246,7 +279,8 @@ async function generatePDF() {
 
   const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
   const pageW = 210, pageH = 297;
-  const labelW = 80, labelH = 24;
+  const labelW = 100, labelH = 24;
+  labelCounter = 0;
   const cols = Math.floor(pageW / labelW);
   const rows = Math.floor(pageH / labelH);
   const labelsPerPage = cols * rows;
@@ -295,10 +329,18 @@ async function generatePDF() {
       const row = Math.floor(idx / cols);
       const x = marginX + col * labelW;
       const y = marginY + row * labelH;
-      const dataUrl = canvas.toDataURL('image/png');
-      doc.addImage(dataUrl, 'PNG', x, y, labelW, labelH);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.5);
+      doc.addImage(dataUrl, 'JPEG', x, y, labelW, labelH);
       labelIdx++;
     }
+
+    // Footer on every page — render via canvas for Cyrillic
+    const footerSvg = `<svg viewBox="0 0 210 10" xmlns="http://www.w3.org/2000/svg" style="font-family:Calibri,Segoe UI,Arial,sans-serif">
+      <text x="105" y="7" text-anchor="middle" fill="#999" font-size="5">formgen.ru — калькулятор гофротары</text>
+      <text x="200" y="7" text-anchor="end" fill="#999" font-size="5">\u00A9 formgen.ru</text>
+    </svg>`;
+    const fCanvas = await svgToCanvas(footerSvg, 2100, 100);
+    doc.addImage(fCanvas.toDataURL('image/jpeg', 0.5), 'JPEG', 0, pageH - 8, 210, 8);
   }
 
   doc.save('etiketki-24x80.pdf');
