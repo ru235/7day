@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import { INGREDIENTS, V } from '../data/ingredients.js';
+
+const path = '/nml/';
+const title = 'nml — что в косметике против старения работает на самом деле';
+const description =
+  'Разбор антивозрастной косметики по данным научных исследований: ретиноиды, ниацинамид, витамин C, пептиды, коллаген в креме. С verdicts, дозировками и оговорками там, где доказательств мало.';
+
+const top = ['retinoids', 'spf', 'niacinamide', 'vitc', 'hyaluronic', 'peptides', 'collagen-cream', 'botox-cream', 'aha'];
+const quick = top.map((id) => INGREDIENTS.find((i) => i.id === id)).filter(Boolean);
+
+const sections = [
+  {
+    href: '/nml/ingredienty/',
+    label: 'Ингредиенты',
+    text: 'Разбор по вердикту: работает, слабо, миф. С рабочими концентрациями.',
+  },
+  {
+    href: '/nml/issledovaniya/',
+    label: 'Исследования',
+    text: 'Что именно показали оригинальные публикации — и где их финансировали.',
+  },
+  {
+    href: '/nml/mify/',
+    label: 'Мифы',
+    text: 'Восемь обещаний, которые не может выполнить ни один крем.',
+  },
+  {
+    href: '/nml/protokoly/',
+    label: 'Протоколы',
+    text: 'Что делать утром и вечером, если надоело выкидывать деньги.',
+  },
+  {
+    href: '/nml/chego-zhdat/',
+    label: 'Ожидания',
+    text: 'Сроки, реальные перемены и граница между косметикой и клиникой.',
+  },
+];
+---
+
+<Base title={title} description={description} path={path}>
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div>
+        <h1>Что в креме от морщин работает на самом деле</h1>
+        <p class="lead">
+          Почти всё, что продают как «средство от старения кожи», — это либо слабые эффекты с громким
+          названием, либо вещи, которые физически не могут попасть туда, куда их обещают. Разобрали
+          составы по публикациям и по тому, что говорит о них сама химия кожи.
+        </p>
+        <p class="muted">
+          Ниже — не список покупок. Это способ отличить работающее от неработающего, чтобы
+          <span class="hl">вы не тратили деньги на кремы, которые приятно пахнут и ничего не делают</span>.
+        </p>
+        <div class="tagrow">
+          <span class="tag">ретиноиды</span>
+          <span class="tag">SPF</span>
+          <span class="tag">ниацинамид 5%</span>
+          <span class="tag">витамин C</span>
+          <span class="tag">молекулярный вес</span>
+        </div>
+      </div>
+
+      <aside class="verdictbox">
+        <h2>Если читать некогда</h2>
+        <ul>
+          <li>
+            <span class="badge badge--ok">Работает</span>
+            <span><b>Солнцезащитное средство</b>Против старения помогает одно — не дать УФ сделать работу.</span>
+          </li>
+          <li>
+            <span class="badge badge--ok">Работает</span>
+            <span><b>Ретиноиды</b>Единственный компонент с устойчивым антивозрастным эффектом. По рецепту.</span>
+          </li>
+          <li>
+            <span class="badge badge--ok">Работает</span>
+            <span><b>Ниацинамид 4–5%</b>Пигмент и текстура. Самая доступная доказанная вещь без рецепта.</span>
+          </li>
+          <li>
+            <span class="badge badge--bad">Миф</span>
+            <span><b>Коллаген в креме</b>Молекула в 600 раз тяжелее того, что вообще проходит через кожу.</span>
+          </li>
+          <li>
+            <span class="badge badge--bad">Миф</span>
+            <span><b>Ботокс в креме</b>Фрагмент белка из флакона не может расслабить мышцу.</span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <h2>Пять вещей, которые стоит понять сразу</h2>
+          <p>Без них любая антивозрастная косметика обсуждается на языке рекламы.</p>
+        </div>
+      </div>
+
+      <div class="cards cards--2">
+        <article class="card">
+          <div class="card__top"><span class="badge badge--n">01</span></div>
+          <h3>Кожа — это фильтр</h3>
+          <p>
+            Роговой слой пропускает внутрь вещества примерно до 500 дальтон. Коллаген — около
+            300 000, гиалуроновая кислота — сотни тысяч и миллионы. Это не вопрос концентрации:
+            молекула либо проходит, либо нет.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card__top"><span class="badge badge--n">02</span></div>
+          <h3>Дорого ≠ эффективно</h3>
+          <p>
+            Самое изученное вещество в отрасли — ниацинамид, стоит копейки. Самое дорогое —
+            стволовые клетки, экзосомы и «сыворотки из Швейцарии» — не имеют доказательной базы,
+            опережающей базовый уход.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card__top"><span class="badge badge--n">03</span></div>
+          <h3>Большинство «новых» средств старше вас</h3>
+          <p>
+            Ретиноидной кислоте больше 80 лет, ниацинамиду — больше 40. От genuinely новых
+            разработок в антивозрастной косметике давно ничего не осталось: индустрия ушла в
+            упаковку и формулировки.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card__top"><span class="badge badge--n">04</span></div>
+          <h3>Против старения — не только крем</h3>
+          <p>
+            Если цель — заметная разница, крем окажется слабейшим инструментом. Инъекции, лазер и
+            <a href="/nml/chego-zhdat/">профессиональные процедуры</a> дают больший эффект. Это стоит
+            признать, а не делать вид, что сыворотка за 9000 ₽ конкурирует с физикой.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card__top"><span class="badge badge--n">05</span></div>
+          <h3>Уход хуже — дороже</h3>
+          <p>
+            Если не подобрать базу (SPF + ретиноид или ниацинамид + увлажнение), любой дорогой
+            продукт поверх даст меньше, чем дешёвый слой под него.
+          </p>
+        </article>
+
+        <article class="card" style="border-style:dashed">
+          <div class="card__top"><span class="badge badge--n">06</span></div>
+          <h3>Как читать этот сайт</h3>
+          <p>
+            <b class="mono">Работает</b> — есть клинические данные на людях.
+            <b class="mono">Слабо</b> — механизм правдоподобен, данных мало.
+            <b class="mono">Миф</b> — заявленное невозможно физически или опровергнуто.
+            Где мы не уверены в цифрах — пишем об этом прямо.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <h2>Быстрая таблица</h2>
+          <p>
+            Девять позиций, с которых чаще всего начинают. Полный разбор — в разделе
+            <a href="/nml/ingredienty/">ингредиентов</a>.
+          </p>
+        </div>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ингредиент</th>
+              <th>Вердикт</th>
+              <th>Рабочая концентрация</th>
+              <th>Коротко</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quick.map((i) => (
+              <tr>
+                <td>
+                  <b>{i.name}</b>
+                  <span class="sub">{i.sub}</span>
+                </td>
+                <td><span class={`badge badge--${V[i.verdict].cls}`}>{V[i.verdict].label}</span></td>
+                <td class="mono small nowrap">{i.dose}</td>
+                <td>{i.reality.split('.')[0]}.</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sechead">
+        <div><h2>Куда читать дальше</h2></div>
+      </div>
+      <div class="cards cards--3">
+        {sections.map((s) => (
+          <a class="card" href={s.href}>
+            <h3>{s.label}</h3>
+            <p>{s.text}</p>
+          </a>
+        ))}
+      </div>
+
+      <p class="note" style="margin-top:28px">
+        <b>Оговорка.</b> Мы не продаём здесь ничего и не работаем на бренды. Если после прочтения
+        вам кажется, что уход за кожей — ловушка и деньги потрачены зря: в каком-то смысле вы правы.
+        Доказательная база антивозрастной косметики гораздо тоньше, чем язык упаковки. Задача сайта —
+        показать, где она всё-таки есть.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -9,6 +9,21 @@ const MAP = [
   ['s07-promptaza', 'S07'], ['s08-domenpodbor', 'S08'],
 ];
 const only = process.argv[2]; // напр. node scripts/deploy-ftp.mjs s04-sechenieprovoda
+
+// Подпапки, залитые через stage-upload.mjs. Их нельзя сносить при деплое основного сайта:
+// clearWorkingDir() удалил бы /nml/, /metal/, /box/, /fefco/ вместе с остальным.
+const KEEP = (process.env.FTP_KEEP_DIRS || 'nml,metal,box,fefco')
+  .split(',').map((s) => s.trim()).filter(Boolean);
+
+async function clearExcept(client, keep) {
+  const items = await client.list();
+  for (const it of items) {
+    if (it.isDirectory && keep.includes(it.name)) continue;
+    if (it.isDirectory) await client.removeDir(it.name);
+    else await client.remove(it.name);
+  }
+}
+
 for (const [app, key] of MAP) {
   if (only && only !== app) continue;
   const client = new Client();
@@ -18,8 +33,8 @@ for (const [app, key] of MAP) {
       password: process.env[`FTP_PASS_${key}`], secure: false,
     });
     await client.ensureDir(process.env[`FTP_DIR_${key}`] || `/${app}/`);
-    await client.clearWorkingDir();
+    await clearExcept(client, KEEP);
     await client.uploadFromDir(path.resolve(`apps/${app}/dist`));
-    console.log(`OK ${app}`);
+    console.log(`OK ${app} (kept: ${KEEP.join(', ')})`);
   } catch (e) { console.error(`FAIL ${app}:`, e.message); } finally { client.close(); }
 }

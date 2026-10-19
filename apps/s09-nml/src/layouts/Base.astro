@@ -1,0 +1,149 @@
+---
+import '../data/ingredients.js';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string;
+}
+
+const { title, description, path } = Astro.props;
+
+const NAV = [
+  { href: '/nml/', label: 'Главная' },
+  { href: '/nml/ingredienty/', label: 'Ингредиенты' },
+  { href: '/nml/mify/', label: 'Мифы' },
+  { href: '/nml/issledovaniya/', label: 'Исследования' },
+  { href: '/nml/protokoly/', label: 'Протоколы' },
+  { href: '/nml/chego-zhdat/', label: 'Ожидания' },
+];
+
+const Y = new Date().getFullYear();
+const pagePath = path.replace(/^\//, '') + 'index.html';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'nml — разбор составов',
+  url: 'https://shinapodbor.ru/nml/',
+  description: 'Что в косметике против старения действительно работает, а что нет — по данным научных исследований.',
+  inLanguage: 'ru-RU',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://shinapodbor.ru/nml/ingredienty/?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<!doctype html>
+<html lang="ru" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`https://shinapodbor.ru${path}`} />
+    <link rel="icon" href="/nml/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/nml/nml.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="nml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={`https://shinapodbor.ru${path}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f7f5f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#13110d" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('nml-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  </head>
+  <body>
+    <a href="#main" class="sr">К содержанию</a>
+
+    <header class="top">
+      <div class="wrap top__in">
+        <a class="brand" href="/nml/">
+          <span class="brand__mark">nml</span>
+          <span class="brand__sub">разбор составов</span>
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          {NAV.map((n) => (
+            <a href={n.href} aria-current={n.href === path ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+        <button id="ttheme" class="tbtn" type="button" aria-label="Переключить тему" title="Переключить тему">◐</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <h4>О проекте</h4>
+            <p class="small muted" style="margin:0;max-width:40ch">
+              <strong>nml</strong> — попытка разобрать косметику против старения по данным исследований,
+              а не по рекламным обещаниям на упаковке. Мы пишем о том, что работает, о том, что почти
+              не работает, и о том, что физически не может работать.
+            </p>
+          </div>
+          <div>
+            <h4>Разделы</h4>
+            <ul>
+              {NAV.slice(1).map((n) => (
+                <li><a href={n.href}>{n.label}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4>Начните с</h4>
+            <ul>
+              <li><a href="/nml/issledovaniya/">Что говорит наука</a></li>
+              <li><a href="/nml/protokoly/">Работающие протоколы</a></li>
+              <li><a href="/nml/chego-zhdat/">Реалистичные сроки</a></li>
+            </ul>
+          </div>
+        </div>
+        <p class="foot__disclaimer">
+          <b>Важно.</b> Материалы сайта носят информационный характер и не являются медицинской
+          рекомендацией, диагнозом или назначением. Топические ретиноиды (третиноин, адапален) и
+          пероральные препараты отпускаются по рецепту; перед применением любого средства с активными
+          компонентами разумно обсудить его с дерматологом, особенно при беременности, кормлении,
+          дерматите, розаце или повреждённом барьере. Ссылки на публикации приведены как указание на
+          источник, а не как рекомендация конкретного продукта.
+        </p>
+        <p class="small dim" style="margin-bottom:0">© {Y} nml · материалы не являются рекламой</p>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (function () {
+        var b = document.getElementById('ttheme');
+        if (!b) return;
+        b.addEventListener('click', function () {
+          var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = t;
+          try { localStorage.setItem('nml-theme', t); } catch (e) {}
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style>
+  .sr {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 0 0 8px 0;
+    font: 500 15px/1 var(--sans);
+  }
+  .sr:focus { left: 0; }
+</style>

@@ -1,0 +1,97 @@
+---
+import Base from '../../layouts/Base.astro';
+import { studies } from '../../data/ingredients.js';
+
+const path = '/nml/issledovaniya/';
+const title = 'Исследования: что показали оригинальные публикации — nml';
+const description =
+  'РКИ солнцезащитных средств (NEJM, 2013), ниацинамид (Dermatol Surg, 2005), ретиноидная кислота (J Invest Dermatol, 1987), витамин C и AHA: результаты, дизайн и оговорки.';
+---
+
+<Base title={title} description={description} path={path}>
+  <section class="hero" style="padding-bottom:26px">
+    <div class="wrap">
+      <a class="crumb" href="/nml/">← nml</a>
+      <h1 style="font-size:clamp(28px,4.4vw,40px)">Что говорили исследования</h1>
+      <p class="lead">
+        Ниже — пересказы оригинальных публикаций. Для каждого указаны дизайн, выборка и результат,
+        а также то, что делает работу слабее, чем её заголовок. Это важно: почти каждая громкая
+        цитата из прессы была вырвана из контекста, в котором она значит меньше.
+      </p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 style="margin-bottom:22px">Публикации и их результаты</h2>
+      <div class="prose" style="max-width:none">
+        {studies.map((s) => (
+          <article class={`study${s.weak ? ' study--weak' : ''}`} id={s.id}>
+            <div class="study__h">
+              <h3>{s.title}</h3>
+              <span class="study__meta">{s.meta}</span>
+            </div>
+            <p>{s.body}</p>
+            <div class="result"><b>Результат.</b> {s.result}</div>
+            <p class="caveat">{s.caveat}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sechead">
+        <div>
+          <h2>Чего в косметических исследованиях почти нет</h2>
+          <p>Структурные слепые пятна, из-за которых легко поверить не тому.</p>
+        </div>
+      </div>
+
+      <div class="cards cards--2">
+        <article class="card">
+          <h3>Длинных исследований</h3>
+          <p>
+            Средняя косметическая работа длится 4–12 недель. За это время можно увидеть изменение
+            пигментации и текстуры. Невозможно увидеть перестройку коллагена, которая накопительна
+            и проявляется годами.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Независимых работ</h3>
+          <p>
+            Почти все крупные исследования ингредиентов выполняются самими производителями. Это не
+            значит, что данные ложные — но они выбираются и интерпретируются теми, кому выгодно.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Реальных людей вместо моделей</h3>
+          <p>
+            Часть антиоксидантных и противовоспалительных эффектов показывают на коже животных или
+            в клеточных культурах. Переносить это на морщины у человека нельзя.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Сравнения с плацебо вслепую</h3>
+          <p>
+            Участники и оценщики знают, где плацебо. В косметике разница между «выглядит лучше» и
+            «статистически значимо лучше» часто невелика.
+          </p>
+        </article>
+      </div>
+
+      <p class="note" style="margin-top:28px">
+        <b>Вывод, который стоит сделать.</b> Отсутствие доказательств — не приговор веществу.
+        Ниацинамид тоже изучался в основном производителем. Но между «работает, есть исследования»
+        и «возможно, работает, но это маркетинг» — разница в цене, которую вы платите.
+      </p>
+
+      <p style="margin-top:22px">
+        <a class="toc" style="display:inline-block;padding:11px 18px;font-size:15px" href="/nml/ingredienty/">
+          Смотреть вердикты по ингредиентам →
+        </a>
+      </p>
+    </div>
+  </section>
+</Base>

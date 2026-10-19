@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import { INGREDIENTS, V } from '../../data/ingredients.js';
+
+const path = '/nml/ingredienty/';
+const title = 'Ингредиенты: работает, слабо, миф — nml';
+const description =
+  'Полный разбор антивозрастной косметики по вердиктам: ретиноиды, ниацинамид, витамин C, кислоты, пептиды, коллаген, ботокс в креме. Рабочие концентрации и оценка доказательной базы.';
+
+const order = { ok: 0, weak: 1, bad: 2 };
+const items = [...INGREDIENTS].sort((a, b) => order[a.verdict] - order[b.verdict]);
+const counts = {
+  all: items.length,
+  ok: items.filter((i) => i.verdict === 'ok').length,
+  weak: items.filter((i) => i.verdict === 'weak').length,
+  bad: items.filter((i) => i.verdict === 'bad').length,
+};
+---
+
+<Base title={title} description={description} path={path}>
+  <section class="hero" style="padding-bottom:26px">
+    <div class="wrap">
+      <a class="crumb" href="/nml/">← nml</a>
+      <h1 style="font-size:clamp(28px,4.4vw,40px)">Ингредиенты против старения</h1>
+      <p class="lead">
+        {items.length} позиций. Вердикт ставится <b>по заявленному на упаковке эффекту</b> — не по тому,
+        что вещество вообще делает, а по тому, что обещает этикетка. Увлажняющий крем честно увлажняет;
+        обещание «строит коллаген глубоко в дерме» — это уже миф.
+      </p>
+      <div class="tagrow">
+        <span class="tag">Работает: {counts.ok}</span>
+        <span class="tag">Слабо: {counts.weak}</span>
+        <span class="tag">Миф: {counts.bad}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 style="margin-bottom:14px">Список по вердиктам</h2>
+      <div class="filters" role="group" aria-label="Фильтр по вердикту">
+        <button type="button" data-f="all" aria-pressed="true">Все ({counts.all})</button>
+        <button type="button" data-f="ok" aria-pressed="false">Работает ({counts.ok})</button>
+        <button type="button" data-f="weak" aria-pressed="false">Слабо ({counts.weak})</button>
+        <button type="button" data-f="bad" aria-pressed="false">Миф ({counts.bad})</button>
+      </div>
+
+      <div id="list">
+        {items.map((i) => (
+          <details class="ing" data-v={i.verdict}>
+            <summary class="ing__head">
+              <span class={`badge badge--${V[i.verdict].cls}`}>{V[i.verdict].label}</span>
+              <h3>{i.name}</h3>
+              <span class="dose">{i.dose}</span>
+              <span class="ing__chev" aria-hidden="true">▸</span>
+            </summary>
+            <div class="ing__body">
+              <dl>
+                <dt>Обещают</dt>
+                <dd class="claim">{i.claim}</dd>
+                <dt>На самом деле</dt>
+                <dd>{i.reality}</dd>
+                <dt>Данные</dt>
+                <dd class="muted">{i.evidence}</dd>
+              </dl>
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <p class="dim small" id="empty" hidden style="margin-top:20px">
+        В этой категории пока пусто.
+      </p>
+
+      <p class="note" style="margin-top:30px">
+        <b>Как формировался список.</b> Сначала взяты компоненты с наибольшей рекламной частотой в
+        сегменте anti-aging, затем добавлены вещества, которые чаще всего попадают в этот список по
+        ошибке. Отдельно отмечено то, что не может работать физически — такие пункты проверялись не по
+        маркетингу, а по молекулярной массе и барьерной проницаемости.
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var btns = document.querySelectorAll('.filters button');
+      var rows = document.querySelectorAll('#list .ing');
+      var empty = document.getElementById('empty');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var f = b.dataset.f;
+          btns.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          var shown = 0;
+          rows.forEach(function (r) {
+            var on = f === 'all' || r.dataset.v === f;
+            r.hidden = !on;
+            if (on && f !== 'all') r.open = true;
+            if (on) shown++;
+          });
+          empty.hidden = shown > 0;
+        });
+      });
+    })();
+  </script>
+</Base>
