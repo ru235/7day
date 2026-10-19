@@ -2,17 +2,19 @@
 import Base from '../../layouts/Base.astro';
 import { myths } from '../../data/ingredients.js';
 
+const n = myths.length;
+
 const path = '/nml/mify/';
 const title = 'Мифы антивозрастной косметики — nml';
 const description =
-  'Коллаген в креме, ботокс без иглы, муцина улитки, ночной крем, скраб с микробубами и DIY-маски: почему восемь популярных обещаний не выполняются физически.';
+  `Коллаген в креме, ботокс без иглы, сперма лосося, барсучий жир, муцина улитки, ночной крем, микробубы и DIY-маски: почему ${n} популярных обещаний не выполняются физически.`;
 ---
 
 <Base title={title} description={description} path={path}>
   <section class="hero" style="padding-bottom:26px">
     <div class="wrap">
       <a class="crumb" href="/nml/">← nml</a>
-      <h1 style="font-size:clamp(28px,4.4vw,40px)">Восемь мифов</h1>
+      <h1 style="font-size:clamp(28px,4.4vw,40px)">{myths.length} мифов</h1>
       <p class="lead">
         Не все пункты здесь — про веру в науку. Большинство опровергаются арифметикой: размером
         молекулы, pH и тем, что барьер кожи пропускает внутрь. Это самая надёжная часть разбора,
